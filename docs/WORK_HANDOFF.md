@@ -1,3 +1,10 @@
+# Group repository / handoff paths
+
+- **Destination:** https://github.com/Arkanzahir/Soka-cloud-ops-scheduling-adventure
+- **Source foundation:** https://github.com/brunosimon/folio-2025
+- **Read first:** `README.md`, `AGENTS.md`, `docs/MASTER_PROMPT.md`, `docs/PAPER_REVIEW.md`.
+- **Status:** documentation is prepared; game and in-engine art audit are not yet implemented.
+
 # WORK HANDOFF — ringkasan untuk sesi baru
 
 ## Proyek
