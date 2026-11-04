@@ -1,0 +1,5 @@
+# Preserve audited upstream bytes across Windows/Linux checkouts.
+sources/** -text
+static/** -text
+resources/** -text
+license.md -text

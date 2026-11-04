@@ -1,7 +1,7 @@
 # CLOUD OPS — Scheduling Adventure
 
 > **Tugas Kelompok Strategi Optimasi Komputasi Awan (SOKA) | Demo Week 10**  
-> **Status proyek: Perencanaan dan dokumentasi — game belum diimplementasikan.**  
+> **Status proyek: M0 — fondasi Bruno terintegrasi dan diuji; fitur edukasi masih direncanakan.**
 > **Repository:** https://github.com/Arkanzahir/Soka-cloud-ops-scheduling-adventure
 
 ## 1. Tentang proyek
@@ -77,7 +77,7 @@ Lihat [`docs/WORLD_DESIGN_SPEC.md`](docs/WORLD_DESIGN_SPEC.md) untuk aturan visu
 6. Di dekat objek/stasiun simulasi, tekan **E** lagi untuk membuka panel/animasi penjelasan. Kendaraan berhenti sementara.
 7. Tekan **Esc** untuk menutup panel dan kembali mengemudi. Untuk keluar mini-world, menuju gerbang keluar lalu tekan **E**.
 
-> Catatan teknis: pada proyek Bruno, tombol interaksi asli menggunakan **Enter**. Rancangan `E` harus dibuat sebagai alias atau dikonfigurasi setelah memeriksa apakah ada konflik; jangan menghapus kontrol aslinya secara sembarangan.
+> Audit M0: commit Bruno yang digunakan sudah mendukung **Enter, E, dan F** untuk interaksi. Kontrol asli dipertahankan.
 
 ### Dua mode bermain
 
@@ -167,32 +167,37 @@ Soka-cloud-ops-scheduling-adventure/
 │   ├── PRESENTATION_GUIDE.md    # Script demo untuk kelompok
 │   ├── MASTER_PROMPT.md         # Prompt eksekusi di Work
 │   └── WORK_HANDOFF.md          # Status dan tugas sesi berikutnya
-├── sources/                     # AKAN mengikuti struktur repo dasar setelah audit
-├── static/                      # AKAN mengikuti pipeline aset repo dasar
-└── package.json                 # BELUM tersedia di repo tujuan
+├── sources/                     # Source game Bruno, fondasi M0
+├── static/                      # Aset runtime asli
+├── resources/                   # Sumber Blender/texture
+├── scripts/                     # Pipeline aset dan pengujian browser
+├── tests/                       # Integritas fondasi/aset/path
+└── package.json                 # Vite dan perintah pengujian
 ```
 
 **Jangan membuat folder `src/public` secara asal** sebelum memeriksa struktur aktual repositori dasar; source resmi memakai `sources/`, `static/`, `resources/`, `scripts/`.
 
 ## 9. Cara menjalankan proyek
 
-**Belum bisa dijalankan dari repository ini** karena tahap saat ini adalah dokumentasi dan belum ada source code game yang diintegrasikan.
-
-Setelah kode dasar ditambahkan dan lolos audit, prosedur yang akan diverifikasi mencakup:
+Jalankan dari root checkout (Node.js 22.17.0 digunakan pada pengujian M0):
 
 ```bash
-npm install
+cp .env.example .env
+npm install --force
 npm run dev
+npm test
 npm run build
+npm run test:build
+npm run preview
 ```
 
-Catatan: README asli Bruno menggunakan `npm install --force` untuk setup. Ikuti petunjuk dan dependency yang benar-benar ada pada commit dasar yang diaudit; jangan mengasumsikan perintah di atas pasti berhasil sebelum diuji.
+PowerShell: gunakan `Copy-Item .env.example .env` dan `npm.cmd` bila diperlukan. Server dev menampilkan URL localhost; `VITE_SERVER_URL` kosong menjalankan core game tanpa backend. Uji browser memerlukan Chrome: `npm run test:browser -- URL foundation-dev`. Bukti, pengujian produksi subpath, keterbatasan dan screenshot: [`docs/BASELINE_TEST_REPORT.md`](docs/BASELINE_TEST_REPORT.md). README Bruno asli: [`docs/upstream/BRUNO_README.md`](docs/upstream/BRUNO_README.md).
 
 ## 10. Roadmap status
 
 | Milestone | Fokus | Status saat dokumen dibuat |
 |---|---|---|
-| M0 | Audit source Bruno, lisensi, aset, build dan visual baseline | BELUM DIMULAI |
+| M0 | Audit source Bruno, lisensi, aset, build dan visual baseline | SELESAI — bukti pada BASELINE_TEST_REPORT; clearance SFX/font sebelum publikasi |
 | M1 | Finalisasi detail paper dan spesifikasi algoritma | DRAFT / paper GWO terverifikasi, ACO DBpia belum |
 | M2 | Sistem zona, tombol E/Enter, kamera, respawn | BELUM DIMULAI |
 | M3 | Cloud Mini-World sebagai vertical slice | BELUM DIMULAI |
@@ -246,4 +251,4 @@ Repository saat penulisan masih **Private**; perubahan ke Public direncanakan ol
 
 Proyek ini mengadaptasi fondasi open-source **Bruno Simon — Folio 2025** (MIT). Lisensi sumber dan pemberitahuan hak cipta wajib dipertahankan ketika kode/asetnya dimasukkan. Pihak ketiga dapat memiliki lisensi berbeda sehingga harus diperiksa sebelum redistribusi. Kontribusi karya kelompok harus dicatat dengan jelas, termasuk bagian yang dibangun sendiri dan yang merupakan adaptasi.
 
-**Status klaim:** halaman ini adalah **rencana pengembangan**, bukan pernyataan bahwa game, algoritma atau mini-world sudah selesai.
+**Status klaim:** fondasi game M0 sudah diuji. Algoritma, mini-world, mode presentasi dan deployment masih rencana; materi desain kelompok dipertahankan.

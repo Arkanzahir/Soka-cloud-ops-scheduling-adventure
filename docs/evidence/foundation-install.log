@@ -1,0 +1,36 @@
+npm warn using --force Recommended protections disabled.
+npm warn ERESOLVE overriding peer dependency
+npm warn While resolving: vite-plugin-restart@0.4.1
+npm warn Found: vite@7.2.4
+npm warn node_modules/vite
+npm warn   peer vite@"^6.0.0 || ^7.0.0" from @vitejs/plugin-basic-ssl@2.1.0
+npm warn   node_modules/@vitejs/plugin-basic-ssl
+npm warn     @vitejs/plugin-basic-ssl@"^2.1.0" from the root project
+npm warn   4 more (vite-plugin-node-polyfills, ...)
+npm warn
+npm warn Could not resolve dependency:
+npm warn peer vite@"^2.9.0 || ^3.0.0 || ^4.0.0 || ^5.0.0" from vite-plugin-restart@0.4.1
+npm warn node_modules/vite-plugin-restart
+npm warn   vite-plugin-restart@"^0.4.1" from the root project
+npm warn
+npm warn Conflicting peer dependency: vite@5.4.21
+npm warn node_modules/vite
+npm warn   peer vite@"^2.9.0 || ^3.0.0 || ^4.0.0 || ^5.0.0" from vite-plugin-restart@0.4.1
+npm warn   node_modules/vite-plugin-restart
+npm warn     vite-plugin-restart@"^0.4.1" from the root project
+npm warn deprecated node-domexception@1.0.0: Use your platform's native DOMException instead
+
+added 404 packages, and audited 405 packages in 16s
+
+103 packages are looking for funding
+  run `npm fund` for details
+
+30 vulnerabilities (6 low, 9 moderate, 14 high, 1 critical)
+
+To address issues that do not require attention, run:
+  npm audit fix
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force
+
+Run `npm audit` for details.

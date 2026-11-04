@@ -1,0 +1,65 @@
+{
+  "commit": "41046b57eeed8d156d9c3fd7fa259900baef7816",
+  "files": [
+    {
+      "path": "sources/Game/Physics/Physics.js",
+      "sha256": "880a57c53ffd4f4ba51d0d978e9b8cb36fd90bf2fee5614a9017928489f1f5c8"
+    },
+    {
+      "path": "sources/Game/Physics/PhysicsVehicle.js",
+      "sha256": "a7806e7c1f0a8eb20c1173ac4496fc0ed116e00dca3890dcfb90a213598cdaab"
+    },
+    {
+      "path": "sources/Game/World/VisualVehicle.js",
+      "sha256": "4106d1c6bd036322be0a8d7cb149c48652f03ed654a60dc6cc8e65d5bbdfa3a7"
+    },
+    {
+      "path": "sources/Game/Player.js",
+      "sha256": "29350416328420a7fad7bd1211e02e0371e80db661031a3b19a1995b285657b7"
+    },
+    {
+      "path": "sources/Game/View.js",
+      "sha256": "6e3769df7be7f311ffff1112290861c03828784186e1acc81e61b654dfcd3921"
+    },
+    {
+      "path": "sources/Game/Terrain.js",
+      "sha256": "4ebd2758c1d4fdb921c4f8467ef077836c7ea052c4e8cb1f4e88fc0b8a2e3c1a"
+    },
+    {
+      "path": "sources/Game/World/Floor.js",
+      "sha256": "04149f043bb6acf0e8d5cca239b4c810f333f051f8dbd87b72397d53c1f4bd04"
+    },
+    {
+      "path": "sources/Game/Ligthing.js",
+      "sha256": "7ca27dd7ea47f1b65e0f8c91e3275d591e586fd6112b4e10ecbe168de6605d77"
+    },
+    {
+      "path": "sources/Game/Materials.js",
+      "sha256": "a2396a225afd603e0887f25e38b6fdd7af74a78b474a66334dd7a4d477c40d89"
+    },
+    {
+      "path": "sources/Game/Materials/MeshDefaultMaterial.js",
+      "sha256": "49589e6af80c1f95d334697aa8d15259dec7ca1d233eb010c1fd0eb0a1fc05d0"
+    },
+    {
+      "path": "sources/Game/World/Foliage.js",
+      "sha256": "ee08f2529b1acef84814aecf79c67f6824d98a763aa2fe8ea5fdc928de9be3c4"
+    },
+    {
+      "path": "sources/Game/InteractivePoints.js",
+      "sha256": "ac831b0a0e4e8f25ec9ba13b12b2ae7de7f57e34ce26eb5674df5663ca38e430"
+    },
+    {
+      "path": "sources/Game/Zones.js",
+      "sha256": "558c942747c1637d677eaec9b34f8678e6770cf3a7850b6861b238954a724b24"
+    },
+    {
+      "path": "sources/Game/World/Areas/Areas.js",
+      "sha256": "3e133cb44e19be423ee714d9e1d85dcdb14e5fda19d92cb6ed700bbeba924ccf"
+    },
+    {
+      "path": "license.md",
+      "sha256": "dcdac79081f611f54a16fdcb683242e930972c2ed31a0aea682aafab9baa5ef2"
+    }
+  ]
+}

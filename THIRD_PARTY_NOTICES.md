@@ -1,6 +1,6 @@
 # Third-party Sources & Attribution — Cloud Ops
 
-**Status:** catatan sumber saat tahap dokumentasi. Belum ada kode atau aset pihak ketiga yang dimasukkan ke repository target pada saat penyusunan. Isi akan diperbarui setelah import dan audit file nyata.
+**Status M0:** fondasi Bruno diimpor dari commit `41046b57eeed8d156d9c3fd7fa259900baef7816`. Lisensi MIT asli berada di [`license.md`](license.md); source, aset runtime dan sumber Blender dipertahankan. Inventaris file/hash dan pengecualian izin: [`docs/ASSET_CATALOG.md`](docs/ASSET_CATALOG.md). Kredit dalam game dan README upstream tetap disimpan. Repository tetap Private; belum dipublikasikan.
 
 ## 1. Game 3D dasar
 
@@ -9,7 +9,7 @@
 - **Website:** https://bruno-simon.com/
 - **Lisensi yang tercantum pada repository sumber:** MIT
 - **Dokumen lisensi:** https://github.com/brunosimon/folio-2025/blob/main/license.md
-- **Penggunaan yang direncanakan:** adaptasi sistem world, mobil, kamera, rendering, fisika, props, dan pipeline aset sebagai fondasi presentasi edukasi.
+- **Penggunaan M0:** integrasi sistem world, mobil, kamera, rendering, fisika, props, dan pipeline aset sebagai fondasi presentasi edukasi.
 
 Saat menyalin sumber ke repo ini, **pertahankan** semua pemberitahuan copyright dan file MIT dari proyek asal; jangan menghapus catatan pembuat. Periksa item yang memiliki ketentuan tersendiri sebelum redistribusi. Jangan menyatakan seluruh proyek adalah kode original kelompok.
 
