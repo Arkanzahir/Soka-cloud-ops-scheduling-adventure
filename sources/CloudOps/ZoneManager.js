@@ -2,6 +2,7 @@ import { CarTransitionController } from './CarTransitionController.js'
 import { InteractiveStation } from './InteractiveStation.js'
 import { TestArea } from './TestArea.js'
 import { PresentationController } from './PresentationController.js'
+import { CloudArea } from './CloudArea.js'
 
 export class ZoneManager
 {
@@ -30,6 +31,7 @@ export class ZoneManager
         this.createStation({ zone: 'test', label: 'Kembali ke Main', position: [-60, 1.5, 65], onInteract: () => this.enter('main') })
         this.createStation({ zone: 'test', label: 'Panel Uji M2', position: [-65, 1.5, 71], onInteract: () => this.openPanel() })
         this.registerPanel('cloud-ops-test')
+        game.world.areas.cloud = new CloudArea(this)
         this.status = document.querySelector('.js-cloud-ops-status')
         this.status.hidden = false
         // Before Bruno's default respawn listener; use the same R action.

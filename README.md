@@ -202,7 +202,7 @@ PowerShell: gunakan `Copy-Item .env.example .env` dan `npm.cmd` bila diperlukan.
 | M0 | Audit source Bruno, lisensi, aset, build dan visual baseline | SELESAI — bukti pada BASELINE_TEST_REPORT; clearance SFX/font sebelum publikasi |
 | M1 | Finalisasi detail paper dan spesifikasi algoritma | DRAFT / paper GWO terverifikasi, ACO DBpia belum |
 | M2 | Sistem zona, tombol E/Enter, kamera, respawn | SELESAI — Main↔satu zona uji, panel, safety reset; laporan M2 tersedia |
-| M3 | Cloud Mini-World sebagai vertical slice | BELUM DIMULAI |
+| M3 | Cloud Mini-World sebagai vertical slice | TAHAP 1 selesai: kerangka CloudArea, 1 stasiun, 3 VM placeholder; M3 penuh belum selesai |
 | M4 | Engine ACO & GWO, seeded RNG, unit tests | BELUM DIMULAI |
 | M5 | ACO/GWO worlds dan animasi dari trace nyata | BELUM DIMULAI |
 | M6 | Results, paper station, Presentation Mode | BELUM DIMULAI |
