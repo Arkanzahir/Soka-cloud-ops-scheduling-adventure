@@ -17,7 +17,7 @@
 - [x] **M0:** audit dan run original Bruno, screenshot baseline, inventaris lisensi/aset; clearance SFX/font tetap gate sebelum publikasi.
 - [ ] **M1:** verifikasi akademik final dan keputusan baseline vs improved.
 - [x] **M2:** reusable zone/interaction/vehicle transition; Main↔satu zona uji, panel, E/Enter/Esc/R, browser/physics/production tests.
-- [ ] **M3:** Cloud Mini-World proof of concept, render style check.
+- [ ] **M3:** Cloud Mini-World proof of concept, render style check. Tahap 1 selesai: CloudArea + 1 stasiun + 3 VM placeholder; lihat M3_CLOUD_FOUNDATION.md.
 - [ ] **M4:** scheduling engine ACO/GWO, seeded RNG, unit tests.
 - [ ] **M5:** ACO & GWO mini-world dan animasi dari trace.
 - [ ] **M6:** Results, paper, Presentation Mode, latihan demo.

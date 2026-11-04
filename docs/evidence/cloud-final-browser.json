@@ -1,0 +1,60 @@
+{
+  "url": "http://127.0.0.1:1247/",
+  "checks": [
+    {
+      "name": "Cloud registered alongside existing M2 zones",
+      "passed": true
+    },
+    {
+      "name": "eight task crates and three VM bodies reuse M3 Bruno geometry",
+      "passed": true
+    },
+    {
+      "name": "E enters Cloud, grounded and unlocked",
+      "passed": true
+    },
+    {
+      "name": "M4 Round Robin events update exact task destinations and loads",
+      "passed": true
+    },
+    {
+      "name": "animation reaches VM pads without adding meshes",
+      "passed": true
+    },
+    {
+      "name": "reset cancels motion and restores queue and zero loads",
+      "passed": true
+    },
+    {
+      "name": "vehicle and camera move in Cloud",
+      "passed": true
+    },
+    {
+      "name": "R stays in Cloud safe spawn",
+      "passed": true
+    },
+    {
+      "name": "station opens placeholder panel and freezes vehicle",
+      "passed": true
+    },
+    {
+      "name": "Esc restores driving",
+      "passed": true
+    },
+    {
+      "name": "Enter returns safely to Main",
+      "passed": true
+    },
+    {
+      "name": "M2 gate remains available",
+      "passed": true
+    },
+    {
+      "name": "no page or local HTTP errors",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "httpErrors": [],
+  "passed": true
+}

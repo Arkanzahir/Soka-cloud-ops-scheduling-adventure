@@ -1,0 +1,254 @@
+{
+  "algorithm": "round-robin",
+  "bestAssignment": [
+    0,
+    1,
+    2,
+    0,
+    1,
+    2,
+    0,
+    1
+  ],
+  "metrics": {
+    "assignment": [
+      0,
+      1,
+      2,
+      0,
+      1,
+      2,
+      0,
+      1
+    ],
+    "vmLoads": [
+      11.833333333333332,
+      8.1,
+      2.2
+    ],
+    "vmTaskIds": [
+      [
+        "T1",
+        "T4",
+        "T7"
+      ],
+      [
+        "T2",
+        "T5",
+        "T8"
+      ],
+      [
+        "T3",
+        "T6"
+      ]
+    ],
+    "taskDurations": [
+      2,
+      2.4,
+      1.2,
+      5.333333333333333,
+      2.1,
+      1,
+      4.5,
+      3.6
+    ],
+    "makespan": 11.833333333333332,
+    "cost": 0.029483333333333334,
+    "utilizationProxy": [
+      1,
+      0.6845070422535212,
+      0.1859154929577465
+    ],
+    "meanUtilizationProxy": 0.6234741784037559
+  },
+  "events": [
+    {
+      "type": "allocation",
+      "algorithm": "round-robin",
+      "step": 1,
+      "taskIndex": 0,
+      "taskId": "T1",
+      "vmIndex": 0,
+      "selectedVM": 0,
+      "vmId": "VM1",
+      "executionTime": 2,
+      "vmLoads": [
+        2,
+        0,
+        0
+      ],
+      "partialAssignment": [
+        0
+      ]
+    },
+    {
+      "type": "allocation",
+      "algorithm": "round-robin",
+      "step": 2,
+      "taskIndex": 1,
+      "taskId": "T2",
+      "vmIndex": 1,
+      "selectedVM": 1,
+      "vmId": "VM2",
+      "executionTime": 2.4,
+      "vmLoads": [
+        2,
+        2.4,
+        0
+      ],
+      "partialAssignment": [
+        0,
+        1
+      ]
+    },
+    {
+      "type": "allocation",
+      "algorithm": "round-robin",
+      "step": 3,
+      "taskIndex": 2,
+      "taskId": "T3",
+      "vmIndex": 2,
+      "selectedVM": 2,
+      "vmId": "VM3",
+      "executionTime": 1.2,
+      "vmLoads": [
+        2,
+        2.4,
+        1.2
+      ],
+      "partialAssignment": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "type": "allocation",
+      "algorithm": "round-robin",
+      "step": 4,
+      "taskIndex": 3,
+      "taskId": "T4",
+      "vmIndex": 0,
+      "selectedVM": 0,
+      "vmId": "VM1",
+      "executionTime": 5.333333333333333,
+      "vmLoads": [
+        7.333333333333333,
+        2.4,
+        1.2
+      ],
+      "partialAssignment": [
+        0,
+        1,
+        2,
+        0
+      ]
+    },
+    {
+      "type": "allocation",
+      "algorithm": "round-robin",
+      "step": 5,
+      "taskIndex": 4,
+      "taskId": "T5",
+      "vmIndex": 1,
+      "selectedVM": 1,
+      "vmId": "VM2",
+      "executionTime": 2.1,
+      "vmLoads": [
+        7.333333333333333,
+        4.5,
+        1.2
+      ],
+      "partialAssignment": [
+        0,
+        1,
+        2,
+        0,
+        1
+      ]
+    },
+    {
+      "type": "allocation",
+      "algorithm": "round-robin",
+      "step": 6,
+      "taskIndex": 5,
+      "taskId": "T6",
+      "vmIndex": 2,
+      "selectedVM": 2,
+      "vmId": "VM3",
+      "executionTime": 1,
+      "vmLoads": [
+        7.333333333333333,
+        4.5,
+        2.2
+      ],
+      "partialAssignment": [
+        0,
+        1,
+        2,
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "type": "allocation",
+      "algorithm": "round-robin",
+      "step": 7,
+      "taskIndex": 6,
+      "taskId": "T7",
+      "vmIndex": 0,
+      "selectedVM": 0,
+      "vmId": "VM1",
+      "executionTime": 4.5,
+      "vmLoads": [
+        11.833333333333332,
+        4.5,
+        2.2
+      ],
+      "partialAssignment": [
+        0,
+        1,
+        2,
+        0,
+        1,
+        2,
+        0
+      ]
+    },
+    {
+      "type": "allocation",
+      "algorithm": "round-robin",
+      "step": 8,
+      "taskIndex": 7,
+      "taskId": "T8",
+      "vmIndex": 1,
+      "selectedVM": 1,
+      "vmId": "VM2",
+      "executionTime": 3.6,
+      "vmLoads": [
+        11.833333333333332,
+        8.1,
+        2.2
+      ],
+      "partialAssignment": [
+        0,
+        1,
+        2,
+        0,
+        1,
+        2,
+        0,
+        1
+      ]
+    }
+  ],
+  "history": [
+    {
+      "iteration": 0,
+      "bestSoFar": 11.833333333333332,
+      "bestFitness": 11.833333333333332
+    }
+  ],
+  "fitnessEvaluations": 1
+}
