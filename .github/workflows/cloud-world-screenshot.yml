@@ -1,0 +1,49 @@
+name: Cloud World real-browser screenshots
+on:
+  push:
+    branches: [feature/cloud-world-backup]
+    paths:
+      - ".github/workflows/cloud-world-screenshot.yml"
+      - "scripts/ci-cloud-screenshot.mjs"
+jobs:
+  screenshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+      - name: Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - name: Install project dependencies
+        run: npm ci --force
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Configure browser-test-only environment
+        run: |
+          printf 'VITE_GAME_PUBLIC=true\nVITE_WHISPERS_COUNT=30\n' > .env
+      - name: Launch development server
+        run: |
+          nohup npm run dev -- --host 127.0.0.1 --port 1240 > /tmp/cloud-vite.log 2>&1 &
+          for i in $(seq 1 120); do
+            if curl -fsS http://127.0.0.1:1240/ > /dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/cloud-vite.log
+          exit 1
+      - name: Capture actual Three.js Cloud World
+        run: node scripts/ci-cloud-screenshot.mjs
+      - name: Upload screenshots and report even on failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cloud-world-browser-screenshots
+          path: docs/evidence/cloud-ci/
+          if-no-files-found: warn
+      - name: Show dev server logs on error
+        if: failure()
+        run: cat /tmp/cloud-vite.log || true
