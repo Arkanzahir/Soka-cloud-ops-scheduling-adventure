@@ -41,4 +41,6 @@ Automated: set `VITE_GAME_PUBLIC=1` in the server/build process, then `node scri
 
 ## Remaining limitations
 
+Final GitHub metadata check reports repository visibility **public**. This session did not change repository visibility; restoring private access needs a separate owner decision. Draft PR: https://github.com/Arkanzahir/Soka-cloud-ops-scheduling-adventure/pull/9 targeting M6, confirmed open/draft and mergeable. No PR was merged.
+
 No known blocker in the tested desktop journey. Google Fonts requests are restricted in this environment (fallback fonts render); existing dependency vulnerabilities, audio/font clearance, sustained FPS, mobile/WebGL/gamepad and deployed URL remain unverified/unresolved. Preview assets/layout are retained; visual polishing by other developers is not merged in this integration. Existing build warnings about fonts/eval/bundle size remain. This is a tested local/production-preview demo, not an approved public release.
