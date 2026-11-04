@@ -3,7 +3,7 @@
 - **Destination:** https://github.com/Arkanzahir/Soka-cloud-ops-scheduling-adventure
 - **Source foundation:** https://github.com/brunosimon/folio-2025
 - **Read first:** `README.md`, `AGENTS.md`, `docs/MASTER_PROMPT.md`, `docs/PAPER_REVIEW.md`.
-- **Status terbaru:** M0 dan M2 selesai; lihat `M2_SHARED_GAME_EXTENSION.md` serta penutupan M2 di akhir dokumen. M1 belum dikerjakan. Catatan jeda di bawah adalah riwayat.
+- **Status terbaru:** M0/M2 selesai; M3 tahap 1 selesai pada `feature/cloud-world`. Baca `M3_CLOUD_FOUNDATION.md` dan checkpoint terakhir. M1 belum dikerjakan; catatan jeda di bawah adalah riwayat.
 
 # WORK HANDOFF — ringkasan untuk sesi baru
 
@@ -80,3 +80,13 @@ Gunakan jawaban default minimal: desktop browser 16:9; demo berurutan tetapi zon
 - Hasil uji penting: footprint return dekat props tidak selalu aman; cari titik tervalidasi terdekat sebelum transit. Flag VITE_GAME_PUBLIC=1 hanya untuk tes introspeksi; release normal sudah diuji tanpa flag.
 - Sisa M0 tetap: font eksternal diblok lingkungan uji, dependency vulnerabilities, clearance lisensi SFX/Pally; mobile/gamepad/WebGL belum diuji. Tidak merge/main/public/deploy.
 - **Berhenti di M2.** M1 belum dikerjakan; milestone berikutnya menunggu permintaan pemilik.
+
+## Checkpoint M3 tahap 1 — 2026-11-04
+
+- Branch `feature/cloud-world`, base M2 `e6574eb`. Kerangka selesai; M3 penuh belum selesai.
+- Baca [M3_CLOUD_FOUNDATION.md](M3_CLOUD_FOUNDATION.md), lalu `sources/CloudOps/CloudArea.js` bila melanjutkan. Tidak perlu audit ulang.
+- CloudArea memakai Area + registry/station/transition/panel M2; 3 VM clone brick asli, satu stasiun sederhana, Main↔Cloud teruji. Tidak ada engine algoritma.
+- PASS: 10 browser checks, 3 integrity tests, production build, 958 output asset hashes. Bukti `docs/evidence/m3-foundation-*`.
+- Berhenti sesuai lingkup kecil pemilik. Berikutnya menunggu instruksi; tidak lanjut ke keseluruhan Cloud World.
+
+Status sinkronisasi M3 tahap 1: commit tersedia lokal pada `feature/cloud-world` (`git log -1 --format=%H`). Dua percobaan push ditolak GitHub dengan `Internal Server Error` pada 2026-11-04. Belum tersinkron ke remote; retry `git push -u origin feature/cloud-world` saat layanan pulih. Pengujian dan source tidak terpengaruh.

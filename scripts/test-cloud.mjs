@@ -1,0 +1,40 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import { chromium } from 'playwright';
+const url=process.argv[2]||'http://127.0.0.1:1242/';
+const browser=await chromium.launch({channel:'chrome',headless:true});
+const page=await browser.newPage({viewport:{width:1440,height:900}});
+const report={url,checks:[],errors:[],httpErrors:[]};
+page.on('pageerror',e=>report.errors.push(e.message));
+page.on('response',r=>{if(r.status()>=400)report.httpErrors.push(r.url())});
+function check(name,passed){report.checks.push({name,passed:!!passed});assert.ok(passed,name);console.log('PASS '+name)}
+const driving=()=>page.waitForFunction(()=>game.world.cloudOps.state==='DRIVING'&&!game.world.cloudOps.transitions.busy,null,{timeout:20000});
+async function near(key){await page.evaluate(k=>{const p=game.world.areas.cloud[k].position;game.physicalVehicle.moveTo({x:p.x,y:2,z:p.z},0)},key);await page.waitForFunction(()=>game.physicalVehicle.wheels.inContactCount>=2&&Math.abs(game.physicalVehicle.speed)<.5);await page.waitForTimeout(500)}
+try {
+ await page.goto(url+'#skip',{waitUntil:'networkidle'});
+ await page.waitForFunction(()=>window.game?.world?.areas?.cloud&&game.reveal.step===2,null,{timeout:90000});
+ await page.evaluate(()=>{for(const [c,v] of [[game.dayCycles,.1],[game.yearCycles,.25]]){c.newAbsoluteProgressBinding.manual=true;c.newAbsoluteProgressBinding.manualValue=v;c.update(true)}});
+ check('Cloud registered alongside existing M2 zones',await page.evaluate(()=>['main','test','cloud'].every(id=>game.world.cloudOps.zones.has(id))));
+ check('exactly three VM placeholders reuse Bruno brick geometry and materials',await page.evaluate(()=>{const cloud=game.world.areas.cloud;const geometries=new Set(),materials=new Set();game.world.bricks.instancedGroup.group.traverse(o=>{if(o.isMesh){geometries.add(o.geometry);materials.add(o.material)}});return cloud.vms.length===3&&cloud.vms.every(v=>{let shared=true;v.visual.object3D.children[0].traverse(o=>{if(o.isMesh)shared&&=geometries.has(o.geometry)&&materials.has(o.material)});return shared&&v.physical.type==='fixed'})}));
+ await near('entry');await page.keyboard.press('e');await driving();
+ check('E enters Cloud, grounded and unlocked',await page.evaluate(()=>game.world.cloudOps.currentZone==='cloud'&&game.physicalVehicle.wheels.inContactCount>=2&&game.physicalVehicle.chassis.physical.body.isEnabled()&&game.world.cloudOps.lastError===null));
+ await page.screenshot({path:'docs/evidence/m3-foundation-cloud.png'});
+ const before=await page.evaluate(()=>({p:game.player.position.toArray(),c:game.view.camera.position.toArray()}));
+ await page.keyboard.down('ArrowUp');await page.waitForTimeout(800);await page.keyboard.up('ArrowUp');
+ const after=await page.evaluate(()=>({p:game.player.position.toArray(),c:game.view.camera.position.toArray()}));
+ const distance=(a,b)=>Math.hypot(...a.map((v,i)=>v-b[i]));
+ check('vehicle and camera move in Cloud',distance(before.p,after.p)>1&&distance(before.c,after.c)>.5);
+ await page.keyboard.press('r');await driving();
+ check('R stays in Cloud safe spawn',await page.evaluate(()=>game.world.cloudOps.currentZone==='cloud'&&Math.hypot(game.player.position.x+50,game.player.position.z-70)<.5&&game.physicalVehicle.wheels.inContactCount>=2));
+ await near('station');await page.keyboard.press('Enter');await page.waitForFunction(()=>game.modals.current?.name==='cloud-foundation'&&game.modals.state===1);
+ check('station opens placeholder panel and freezes vehicle',await page.evaluate(()=>game.world.cloudOps.state==='LEARNING_UI'&&!game.physicalVehicle.chassis.physical.body.isEnabled()));
+ await page.screenshot({path:'docs/evidence/m3-foundation-panel.png'});
+ await page.keyboard.press('Escape');await driving();
+ check('Esc restores driving',await page.evaluate(()=>game.modals.current===null&&game.inputs.filters.has('wandering')&&game.physicalVehicle.chassis.physical.body.isEnabled()));
+ await near('exit');await page.keyboard.press('Enter');await driving();
+ check('Enter returns safely to Main',await page.evaluate(()=>{const m=game.world.cloudOps,p=m.returnPoint.position;return m.currentZone==='main'&&m.lastError===null&&Math.hypot(game.player.position.x-p[0],game.player.position.z-p[1])<.5&&game.physicalVehicle.wheels.inContactCount>=2}));
+ check('M2 gate remains available',await page.evaluate(()=>game.world.cloudOps.stations[0].enabled===true));
+ check('no page or local HTTP errors',report.errors.length===0&&report.httpErrors.filter(u=>u.startsWith(new URL(url).origin)).length===0);
+ report.passed=true;
+}catch(error){report.passed=false;report.failure=error.stack;report.state=await page.evaluate(()=>({zone:game.world.cloudOps.currentZone,state:game.world.cloudOps.state,error:game.world.cloudOps.lastError,position:game.player.position.toArray(),entryInside:game.world.areas.cloud.entry.trigger.isIn,active:game.interactivePoints.activeItem===game.world.areas.cloud.entry.point,entryState:game.world.areas.cloud.entry.point.state}));await page.screenshot({path:'docs/evidence/m3-foundation-failure.png'});throw error}
+finally{fs.writeFileSync('docs/evidence/m3-foundation-browser.json',JSON.stringify(report,null,2));await browser.close()}

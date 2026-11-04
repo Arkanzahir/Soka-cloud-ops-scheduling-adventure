@@ -19,7 +19,7 @@ try {
  await page.waitForFunction(()=>window.game,null,{timeout:30000});
  await page.waitForFunction(()=>game.world?.cloudOps&&game.reveal.step===2,null,{timeout:90000});
  await page.evaluate(()=>{for(const [cycle,value] of [[game.dayCycles,.1],[game.yearCycles,.25]]){cycle.newAbsoluteProgressBinding.manual=true;cycle.newAbsoluteProgressBinding.manualValue=value;cycle.update(true)}});await page.waitForTimeout(2500);
- check('single original vehicle / Area / Zones registration',await page.evaluate(()=>game.world.areas.cloudOpsTest.isIn===false&&game.world.cloudOps.stations.every(s=>game.zones.items.includes(s.trigger))&&game.world.cloudOps.zones.size===2));
+ check('single original vehicle / Area / Zones registration',await page.evaluate(()=>game.world.areas.cloudOpsTest.isIn===false&&game.world.cloudOps.stations.every(s=>game.zones.items.includes(s.trigger))&&['main','test'].every(id=>game.world.cloudOps.zones.has(id))));
  check('reject duplicate and invalid zone definitions',await page.evaluate(()=>{let rejected=0;for(const z of [{id:'main',name:'duplicate',spawn:{position:[0,0],rotation:0}},{id:'bad',name:'bad',spawn:{position:[NaN,0],rotation:0}}]){try{game.world.cloudOps.register(z)}catch{rejected++}}return rejected===2}));
  check('remote interaction cannot teleport',await page.evaluate(()=>{game.world.cloudOps.stations[0].point.interact();return game.world.cloudOps.state==='DRIVING'&&game.world.cloudOps.currentZone==='main'}));
  await capture('main-gate');
