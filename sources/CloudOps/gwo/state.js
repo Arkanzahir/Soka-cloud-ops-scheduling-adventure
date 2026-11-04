@@ -9,3 +9,8 @@ export function validateState(state) {
  return structuredClone(state)
 }
 export const previewState={iteration:0,candidates:Array.from({length:5},(_,i)=>({id:`wolf-${i+1}`,assignment:Array.from({length:8},(_,j)=>(i+j)%3),fitness:12+i})),leaders:{alpha:'wolf-1',beta:'wolf-2',delta:'wolf-3'},bestAssignment:[0,1,2,0,1,2,0,1],bestMakespan:12}
+
+export function optimizerState(input){
+ const candidates=[...input.candidates].sort((a,b)=>a.fitness-b.fitness||a.id.localeCompare(b.id)).slice(0,5);
+ return validateState({...input,candidates,leaders:Object.fromEntries(Object.entries(input.leaders).map(([role,value])=>[role,typeof value==='string'?value:value.id]))});
+}

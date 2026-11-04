@@ -48,7 +48,7 @@ export function createWorldAdapter(algorithm, world)
     if(!world || typeof world !== 'object') throw new TypeError('World instance is required')
     const call = (method, data) => {
         if(typeof world[method] !== 'function') throw new Error(`${algorithm} world requires ${method}()`)
-        world[method](data)
+        if(world[method](data) === false) throw new Error(`${algorithm} visualization rejected the event`)
     }
     return {
         apply(step)
@@ -75,7 +75,7 @@ export function createWorldAdapter(algorithm, world)
                 if(typeof world.applyIteration === 'function') world.applyIteration(e)
             }
             else if(algorithm === 'gwo')
-                call('applyState', {
+                call(typeof world.applyOptimizerState === 'function' ? 'applyOptimizerState' : 'applyState', {
                     iteration: e.iteration, candidates: e.wolves,
                     leaders: e.leaders, guides: e.guides,
                     bestAssignment: [...e.bestAssignment],
