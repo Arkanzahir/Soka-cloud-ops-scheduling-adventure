@@ -12,7 +12,7 @@ Berbeda dengan PowerPoint konvensional, penjelasan algoritma tidak berhenti pada
 
 **Prinsip proyek:** game 3D adalah cara *menyampaikan* materi. Nilai akademik utamanya tetap terletak pada paper, penjelasan algoritma, studi kasus task→algoritma→solusi, dan visualisasi hasil perhitungan yang benar.
 
-### Istilah penting
+### Istilah penting:
 
 | Istilah | Penjelasan singkat |
 |---|---|
@@ -251,4 +251,4 @@ Repository saat penulisan masih **Private**; perubahan ke Public direncanakan ol
 
 Proyek ini mengadaptasi fondasi open-source **Bruno Simon — Folio 2025** (MIT). Lisensi sumber dan pemberitahuan hak cipta wajib dipertahankan ketika kode/asetnya dimasukkan. Pihak ketiga dapat memiliki lisensi berbeda sehingga harus diperiksa sebelum redistribusi. Kontribusi karya kelompok harus dicatat dengan jelas, termasuk bagian yang dibangun sendiri dan yang merupakan adaptasi.
 
-**Status klaim:** fondasi game M0 sudah diuji. Algoritma, mini-world, mode presentasi dan deployment masih rencana; materi desain kelompok dipertahankan.
+**Status klaim:** halaman ini adalah **rencana pengembangan**, bukan pernyataan bahwa game, algoritma atau mini-world sudah selesai.
