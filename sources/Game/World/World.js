@@ -1,3 +1,4 @@
+import { GwoWorld } from '../../CloudOps/gwo/GwoWorld.js'
 import * as THREE from 'three/webgpu'
 import { Game } from '../Game.js'
 import { Floor } from './Floor.js'
@@ -84,6 +85,7 @@ export class World
         {
             this.whispers = new Whispers()
             this.cloudOps = new ZoneManager(this.game)
+            this.areas.gwo = new GwoWorld(this.cloudOps)
         }
     }
 
@@ -245,3 +247,4 @@ export class World
     //     this.game.scene.add(mesh)
     // }
 }
+
