@@ -6,9 +6,11 @@ const out = 'docs/evidence/cloud-ci'
 fs.mkdirSync(out, { recursive: true })
 const browser = await chromium.launch({
   headless: true,
-  args: ['--enable-unsafe-webgpu', '--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader']
+  args: ['--disable-features=WebGPU', '--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader']
 })
 const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1 })
+// CI runner has no physical GPU: force Three.js WebGL2 backend instead of unstable SwiftShader WebGPU.
+await page.addInitScript(() => { try { Object.defineProperty(navigator, 'gpu', { configurable: true, value: undefined }) } catch {} })
 const report = { checks: [], consoleErrors: [], errors: [], requests: [] }
 page.on('pageerror', e => report.errors.push(e.message))
 page.on('console', m => { if(m.type() === 'error') report.consoleErrors.push(m.text()) })
