@@ -32,4 +32,4 @@ try{
  }
  const after=await counts();report.before=before;report.after=after;
  assert.deepEqual(after,before);report.checks.push({name:'keyboard and modal listeners stable across three presentation round trips',passed:true});report.passed=true;console.log('PASS stable keyboard and modal listeners');
-}catch(error){report.passed=false;report.failure=error.stack;throw error}finally{fs.writeFileSync('docs/evidence/m7-listeners.json',JSON.stringify(report,null,2));await browser.close()}
+}catch(error){report.passed=false;report.failure=error.stack;throw error}finally{fs.writeFileSync(`docs/evidence/${process.argv[3]||'m7-listeners'}.json`,JSON.stringify(report,null,2));await browser.close()}

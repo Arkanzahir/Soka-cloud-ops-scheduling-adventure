@@ -2,11 +2,12 @@ import { Events } from './Events.js'
 
 export class Viewport
 {
-    constructor(domElement)
+    constructor(domElement, pixelRatioMax = 2)
     {
         this.domElement = domElement
 
         this.events = new Events()
+        this.pixelRatioMax = pixelRatioMax
         
         this.measure()
         this.setResize()
@@ -21,8 +22,15 @@ export class Viewport
         this.ratio = this.width / this.height
 
         this.pixelRatioPure = window.devicePixelRatio
-        this.pixelRatioMax = 2
         this.pixelRatio = Math.min(this.pixelRatioPure, this.pixelRatioMax)
+    }
+
+    setPixelRatioMax(value)
+    {
+        if(value === this.pixelRatioMax) return
+        this.pixelRatioMax = value
+        this.measure()
+        this.events.trigger('change')
     }
 
     setResize()

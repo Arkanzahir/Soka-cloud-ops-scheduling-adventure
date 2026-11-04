@@ -237,7 +237,7 @@ export class LearningPanel
             const value = document.createElement('strong')
             value.textContent = `${fmt(row.metrics.makespan)} s`
             const detail = document.createElement('small')
-            detail.textContent = `Biaya ${fmt(row.metrics.cost, 6)} · Evaluasi ${row.fitnessEvaluations}`
+            detail.textContent = `Biaya ${fmt(row.metrics.cost, 6)} · Utilisasi (proxy) ${fmt(row.metrics.meanUtilizationProxy * 100, 1)}% · Evaluasi ${row.fitnessEvaluations}`
             card.append(label, value, detail)
             return card
         }))

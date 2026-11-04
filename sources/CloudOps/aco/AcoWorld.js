@@ -3,15 +3,16 @@ import { color, texture, uv, mix } from 'three/tsl'
 import { MeshDefaultMaterial } from '../../Game/Materials/MeshDefaultMaterial.js'
 import { Trees } from '../../Game/World/Trees.js'
 import { InteractivePoints } from '../../Game/InteractivePoints.js'
+import {createPheromoneGeometry,setPheromoneRadius} from './PheromoneGeometry.js'
 
 // Procedural source assets: no Blender or external model dependencies.
 export class AcoWorld {
  constructor(game, origin = new T.Vector3(220, 0, 0)) {
-  this.game=game; this.origin=origin; this.ants=[]; this.paths=[]; this.pathMeshes=[]; this.elapsed=0; this.demo=false
+  this.game=game; this.origin=origin; this.ants=[]; this.paths=[]; this.pathMeshes=[]; this.elapsed=0; this.demo=false;this.antPosition=new T.Vector3();this.antTangent=new T.Vector3()
   this.group=new T.Group(); this.group.position.copy(origin); game.scene.add(this.group)
   this.mat={}; for(const [n,c] of Object.entries({sand:'#ffcf8b',wood:'#a87762',soil:'#ac6942',dark:'#382c38',leaf:'#b8b62e',cream:'#fff0bf',red:'#b85b47'})) this.mat[n]=new MeshDefaultMaterial({colorNode:color(c)})
   this.build(); this.decorate(); this.resetVisualization()
-  this.tick=()=>this.update(game.ticker.delta); game.ticker.events.on('tick',this.tick,10)
+  this.tick=()=>{const active=!this.isActive||this.isActive();this.group.visible=active;if(active)this.update(game.ticker.delta)}; game.ticker.events.on('tick',this.tick,10)
  }
  mesh(geometry,mat,x,y,z,sx=1,sy=1,sz=1){const m=new T.Mesh(geometry,this.mat[mat]||mat);m.position.set(x,y,z);m.scale.set(sx,sy,sz);m.castShadow=true;m.receiveShadow=true;this.group.add(m);return m}
  box(x,y,z,w,h,d,mat='wood',solid=false){const m=this.mesh(new T.BoxGeometry(w,h,d),mat,x,y,z);if(solid)this.game.objects.add(null,{type:'fixed',position:{x:x+this.origin.x,y:y+this.origin.y,z:z+this.origin.z},colliders:[{shape:'cuboid',parameters:[w/2,h/2,d/2],category:'object'}]});return m}
@@ -38,7 +39,7 @@ export class AcoWorld {
   for(let j=0;j<3;j++){
    const x=j*4-1;this.box(x,1,-7,2,1,1.8,'wood');this.box(x,1.65,-7,1.6,.3,1.4,'cream');this.label('VM'+(j+1),x,2,-6.1,2)
    const curve=new T.CatmullRomCurve3([new T.Vector3(3,.61,.5),new T.Vector3(3,.61,-2),new T.Vector3(x,.61,-4),new T.Vector3(x,.61,-6)])
-   this.paths.push(curve);this.pathMeshes.push(this.mesh(new T.TubeGeometry(curve,32,.075,5,false),'soil',0,0,0))
+   this.paths.push(curve);this.pathMeshes.push(this.mesh(createPheromoneGeometry(curve),'soil',0,0,0))
    for(let k=0;k<3;k++){const ant=this.makeAnt();this.group.add(ant);this.ants.push({mesh:ant,vm:j,phase:k/3})}
   }
   this.box(-9,1.3,5,4.5,2.6,.35,'wood',true);this.label('ACO RESEARCH',-9,2,5.2,4);this.label('E / ENTER : INSPECT',-9,1.2,5.2,4)
@@ -51,10 +52,10 @@ export class AcoWorld {
   for(let i=0;i<35;i++){const a=i*2.399;const x=-8+Math.cos(a)*(3.6+(i%3)*.3),z=-5+Math.sin(a)*(3.6+(i%3)*.3);this.mesh(new T.DodecahedronGeometry(.2+(i%3)*.08,0),'cream',x,.16,z,1,.7,1)}
   for(let i=0;i<220;i++){const x=-15+(i*7.31%30),z=-13+(i*3.17%26);if(Math.abs(x)<12&&z>-10&&z<11)continue;const m=this.mesh(new T.ConeGeometry(.12,.55,3),'leaf',x,.275,z);m.rotation.y=i}
  }
- applyEvent(event){if(!Number.isInteger(event.selectedVM)||event.selectedVM<0||event.selectedVM>2)throw new RangeError('selectedVM must be 0..2');if(event.pheromone && (event.pheromone.length!==3 || event.pheromone.some(v=>!Number.isFinite(v)||v<0)))throw new RangeError('pheromone must contain three nonnegative values');if(event.pheromone){const max=Math.max(...event.pheromone,1e-6);this.pathMeshes.forEach((m,j)=>{m.geometry.dispose();m.geometry=new T.TubeGeometry(this.paths[j],32,.04+.16*event.pheromone[j]/max,5,false)})}this.currentTask=event.task;this.demo=false;this.event={...event};this.elapsed=0;this.ants.forEach((a,i)=>a.mesh.visible=i===0);this.ants[0].vm=event.selectedVM}
+ applyEvent(event){if(!Number.isInteger(event.selectedVM)||event.selectedVM<0||event.selectedVM>2)throw new RangeError('selectedVM must be 0..2');if(event.pheromone && (event.pheromone.length!==3 || event.pheromone.some(v=>!Number.isFinite(v)||v<0)))throw new RangeError('pheromone must contain three nonnegative values');if(event.pheromone)this.setPheromone(event.pheromone);this.currentTask=event.task;this.demo=false;this.event={...event};this.elapsed=0;this.ants.forEach((a,i)=>a.mesh.visible=i===0);this.ants[0].vm=event.selectedVM}
  resetVisualization(){this.demo=false;this.event=null;this.elapsed=0;this.currentTask=0;this.ants.forEach((a,i)=>{a.mesh.visible=i===0;a.vm=0;a.mesh.position.copy(this.paths[0].getPoint(0))});this.setPheromone([1,1,1])}
- setPheromone(row){const max=Math.max(...row,1e-6);this.pathMeshes.forEach((m,j)=>{m.geometry.dispose();m.geometry=new T.TubeGeometry(this.paths[j],32,.04+.16*row[j]/max,5,false)})}
+ setPheromone(row){const max=Math.max(...row,1e-6);this.pathMeshes.forEach((m,j)=>setPheromoneRadius(m.geometry,.04+.16*row[j]/max))}
  applyIteration(e){this.iteration=e;this.setPheromone(e.pheromoneSnapshot[this.currentTask])}
- update(dt){if(!this.demo&&!this.event)return;this.elapsed+=Number.isFinite(dt)?dt:0;for(const a of this.ants){const t=this.demo?(this.elapsed*.1+a.phase)%1:Math.min(this.elapsed*1.8,1);const p=this.paths[a.vm].getPoint(t);a.mesh.position.copy(p);const v=this.paths[a.vm].getTangent(t);a.mesh.rotation.y=Math.atan2(v.x,v.z)}}
+ update(dt){if(!this.demo&&(!this.event||this.elapsed>=1/1.8))return;this.elapsed+=Number.isFinite(dt)?dt:0;for(const a of this.ants){if(!a.mesh.visible)continue;const t=this.demo?(this.elapsed*.1+a.phase)%1:Math.min(this.elapsed*1.8,1);const p=this.paths[a.vm].getPoint(t,this.antPosition);a.mesh.position.copy(p);const v=this.paths[a.vm].getTangent(t,this.antTangent);a.mesh.rotation.y=Math.atan2(v.x,v.z)}}
 }
 

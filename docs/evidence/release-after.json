@@ -1,0 +1,552 @@
+{
+  "url": "http://127.0.0.1:4192/Soka-cloud-ops-scheduling-adventure/",
+  "label": "release-after",
+  "viewport": {
+    "width": 1366,
+    "height": 768
+  },
+  "deviceScaleFactor": 2,
+  "sampleMs": 5000,
+  "scenarios": [
+    {
+      "id": "main",
+      "quality": 0,
+      "frames": 669,
+      "durationMs": 5005.200000017881,
+      "fps": 133.66099256725204,
+      "meanMs": 7.481614349802514,
+      "p50Ms": 7.4000000059604645,
+      "p95Ms": 8.5,
+      "drawCalls": 269.76532137518683,
+      "triangles": 483184.9192825112,
+      "resources": {
+        "geometries": 367,
+        "textures": 113
+      },
+      "gpuTimestamp": 0,
+      "devicePixelRatio": 2,
+      "renderPixelRatio": 2,
+      "canvas": [
+        2732,
+        1536
+      ],
+      "cpu": {
+        "taskMs": 4986.646000000001,
+        "scriptMs": 4616.602999999999,
+        "layoutMs": 50.191999999999986
+      },
+      "heapBytes": 84546296,
+      "transitionMs": 3184
+    },
+    {
+      "id": "cloud",
+      "quality": 0,
+      "frames": 599,
+      "durationMs": 5004.9000000059605,
+      "fps": 119.68271094313305,
+      "meanMs": 8.35542570952581,
+      "p50Ms": 8.299999982118607,
+      "p95Ms": 9.399999976158142,
+      "drawCalls": 375.62270450751254,
+      "triangles": 458511.36227045074,
+      "resources": {
+        "geometries": 501,
+        "textures": 133
+      },
+      "gpuTimestamp": 0,
+      "devicePixelRatio": 2,
+      "renderPixelRatio": 2,
+      "canvas": [
+        2732,
+        1536
+      ],
+      "cpu": {
+        "taskMs": 4984.679,
+        "scriptMs": 4660.916999999998,
+        "layoutMs": 42.11799999999999
+      },
+      "heapBytes": 87878460,
+      "transitionMs": 3799
+    },
+    {
+      "id": "aco",
+      "quality": 0,
+      "frames": 487,
+      "durationMs": 5004,
+      "fps": 97.32214228617107,
+      "meanMs": 10.275154004106776,
+      "p50Ms": 10.199999988079071,
+      "p95Ms": 11.400000005960464,
+      "drawCalls": 494.8336755646817,
+      "triangles": 390924.0205338809,
+      "resources": {
+        "geometries": 762,
+        "textures": 147
+      },
+      "gpuTimestamp": 0,
+      "devicePixelRatio": 2,
+      "renderPixelRatio": 2,
+      "canvas": [
+        2732,
+        1536
+      ],
+      "cpu": {
+        "taskMs": 4993.985999999996,
+        "scriptMs": 4713.132000000001,
+        "layoutMs": 34.59099999999998
+      },
+      "heapBytes": 113840776,
+      "transitionMs": 3195
+    },
+    {
+      "id": "gwo",
+      "quality": 0,
+      "frames": 560,
+      "durationMs": 5002.800000011921,
+      "fps": 111.9373151032753,
+      "meanMs": 8.933571428592716,
+      "p50Ms": 8.799999982118607,
+      "p95Ms": 9.900000005960464,
+      "drawCalls": 409.08392857142854,
+      "triangles": 442729.03571428574,
+      "resources": {
+        "geometries": 912,
+        "textures": 156
+      },
+      "gpuTimestamp": 0,
+      "devicePixelRatio": 2,
+      "renderPixelRatio": 2,
+      "canvas": [
+        2732,
+        1536
+      ],
+      "cpu": {
+        "taskMs": 4991.037999999996,
+        "scriptMs": 4642.249,
+        "layoutMs": 39.33700000000001
+      },
+      "heapBytes": 67264800,
+      "transitionMs": 3443
+    },
+    {
+      "id": "panel-gwo-play",
+      "quality": 0,
+      "frames": 565,
+      "durationMs": 5005.4000000059605,
+      "fps": 112.8780916608717,
+      "meanMs": 8.859115044258337,
+      "p50Ms": 8.700000017881393,
+      "p95Ms": 10,
+      "drawCalls": 407.60176991150445,
+      "triangles": 442698.1061946903,
+      "resources": {
+        "geometries": 912,
+        "textures": 156
+      },
+      "gpuTimestamp": 0,
+      "devicePixelRatio": 2,
+      "renderPixelRatio": 2,
+      "canvas": [
+        2732,
+        1536
+      ],
+      "cpu": {
+        "taskMs": 4992.375000000003,
+        "scriptMs": 4653.086000000002,
+        "layoutMs": 42.437999999999974
+      },
+      "heapBytes": 63527504
+    },
+    {
+      "id": "main",
+      "quality": 1,
+      "frames": 704,
+      "durationMs": 5004.600000023842,
+      "fps": 140.67058306291136,
+      "meanMs": 7.108806818215684,
+      "p50Ms": 7,
+      "p95Ms": 8.100000023841858,
+      "drawCalls": 268.9161931818182,
+      "triangles": 483192.9715909091,
+      "resources": {
+        "geometries": 912,
+        "textures": 156
+      },
+      "gpuTimestamp": 0,
+      "devicePixelRatio": 2,
+      "renderPixelRatio": 1,
+      "canvas": [
+        1366,
+        768
+      ],
+      "cpu": {
+        "taskMs": 4986.2210000000005,
+        "scriptMs": 4785.040999999999,
+        "layoutMs": 0
+      },
+      "heapBytes": 98585756,
+      "transitionMs": 3540
+    },
+    {
+      "id": "cloud",
+      "quality": 1,
+      "frames": 646,
+      "durationMs": 5007.699999988079,
+      "fps": 129.00133793988013,
+      "meanMs": 7.751857585120866,
+      "p50Ms": 7.699999988079071,
+      "p95Ms": 8.599999994039536,
+      "drawCalls": 375.1346749226006,
+      "triangles": 458541.08049535606,
+      "resources": {
+        "geometries": 912,
+        "textures": 156
+      },
+      "gpuTimestamp": 0,
+      "devicePixelRatio": 2,
+      "renderPixelRatio": 1,
+      "canvas": [
+        1366,
+        768
+      ],
+      "cpu": {
+        "taskMs": 4989.681000000004,
+        "scriptMs": 4803.298000000005,
+        "layoutMs": 0
+      },
+      "heapBytes": 115585704,
+      "transitionMs": 3286
+    },
+    {
+      "id": "aco",
+      "quality": 1,
+      "frames": 515,
+      "durationMs": 5000.699999988079,
+      "fps": 102.98558201876291,
+      "meanMs": 9.710097087355493,
+      "p50Ms": 9.699999988079071,
+      "p95Ms": 10.5,
+      "drawCalls": 493.25825242718446,
+      "triangles": 390888.4951456311,
+      "resources": {
+        "geometries": 912,
+        "textures": 156
+      },
+      "gpuTimestamp": 0,
+      "devicePixelRatio": 2,
+      "renderPixelRatio": 1,
+      "canvas": [
+        1366,
+        768
+      ],
+      "cpu": {
+        "taskMs": 4988.561999999987,
+        "scriptMs": 4838.357999999999,
+        "layoutMs": 0
+      },
+      "heapBytes": 140564028,
+      "transitionMs": 3189
+    },
+    {
+      "id": "gwo",
+      "quality": 1,
+      "frames": 591,
+      "durationMs": 5000.899999976158,
+      "fps": 118.1787278295542,
+      "meanMs": 8.461759729232078,
+      "p50Ms": 8.299999982118607,
+      "p95Ms": 9.699999988079071,
+      "drawCalls": 408.3333333333333,
+      "triangles": 442743,
+      "resources": {
+        "geometries": 912,
+        "textures": 156
+      },
+      "gpuTimestamp": 0,
+      "devicePixelRatio": 2,
+      "renderPixelRatio": 1,
+      "canvas": [
+        1366,
+        768
+      ],
+      "cpu": {
+        "taskMs": 4986.983999999992,
+        "scriptMs": 4759.223000000005,
+        "layoutMs": 0
+      },
+      "heapBytes": 78013336,
+      "transitionMs": 3183
+    },
+    {
+      "id": "panel-gwo-play",
+      "quality": 1,
+      "frames": 610,
+      "durationMs": 5003.300000011921,
+      "fps": 121.91953310785813,
+      "meanMs": 8.202131147560527,
+      "p50Ms": 8.099999994039536,
+      "p95Ms": 9.199999988079071,
+      "drawCalls": 407.52295081967213,
+      "triangles": 442752.37704918033,
+      "resources": {
+        "geometries": 912,
+        "textures": 156
+      },
+      "gpuTimestamp": 0,
+      "devicePixelRatio": 2,
+      "renderPixelRatio": 1,
+      "canvas": [
+        1366,
+        768
+      ],
+      "cpu": {
+        "taskMs": 4990.017999999992,
+        "scriptMs": 4808.855000000009,
+        "layoutMs": 0.4389999999999672
+      },
+      "heapBytes": 78290260
+    }
+  ],
+  "stress": [
+    {
+      "before": {
+        "meshes": 1182,
+        "geometries": 1021,
+        "textures": 9,
+        "renderer": {
+          "geometries": 912,
+          "textures": 156
+        }
+      },
+      "after": {
+        "meshes": 1182,
+        "geometries": 1021,
+        "textures": 9,
+        "renderer": {
+          "geometries": 912,
+          "textures": 156
+        }
+      },
+      "elapsedMs": 15.5,
+      "iterations": 20,
+      "distinctPheromoneGeometryIds": 0,
+      "heapAfterGC": 44884468,
+      "id": "cloud"
+    },
+    {
+      "before": {
+        "meshes": 1182,
+        "geometries": 1021,
+        "textures": 9,
+        "renderer": {
+          "geometries": 912,
+          "textures": 156
+        }
+      },
+      "after": {
+        "meshes": 1182,
+        "geometries": 1021,
+        "textures": 9,
+        "renderer": {
+          "geometries": 912,
+          "textures": 156
+        }
+      },
+      "elapsedMs": 26,
+      "iterations": 20,
+      "distinctPheromoneGeometryIds": 3,
+      "heapAfterGC": 44948840,
+      "id": "aco"
+    },
+    {
+      "before": {
+        "meshes": 1182,
+        "geometries": 1021,
+        "textures": 9,
+        "renderer": {
+          "geometries": 912,
+          "textures": 156
+        }
+      },
+      "after": {
+        "meshes": 1182,
+        "geometries": 1021,
+        "textures": 9,
+        "renderer": {
+          "geometries": 912,
+          "textures": 156
+        }
+      },
+      "elapsedMs": 14.400000005960464,
+      "iterations": 20,
+      "distinctPheromoneGeometryIds": 0,
+      "heapAfterGC": 45238260,
+      "id": "gwo"
+    }
+  ],
+  "errors": [],
+  "gpu": {
+    "gpu": {
+      "devices": [
+        {
+          "vendorId": 4318,
+          "deviceId": 9634,
+          "subSysId": 989206442,
+          "revision": 161,
+          "vendorString": "",
+          "deviceString": "NVIDIA GeForce RTX 3050 Laptop GPU",
+          "driverVendor": "NVIDIA",
+          "driverVersion": "31.0.15.3770"
+        },
+        {
+          "vendorId": 32902,
+          "deviceId": 18086,
+          "subSysId": 989206442,
+          "revision": 12,
+          "vendorString": "",
+          "deviceString": "Intel(R) Iris(R) Xe Graphics",
+          "driverVendor": "",
+          "driverVersion": "31.0.101.4255"
+        },
+        {
+          "vendorId": 5140,
+          "deviceId": 140,
+          "subSysId": 0,
+          "revision": 0,
+          "vendorString": "",
+          "deviceString": "Microsoft Basic Render Driver",
+          "driverVendor": "",
+          "driverVersion": "10.0.26100.7309"
+        }
+      ],
+      "auxAttributes": {
+        "amdSwitchable": false,
+        "bgra8OverlaySupport": "SOFTWARE",
+        "canSupportThreadedTextureMailbox": false,
+        "directComposition": true,
+        "directMLFeatureLevel": "Not supported",
+        "directRenderingVersion": "",
+        "displayType": "ANGLE_D3D11",
+        "dx12FeatureLevel": "Not supported",
+        "glExtensions": "GL_AMD_performance_monitor GL_ANGLE_base_vertex_base_instance_shader_builtin GL_ANGLE_blob_cache GL_ANGLE_client_arrays GL_ANGLE_clip_cull_distance GL_ANGLE_copy_texture_3d GL_ANGLE_depth_texture GL_ANGLE_framebuffer_blit GL_ANGLE_framebuffer_multisample GL_ANGLE_get_serialized_context_string GL_ANGLE_get_tex_level_parameter GL_ANGLE_instanced_arrays GL_ANGLE_memory_size GL_ANGLE_multiview_multisample GL_ANGLE_pack_reverse_row_order GL_ANGLE_polygon_mode GL_ANGLE_program_binary_readiness_query GL_ANGLE_program_cache_control GL_ANGLE_provoking_vertex GL_ANGLE_renderability_validation GL_ANGLE_request_extension GL_ANGLE_robust_client_memory GL_ANGLE_shader_pixel_local_storage GL_ANGLE_shader_pixel_local_storage_coherent GL_ANGLE_stencil_texturing GL_ANGLE_texture_compression_dxt3 GL_ANGLE_texture_compression_dxt5 GL_ANGLE_texture_multisample GL_ANGLE_texture_usage GL_ANGLE_translated_shader_source GL_APPLE_clip_distance GL_ARM_rgba8 GL_CHROMIUM_bind_generates_resource GL_CHROMIUM_bind_uniform_location GL_CHROMIUM_copy_compressed_texture GL_CHROMIUM_copy_texture GL_CHROMIUM_lose_context GL_EXT_EGL_image_external_wrap_modes GL_EXT_base_instance GL_EXT_blend_func_extended GL_EXT_blend_minmax GL_EXT_clip_control GL_EXT_clip_cull_distance GL_EXT_color_buffer_float GL_EXT_color_buffer_half_float GL_EXT_conservative_depth GL_EXT_debug_label GL_EXT_debug_marker GL_EXT_depth_clamp GL_EXT_discard_framebuffer GL_EXT_disjoint_timer_query GL_EXT_draw_buffers GL_EXT_draw_buffers_indexed GL_EXT_draw_elements_base_vertex GL_EXT_float_blend GL_EXT_frag_depth GL_EXT_instanced_arrays GL_EXT_map_buffer_range GL_EXT_occlusion_query_boolean GL_EXT_polygon_offset_clamp GL_EXT_read_format_bgra GL_EXT_render_snorm GL_EXT_robustness GL_EXT_sRGB GL_EXT_shader_texture_lod GL_EXT_texture_border_clamp GL_EXT_texture_compression_bptc GL_EXT_texture_compression_dxt1 GL_EXT_texture_compression_rgtc GL_EXT_texture_compression_s3tc_srgb GL_EXT_texture_filter_anisotropic GL_EXT_texture_format_BGRA8888 GL_EXT_texture_mirror_clamp_to_edge GL_EXT_texture_norm16 GL_EXT_texture_rg GL_EXT_texture_storage GL_EXT_texture_type_2_10_10_10_REV GL_EXT_unpack_subimage GL_KHR_debug GL_KHR_parallel_shader_compile GL_KHR_robustness GL_NV_EGL_stream_consumer_external GL_NV_fence GL_NV_framebuffer_blit GL_NV_pack_subimage GL_NV_pixel_buffer_object GL_NV_shader_noperspective_interpolation GL_OES_EGL_image GL_OES_EGL_image_external GL_OES_EGL_image_external_essl3 GL_OES_depth24 GL_OES_depth32 GL_OES_draw_buffers_indexed GL_OES_draw_elements_base_vertex GL_OES_element_index_uint GL_OES_fbo_render_mipmap GL_OES_get_program_binary GL_OES_mapbuffer GL_OES_packed_depth_stencil GL_OES_required_internalformat GL_OES_rgb8_rgba8 GL_OES_sample_variables GL_OES_shader_multisample_interpolation GL_OES_standard_derivatives GL_OES_surfaceless_context GL_OES_texture_border_clamp GL_OES_texture_float GL_OES_texture_float_linear GL_OES_texture_half_float GL_OES_texture_half_float_linear GL_OES_texture_npot GL_OES_texture_stencil8 GL_OES_texture_storage_multisample_2d_array GL_OES_vertex_array_object GL_OVR_multiview GL_OVR_multiview2 ",
+        "glImplementationParts": "(gl=egl-angle,angle=d3d11)",
+        "glRenderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3050 Laptop GPU (0x000025A2) Direct3D11 vs_5_0 ps_5_0, D3D11-31.0.15.3770)",
+        "glResetNotificationStrategy": 33362,
+        "glVendor": "Google Inc. (NVIDIA)",
+        "glVersion": "OpenGL ES 3.0 (ANGLE 2.1.28975 git hash: 127e783de334)",
+        "glWsExtensions": "EGL_EXT_create_context_robustness EGL_ANGLE_d3d_share_handle_client_buffer EGL_ANGLE_d3d_texture_client_buffer EGL_ANGLE_surface_d3d_texture_2d_share_handle EGL_ANGLE_query_surface_pointer EGL_ANGLE_window_fixed_size EGL_ANGLE_keyed_mutex EGL_ANGLE_surface_orientation EGL_ANGLE_direct_composition EGL_NV_post_sub_buffer EGL_KHR_create_context EGL_KHR_image EGL_KHR_image_base EGL_KHR_gl_texture_2D_image EGL_KHR_gl_texture_cubemap_image EGL_KHR_gl_renderbuffer_image EGL_KHR_get_all_proc_addresses EGL_KHR_stream EGL_KHR_stream_consumer_gltexture EGL_NV_stream_consumer_gltexture_yuv EGL_ANGLE_stream_producer_d3d_texture EGL_ANGLE_create_context_webgl_compatibility EGL_CHROMIUM_create_context_bind_generates_resource EGL_CHROMIUM_sync_control EGL_EXT_pixel_format_float EGL_KHR_surfaceless_context EGL_ANGLE_display_texture_share_group EGL_ANGLE_display_semaphore_share_group EGL_ANGLE_create_context_client_arrays EGL_ANGLE_program_cache_control EGL_ANGLE_robust_resource_initialization EGL_ANGLE_create_context_extensions_enabled EGL_ANDROID_blob_cache EGL_ANDROID_recordable EGL_ANGLE_image_d3d11_texture EGL_ANGLE_create_context_backwards_compatible EGL_KHR_no_config_context EGL_KHR_create_context_no_error EGL_KHR_reusable_sync EGL_ANGLE_memory_usage_report ",
+        "glWsVendor": "Google Inc. (NVIDIA)",
+        "glWsVersion": "1.5 (ANGLE 2.1.28975 git hash: 127e783de334)",
+        "inProcessGpu": false,
+        "initializationTime": 0.195785,
+        "isAsan": false,
+        "isClangCoverage": false,
+        "jpegDecodeAcceleratorSupported": false,
+        "maxMsaaSamples": "8",
+        "nv12OverlaySupport": "SOFTWARE",
+        "optimus": false,
+        "p010OverlaySupport": "SOFTWARE",
+        "passthroughCmdDecoder": true,
+        "pixelShaderVersion": "5.0",
+        "processCrashCount": 0,
+        "rgb10a2OverlaySupport": "SOFTWARE",
+        "sandboxed": false,
+        "skiaBackendType": "GaneshGL",
+        "subpixelFontRendering": true,
+        "supportsD3dSharedImages": false,
+        "supportsDirectML": false,
+        "supportsDx12": false,
+        "supportsOverlays": true,
+        "supportsVulkan": false,
+        "targetCpuBits": 64,
+        "vertexShaderVersion": "5.0",
+        "visibilityCallbackCallCount": 0,
+        "vulkanVersion": "Not supported",
+        "yuy2OverlaySupport": "SOFTWARE"
+      },
+      "featureStatus": {
+        "2d_canvas": "enabled",
+        "direct_rendering_display_compositor": "disabled_off_ok",
+        "gpu_compositing": "enabled",
+        "multiple_raster_threads": "enabled_on",
+        "opengl": "enabled_on",
+        "rasterization": "enabled",
+        "raw_draw": "disabled_off_ok",
+        "skia_graphite": "disabled_off",
+        "trees_in_viz": "disabled_off",
+        "video_decode": "enabled",
+        "video_encode": "enabled",
+        "webgl": "enabled",
+        "webgpu": "enabled",
+        "webnn": "disabled_off"
+      },
+      "driverBugWorkarounds": [
+        "disable_d3d11_vp9_ksvc_decoding",
+        "disable_d3d12_av1_encoding",
+        "disable_d3d12_h264_encoding",
+        "disable_hevc_hmft_cbr_encoding",
+        "disable_vp9_hmft_temporal_encoding",
+        "disable_vp_auto_hdr",
+        "enable_bgra8_overlays_with_yuv_overlay_support",
+        "enable_webgl_timer_query_extensions",
+        "exit_on_context_lost",
+        "force_rgb10a2_overlay_support",
+        "unpack_overlapping_rows_separately_unpack_buffer",
+        "use_first_valid_ref_for_av1_invalid_ref",
+        "disabled_extension_GL_KHR_blend_equation_advanced",
+        "disabled_extension_GL_KHR_blend_equation_advanced_coherent"
+      ],
+      "videoDecoding": [],
+      "videoEncoding": []
+    },
+    "modelName": "",
+    "modelVersion": "",
+    "commandLine": "\"C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe\" --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-edgeupdater --disable-extensions --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,BlockOriginHeaderModificationOnRedirect,AvoidCorsURLLoaderRestartOnRedirect,Translate,AutoDeElevate,OptimizationHints,NetworkTimeServiceQuerying,AimEnabled,msForceBrowserSignIn,msEdgeUpdateLaunchServicesPreferredVersion --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --disable-updater-scheduler --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --disable-infobars --disable-search-engine-choice-screen --disable-sync --enable-unsafe-swiftshader --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --user-data-dir=\"C:\\Users\\Lenovo\\AppData\\Local\\Temp\\playwright_chromiumdev_profile-MBNc3L\" --remote-debugging-pipe --no-startup-window --noerrdialogs --flag-switches-begin --flag-switches-end --enable-unsafe-swiftshader"
+  },
+  "loadToGameMs": 17975,
+  "environment": {
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.0.0 Safari/537.36",
+    "cores": 16,
+    "deviceMemory": 16,
+    "backend": "WebGPUBackend"
+  },
+  "resourceTransfer": {
+    "decodedBytes": 23480463,
+    "encodedBytes": 19257292,
+    "requests": 153,
+    "largest": [
+      {
+        "url": "http://127.0.0.1:4192/Soka-cloud-ops-scheduling-adventure/sounds/musics/Boy.mp3",
+        "bytes": 6509760
+      },
+      {
+        "url": "http://127.0.0.1:4192/Soka-cloud-ops-scheduling-adventure/assets/index-BfVXNtbd.js",
+        "bytes": 4955914
+      },
+      {
+        "url": "http://127.0.0.1:4192/Soka-cloud-ops-scheduling-adventure/areas/areas.glb?cb=1",
+        "bytes": 3286220
+      },
+      {
+        "url": "http://127.0.0.1:4192/Soka-cloud-ops-scheduling-adventure/assets/rapier_wasm3d_bg-0Vyjx73g.wasm",
+        "bytes": 1698487
+      },
+      {
+        "url": "http://127.0.0.1:4192/Soka-cloud-ops-scheduling-adventure/terrain/terrain.glb?cb=1",
+        "bytes": 730120
+      },
+      {
+        "url": "http://127.0.0.1:4192/Soka-cloud-ops-scheduling-adventure/basis/basis_transcoder.wasm",
+        "bytes": 527333
+      }
+    ]
+  },
+  "webgpuAdapter": {
+    "vendor": "nvidia",
+    "architecture": "ampere",
+    "device": "",
+    "description": "",
+    "isFallbackAdapter": false
+  },
+  "passed": true
+}

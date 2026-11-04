@@ -1,9 +1,9 @@
 # CLOUD OPS — Scheduling Adventure
 
-**M7 integration demo:** Cloud, ACO, GWO dan M6 kini tersambung pada branch `integration/m7-demo`. Gunakan tombol **Presentasi** atau gerbang world. [Hasil QA, screenshot dan panduan](docs/M7_INTEGRATION.md). Belum merge ke main atau deploy; catatan milestone lama di bawah adalah riwayat.
+**Kandidat rilis M7:** game lengkap berada di `release/m7-final`, dengan checkpoint `integration/m7-demo` tetap tersedia. Gunakan tombol **Presentasi** atau gerbang Cloud/ACO/GWO. Untuk perangkat berat, buka **Menu → Options → Quality: Low**; pilihan tersimpan dan DPR dibatasi 1. [Profil performa, QA akhir, screenshot dan batasan](docs/M7_RELEASE.md). Belum merge ke main atau deploy; catatan milestone lama di bawah adalah riwayat.
 
 > **Tugas Kelompok Strategi Optimasi Komputasi Awan (SOKA) | Demo Week 10**  
-> **Status proyek: M0 dan M2 selesai — fondasi Bruno serta shared game extension diuji; konten edukasi masih direncanakan.**
+> **Status proyek: M7 terintegrasi — game, algoritma baseline, visualisasi dan presentasi berjalan; kandidat rilis menunggu review.**
 > **Repository:** https://github.com/Arkanzahir/Soka-cloud-ops-scheduling-adventure
 
 ## 1. Tentang proyek
@@ -195,7 +195,7 @@ npm run preview
 
 PowerShell: gunakan `Copy-Item .env.example .env` dan `npm.cmd` bila diperlukan. Server dev menampilkan URL localhost; `VITE_SERVER_URL` kosong menjalankan core game tanpa backend. Uji browser memerlukan Chrome: `npm run test:browser -- URL foundation-dev`. Bukti, pengujian produksi subpath, keterbatasan dan screenshot: [`docs/BASELINE_TEST_REPORT.md`](docs/BASELINE_TEST_REPORT.md). README Bruno asli: [`docs/upstream/BRUNO_README.md`](docs/upstream/BRUNO_README.md).
 
-**M2:** dekati marker **Zona Uji M2** di depan tulisan Bruno, dekat bangku tambahan pada area awal. E/Enter masuk; di zona uji, E/Enter membuka panel atau kembali melalui gerbang, Esc menutup panel, R mereset kendaraan ke spawn zona. Panduan, API reusable dan bukti pengujian: [`docs/M2_SHARED_GAME_EXTENSION.md`](docs/M2_SHARED_GAME_EXTENSION.md).
+**Riwayat M2:** zona uji hanya tersedia pada server dev dengan `?test-zone`. Demo normal memakai gerbang Cloud/ACO/GWO: E/Enter untuk berinteraksi, Esc menutup panel, R mereset kendaraan ke spawn zona. Panduan API terdahulu: [`docs/M2_SHARED_GAME_EXTENSION.md`](docs/M2_SHARED_GAME_EXTENSION.md).
 
 ## 10. Roadmap status
 

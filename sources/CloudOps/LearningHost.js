@@ -8,7 +8,16 @@ export class LearningHost {
   this.panel=new LearningPanel({mount:document.querySelector('#learning-mount'),embedded:true,escapeCloses:false,worlds:{cloud:game.world.areas.cloud,aco:game.world.areas.aco,gwo:game.world.areas.gwo},onClose:()=>game.modals.close(),navigate:id=>this.navigate(id)});
   game.modals.items.get('learning').events.on('close',()=>this.panel.close());
   for(const [id,index] of [['cloud',1],['aco',2],['gwo',3]])game.world.areas[id].onLearn=()=>this.open(index);
-  this.button=document.querySelector('#presentation-open');this.button.hidden=false;this.button.onclick=()=>{if(manager.canInteract())this.open(0)};
+  this.button=document.querySelector('#presentation-open');this.button.hidden=false;this.button.onclick=()=>this.startPresentation();
+ }
+ async startPresentation(){
+  if(this.busy||!this.manager.canInteract())return;
+  this.busy=true;this.button.disabled=true;
+  try{
+   // Return while the native modal is still closed, avoiding an open/close transition race.
+   if(this.manager.currentZone!=='main'&&!await this.manager.enter('main',true))return;
+   this.open(0);
+  }finally{this.busy=false;this.button.disabled=false}
  }
  open(index){this.manager.openPanel('learning');this.panel.open(index)}
  async navigate(id){

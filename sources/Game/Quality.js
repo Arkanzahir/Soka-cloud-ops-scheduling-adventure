@@ -11,6 +11,12 @@ export class Quality
 
         const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)
         this.level = isMobile ? 1 : 0 // 0 = highest quality
+        try
+        {
+            const saved = localStorage.getItem('cloud-ops-quality')
+            if(saved === '0' || saved === '1') this.level = Number(saved)
+        }
+        catch { /* Storage may be unavailable in restricted browser contexts. */ }
 
         // Debug
         if(this.game.debug.active)
@@ -44,6 +50,7 @@ export class Quality
             return
             
         this.level = level
+        try { localStorage.setItem('cloud-ops-quality', String(level)) } catch {}
         this.events.trigger('change', [ this.level ])
     }
 }
