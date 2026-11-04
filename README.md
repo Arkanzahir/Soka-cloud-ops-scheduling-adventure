@@ -12,7 +12,7 @@ Berbeda dengan PowerPoint konvensional, penjelasan algoritma tidak berhenti pada
 
 **Prinsip proyek:** game 3D adalah cara *menyampaikan* materi. Nilai akademik utamanya tetap terletak pada paper, penjelasan algoritma, studi kasus task→algoritma→solusi, dan visualisasi hasil perhitungan yang benar.
 
-### Istilah penting
+### Istilah penting:
 
 | Istilah | Penjelasan singkat |
 |---|---|
