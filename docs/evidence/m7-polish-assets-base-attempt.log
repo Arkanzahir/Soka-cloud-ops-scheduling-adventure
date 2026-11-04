@@ -1,0 +1,21 @@
+
+> cloud-ops-scheduling-adventure@0.0.0 test:build
+> node scripts/verify-build.mjs
+
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: /Soka-cloud-ops-scheduling-adventure/assets/index-vo5uinWv.js
+    at file:///D:/Download/Soka-cloud-ops-scheduling-adventure-main/cloud-ops/scripts/verify-build.mjs:14:9
+    at ModuleJob.run (node:internal/modules/esm/module_job:329:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '=='
+}
+
+Node.js v22.17.0

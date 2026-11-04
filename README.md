@@ -1,5 +1,7 @@
 # CLOUD OPS — Scheduling Adventure
 
+**M7 integration demo:** Cloud, ACO, GWO dan M6 kini tersambung pada branch `integration/m7-demo`. Gunakan tombol **Presentasi** atau gerbang world. [Hasil QA, screenshot dan panduan](docs/M7_INTEGRATION.md). Belum merge ke main atau deploy; catatan milestone lama di bawah adalah riwayat.
+
 > **Tugas Kelompok Strategi Optimasi Komputasi Awan (SOKA) | Demo Week 10**  
 > **Status proyek: M0 dan M2 selesai — fondasi Bruno serta shared game extension diuji; konten edukasi masih direncanakan.**
 > **Repository:** https://github.com/Arkanzahir/Soka-cloud-ops-scheduling-adventure
@@ -12,7 +14,7 @@ Berbeda dengan PowerPoint konvensional, penjelasan algoritma tidak berhenti pada
 
 **Prinsip proyek:** game 3D adalah cara *menyampaikan* materi. Nilai akademik utamanya tetap terletak pada paper, penjelasan algoritma, studi kasus task→algoritma→solusi, dan visualisasi hasil perhitungan yang benar.
 
-### Istilah penting
+### Istilah penting:
 
 | Istilah | Penjelasan singkat |
 |---|---|
@@ -202,7 +204,7 @@ PowerShell: gunakan `Copy-Item .env.example .env` dan `npm.cmd` bila diperlukan.
 | M0 | Audit source Bruno, lisensi, aset, build dan visual baseline | SELESAI — bukti pada BASELINE_TEST_REPORT; clearance SFX/font sebelum publikasi |
 | M1 | Finalisasi detail paper dan spesifikasi algoritma | DRAFT / paper GWO terverifikasi, ACO DBpia belum |
 | M2 | Sistem zona, tombol E/Enter, kamera, respawn | SELESAI — Main↔satu zona uji, panel, safety reset; laporan M2 tersedia |
-| M3 | Cloud Mini-World sebagai vertical slice | BELUM DIMULAI |
+| M3 | Cloud Mini-World sebagai vertical slice | TAHAP 1 selesai: kerangka CloudArea, 1 stasiun, 3 VM placeholder; M3 penuh belum selesai |
 | M4 | Engine ACO & GWO, seeded RNG, unit tests | BELUM DIMULAI |
 | M5 | ACO/GWO worlds dan animasi dari trace nyata | BELUM DIMULAI |
 | M6 | Results, paper station, Presentation Mode | BELUM DIMULAI |
@@ -254,3 +256,4 @@ Repository saat penulisan masih **Private**; perubahan ke Public direncanakan ol
 Proyek ini mengadaptasi fondasi open-source **Bruno Simon — Folio 2025** (MIT). Lisensi sumber dan pemberitahuan hak cipta wajib dipertahankan ketika kode/asetnya dimasukkan. Pihak ketiga dapat memiliki lisensi berbeda sehingga harus diperiksa sebelum redistribusi. Kontribusi karya kelompok harus dicatat dengan jelas, termasuk bagian yang dibangun sendiri dan yang merupakan adaptasi.
 
 **Status klaim:** M0 dan shared extension M2 sudah diuji. Algoritma, mini-world edukasi, UI mode presentasi dan deployment masih rencana; materi desain kelompok dipertahankan. M1 tidak dikerjakan pada sesi M2 sesuai instruksi pemilik.
+

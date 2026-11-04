@@ -1,3 +1,6 @@
+import { LearningHost } from '../../CloudOps/LearningHost.js'
+import { registerAcoWorld } from '../../CloudOps/registerAcoWorld.js'
+import { GwoWorld } from '../../CloudOps/gwo/GwoWorld.js'
 import * as THREE from 'three/webgpu'
 import { Game } from '../Game.js'
 import { Floor } from './Floor.js'
@@ -84,6 +87,9 @@ export class World
         {
             this.whispers = new Whispers()
             this.cloudOps = new ZoneManager(this.game)
+            this.areas.gwo = new GwoWorld(this.cloudOps)
+            this.areas.aco = registerAcoWorld(this.game,this.cloudOps)
+            this.learning = new LearningHost(this.game,this.cloudOps)
         }
     }
 
@@ -245,3 +251,4 @@ export class World
     //     this.game.scene.add(mesh)
     // }
 }
+

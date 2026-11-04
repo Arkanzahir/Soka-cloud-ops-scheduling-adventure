@@ -1,0 +1,5 @@
+
+> cloud-ops-scheduling-adventure@0.0.0 test:build
+> node scripts/verify-build.mjs
+
+PASS: 958 copied assets match source SHA-256; HTML paths and Rapier WASM valid

@@ -86,3 +86,5 @@
 @media (prefers-reduced-motion: reduce) {
   .co-learning, .co-learning * { scroll-behavior: auto; transition: none !important; }
 }
+
+.modals:has(.learning-host.is-displayed){justify-content:flex-end;padding-right:16px;box-sizing:border-box}.learning-host .container{width:min(440px,calc(100vw - 32px))}.learning-host .content{padding:0}
