@@ -29,6 +29,7 @@ import { Fences } from './Fences.js'
 import { Benches } from './Benches.js'
 import { Scenery } from './Scenery.js'
 import { ZoneManager } from '../../CloudOps/ZoneManager.js'
+import { registerCloudWorld } from '../../CloudOps/cloud/registerCloudWorld.js'
 
 export class World
 {
@@ -84,6 +85,7 @@ export class World
         {
             this.whispers = new Whispers()
             this.cloudOps = new ZoneManager(this.game)
+            this.cloudComputeYard = registerCloudWorld(this.game, this.cloudOps)
         }
     }
 
