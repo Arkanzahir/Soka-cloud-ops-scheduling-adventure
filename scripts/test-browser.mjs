@@ -25,10 +25,11 @@ try {
  await page.goto(url,{waitUntil:'networkidle',timeout:90000});
  if(production){
   check('release does not expose debug Game',await page.evaluate(()=>window.game===undefined));
-  await page.waitForTimeout(8000);await page.keyboard.press('Enter');await page.waitForTimeout(7000);
+  for(let i=0;i<60&&!await page.locator('#presentation-open').isVisible();i++){await page.keyboard.press('Enter');await page.waitForTimeout(1000)}
+  await page.locator('#presentation-open').waitFor({state:'visible',timeout:30000});await page.waitForTimeout(1500);
   await captureWorld();
   await page.keyboard.press('Escape');await page.waitForTimeout(1500);
-  check('production menu opens',await page.locator('.js-menu.is-open, .js-menu.is-visible, .menu.is-open').count()>0 || await page.locator('body').innerText().then(t=>t.includes('CONTROLS')||t.includes('Controls')));
+  check('production menu opens',await page.locator('.js-menu.is-visible').count()>0 || await page.locator('body').innerText().then(t=>t.includes('CONTROLS')||t.includes('Controls')));
   await page.keyboard.press('Escape');await page.waitForTimeout(1000);
  } else {
   await page.evaluate(async()=>{window.game=(await import('./Game/Game.js')).Game.getInstance()});

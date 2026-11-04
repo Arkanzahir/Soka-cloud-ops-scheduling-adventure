@@ -1,5 +1,7 @@
 # CLOUD OPS — Scheduling Adventure
 
+**M7 integration demo:** Cloud, ACO, GWO dan M6 kini tersambung pada branch `integration/m7-demo`. Gunakan tombol **Presentasi** atau gerbang world. [Hasil QA, screenshot dan panduan](docs/M7_INTEGRATION.md). Belum merge ke main atau deploy; catatan milestone lama di bawah adalah riwayat.
+
 > **Tugas Kelompok Strategi Optimasi Komputasi Awan (SOKA) | Demo Week 10**  
 > **Status proyek: M0 dan M2 selesai — fondasi Bruno serta shared game extension diuji; konten edukasi masih direncanakan.**
 > **Repository:** https://github.com/Arkanzahir/Soka-cloud-ops-scheduling-adventure

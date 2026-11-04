@@ -90,3 +90,9 @@ Gunakan jawaban default minimal: desktop browser 16:9; demo berurutan tetapi zon
 - Berhenti sesuai lingkup kecil pemilik. Berikutnya menunggu instruksi; tidak lanjut ke keseluruhan Cloud World.
 
 Status sinkronisasi M3 tahap 1: commit tersedia lokal pada `feature/cloud-world` (`git log -1 --format=%H`). Dua percobaan push ditolak GitHub dengan `Internal Server Error` pada 2026-11-04. Belum tersinkron ke remote; retry `git push -u origin feature/cloud-world` saat layanan pulih. Pengujian dan source tidak terpengaruh.
+
+## M7 implementation checkpoint — 2026-11-04
+
+Branch `integration/m7-demo`, based on M6 `4397d34`, retains GWO/ACO/Cloud Final ancestry; never import Cloud Backup. See M7_INTEGRATION.md. GWO/ACO/Cloud and shared M6 host are integrated and checkpoints pushed incrementally (294d070, b83b3a6, abe0258, 3df389d). Final QA commit follows; use branch HEAD, not an old milestone SHA.
+
+33 unit/contract tests, 22 dev E2E checks, 28 production-subpath E2E checks passed. Native physical gate round trips, real engine visualization, controls and presentation tested. Final release rebuilt without debug flag; all 6 release smoke checks and 958 asset hashes passed. Keyboard/modal listeners stay stable after three presentation round trips. See evidence/m7-release-browser.json, m7-listeners.json and m7-release-build.log. Screenshots are new integrated browser captures, not standalone evidence. Draft PR targets feature/m6-learning-ui, never main. No deploy/visibility change. Remaining limits documented in M7_INTEGRATION.md. Do not repeat the original audit.
