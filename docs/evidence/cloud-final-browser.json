@@ -6,11 +6,23 @@
       "passed": true
     },
     {
-      "name": "exactly three VM placeholders reuse Bruno brick geometry and materials",
+      "name": "eight task crates and three VM bodies reuse M3 Bruno geometry",
       "passed": true
     },
     {
       "name": "E enters Cloud, grounded and unlocked",
+      "passed": true
+    },
+    {
+      "name": "M4 Round Robin events update exact task destinations and loads",
+      "passed": true
+    },
+    {
+      "name": "animation reaches VM pads without adding meshes",
+      "passed": true
+    },
+    {
+      "name": "reset cancels motion and restores queue and zero loads",
       "passed": true
     },
     {

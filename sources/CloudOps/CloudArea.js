@@ -1,3 +1,4 @@
+import {allocationEvent,scheduleState} from './cloud/visualState.js'
 import * as THREE from 'three/webgpu'
 import { Area } from '../Game/World/Areas/Area.js'
 import { YardKit } from './cloud/YardKit.js'
@@ -56,4 +57,20 @@ export class CloudArea extends Area {
   // Low wooden boundaries frame the beds; all corners leave four-unit driving clearance.
   for(const x of [-73,-57])for(const z of [-46,-23]){k.box(x,.5,z,.16,1,.16,'wood');k.box(x+1,.65,z,2,.12,.12,'wood')}
  }
+ // M5 supplies all numerical values. This layer only validates and displays them.
+ allocationTarget(taskIndex,vmIndex){const vm=this.vms[vmIndex];return new THREE.Vector3(vm.x-1.3+(taskIndex%2)*1.3,.38,vm.z+2.7+Math.floor(taskIndex/2)*.7)}
+ applyAllocation(input){
+  let event;try{event=allocationEvent(input)}catch(error){this.lastVisualizationError=error.message;return false}
+  this.lastVisualizationError=null;this.lastAllocation=event
+  const task=this.tasks[event.taskIndex];task.vm=event.vmIndex
+  task.motion={from:task.mesh.position.clone(),to:this.allocationTarget(event.taskIndex,event.vmIndex),elapsed:0,duration:1.4}
+  this.tasks.forEach(t=>t.mesh.scale.setScalar(t===task?1.12:1));this.vms.forEach((vm,i)=>vm.selection.visible=i===event.vmIndex)
+  this.displayLoads(event.vmLoads,Math.max(...event.vmLoads));return true
+ }
+ displayLoads(loads,makespan){const max=Math.max(...loads,1);this.vms.forEach((vm,i)=>{vm.load=loads[i];vm.loadLabel.write(`LOAD ${loads[i].toFixed(2)} s`);vm.bar.scale.x=45*loads[i]/max+.01});this.makespanLabel.write(`${this.previewMode?'DEMO/PREVIEW | ':''}MAKESPAN ${makespan.toFixed(3)} s`)}
+ positionTask(task,position){task.mesh.position.copy(position);task.label.mesh.position.copy(position).add(new THREE.Vector3(0,1.3,.5))}
+ applySchedule(input){let state;try{state=scheduleState(input)}catch(error){this.lastVisualizationError=error.message;return false}this.resetVisualization();this.tasks.forEach((task,i)=>{task.vm=state.assignments[i];this.positionTask(task,this.allocationTarget(i,task.vm))});this.displayLoads(state.vmLoads,state.makespan);return true}
+ resetVisualization(){this.tasks.forEach(task=>{task.motion=null;task.vm=null;task.mesh.scale.setScalar(1);this.positionTask(task,task.home)});this.vms.forEach(vm=>vm.selection.visible=false);this.lastAllocation=null;this.lastVisualizationError=null;this.displayLoads([0,0,0],0)}
+ setPreviewMode(enabled){this.previewMode=!!enabled;this.displayLoads(this.vms.map(vm=>vm.load),Math.max(...this.vms.map(vm=>vm.load)))}
+ update(){if(!this.tasks)return;const dt=this.game.ticker.delta;for(const task of this.tasks){if(!task.motion)continue;const m=task.motion;m.elapsed=Math.min(m.duration,m.elapsed+dt);const p=m.elapsed/m.duration,eased=p*p*(3-2*p),position=m.from.clone().lerp(m.to,eased);position.y+=Math.sin(p*Math.PI)*1.25;this.positionTask(task,position);if(p===1){task.motion=null;task.mesh.scale.setScalar(1)}}}
 }
