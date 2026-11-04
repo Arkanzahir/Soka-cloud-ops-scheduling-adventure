@@ -19,6 +19,7 @@ export class ZoneManager
         this.presentation = new PresentationController(this)
         const landing = game.respawns.getDefault()
         this.register({ id: 'main', name: 'Main World', spawn: { position: [landing.position.x, landing.position.z], rotation: landing.rotation } })
+        if(import.meta.env.DEV && new URLSearchParams(location.search).has('test-zone')) {
         this.register({ id: 'test', name: 'Zona Uji M2', center: [-65, 65], radius: 18, spawn: { position: [-65, 65], rotation: 0 } })
         const area = new TestArea([-65, 65], 18)
         game.world.areas.cloudOpsTest = area
@@ -31,6 +32,7 @@ export class ZoneManager
         this.createStation({ zone: 'test', label: 'Kembali ke Main', position: [-60, 1.5, 65], onInteract: () => this.enter('main') })
         this.createStation({ zone: 'test', label: 'Panel Uji M2', position: [-65, 1.5, 71], onInteract: () => this.openPanel() })
         this.registerPanel('cloud-ops-test')
+        }
         game.world.areas.cloud = new CloudArea(this)
         this.status = document.querySelector('.js-cloud-ops-status')
         this.status.hidden = false

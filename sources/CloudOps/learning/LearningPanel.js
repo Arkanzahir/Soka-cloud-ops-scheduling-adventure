@@ -117,7 +117,8 @@ export class LearningPanel
         this.root.hidden = false
         if(this.escapeCloses) document.addEventListener('keydown', this.escapeHandler, true)
         this.goTo(index)
-        this.root.querySelector('.co-close')?.focus()
+        this.root.tabIndex = -1
+        this.root.focus()
     }
 
     close()
@@ -174,6 +175,7 @@ export class LearningPanel
         this.player = new LessonPlayer(this.lesson, {
             adapter, onChange: snapshot => this.renderStep(snapshot)
         })
+        this.player.reset()
         $(this.root, '.co-world-connection').textContent = world ? 'adapter disambungkan' : 'belum disambungkan (panel tetap interaktif)'
         this.renderStep(this.player.snapshot())
     }
