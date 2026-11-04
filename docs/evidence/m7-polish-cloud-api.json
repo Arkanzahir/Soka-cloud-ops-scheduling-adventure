@@ -1,0 +1,22 @@
+{
+  "checks": [
+    {
+      "name": "Cloud schedule snapshot uses actual M6 engine results",
+      "passed": true
+    },
+    {
+      "name": "Cloud preview toggle preserves real loads and rejects invalid snapshot",
+      "passed": true
+    },
+    {
+      "name": "Cloud reset returns polished labels and packages to dispatch",
+      "passed": true
+    },
+    {
+      "name": "no JavaScript page errors",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "passed": true
+}
