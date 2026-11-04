@@ -1,6 +1,6 @@
 # Paper Review — SOKA Cloud Ops
 
-**Status: ringkasan referensi dan keputusan awal, bukan reproduksi metode.** Catatan ini digunakan bersama `ALGORITHM_SPEC.md`.
+**Status: catatan sumber historis dan batas klaim; keputusan M1 final untuk MVP tersedia di [M1_ACADEMIC_FINAL.md](M1_ACADEMIC_FINAL.md).** Implementasi diputuskan memakai baseline ACO dan baseline GWO diskret, bukan reproduksi OACC atau GWO_C/M. DBpia tetap belum terverifikasi; paper ACO Hongtao Wang (2024) menjadi pilihan MVP.
 
 ## 1. Persyaratan paper
 
