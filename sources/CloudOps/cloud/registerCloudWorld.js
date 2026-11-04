@@ -1,4 +1,4 @@
-import './learning-panel-dependency.css'
+import '../learning/learning-panel.css'
 import { LearningPanel } from '../learning/LearningPanel.js'
 import { CloudWorld } from './CloudWorld.js'
 
