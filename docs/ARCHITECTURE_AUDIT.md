@@ -44,3 +44,7 @@ Gunakan `Area` + `Zones.create` + `InteractivePoints.create`, serta kategori inp
 ## Penutupan M0
 
 Whispers storage buffer membutuhkan jumlah finite: source target menambahkan fallback 30 ketika konfigurasi hilang/tidak valid/negatif. Diuji tanpa .env. Perubahan ini tidak mengganti renderer/world; laporan verifikasi: [BASELINE_TEST_REPORT](BASELINE_TEST_REPORT.md).
+
+## Integrasi M2 (2026-11-04)
+
+Rencana adapter M2 di atas sudah diimplementasikan dan diuji pada branch pengembangan terpisah. Acuan lanjutan: [M2_SHARED_GAME_EXTENSION.md](M2_SHARED_GAME_EXTENSION.md). World step 2 menambahkan satu ZoneManager; Player, PhysicsVehicle, View, material dan static asset tetap identik. Jangan mengulang audit M0.

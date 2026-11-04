@@ -28,6 +28,7 @@ import { Lanterns } from './Lanterns.js'
 import { Fences } from './Fences.js'
 import { Benches } from './Benches.js'
 import { Scenery } from './Scenery.js'
+import { ZoneManager } from '../../CloudOps/ZoneManager.js'
 
 export class World
 {
@@ -82,6 +83,7 @@ export class World
         else if(step === 2)
         {
             this.whispers = new Whispers()
+            this.cloudOps = new ZoneManager(this.game)
         }
     }
 

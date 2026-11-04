@@ -1,6 +1,6 @@
 # Task Tracker — Cloud Ops
 
-**M0 selesai:** fondasi asli berjalan dan diuji; bukti di [BASELINE_TEST_REPORT.md](BASELINE_TEST_REPORT.md). Milestone berikutnya belum dikerjakan.
+**M0 dan M2 selesai:** bukti di [BASELINE_TEST_REPORT.md](BASELINE_TEST_REPORT.md) dan [M2_SHARED_GAME_EXTENSION.md](M2_SHARED_GAME_EXTENSION.md). M1 belum dikerjakan; M2 diminta langsung oleh pemilik.
 
 ## Persiapan
 
@@ -16,7 +16,7 @@
 
 - [x] **M0:** audit dan run original Bruno, screenshot baseline, inventaris lisensi/aset; clearance SFX/font tetap gate sebelum publikasi.
 - [ ] **M1:** verifikasi akademik final dan keputusan baseline vs improved.
-- [ ] **M2:** implementasi reusable zone/interaction/vehicle transition.
+- [x] **M2:** reusable zone/interaction/vehicle transition; Main↔satu zona uji, panel, E/Enter/Esc/R, browser/physics/production tests.
 - [ ] **M3:** Cloud Mini-World proof of concept, render style check.
 - [ ] **M4:** scheduling engine ACO/GWO, seeded RNG, unit tests.
 - [ ] **M5:** ACO & GWO mini-world dan animasi dari trace.

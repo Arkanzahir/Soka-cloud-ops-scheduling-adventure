@@ -1,7 +1,7 @@
 # CLOUD OPS — Scheduling Adventure
 
 > **Tugas Kelompok Strategi Optimasi Komputasi Awan (SOKA) | Demo Week 10**  
-> **Status proyek: M0 — fondasi Bruno terintegrasi dan diuji; fitur edukasi masih direncanakan.**
+> **Status proyek: M0 dan M2 selesai — fondasi Bruno serta shared game extension diuji; konten edukasi masih direncanakan.**
 > **Repository:** https://github.com/Arkanzahir/Soka-cloud-ops-scheduling-adventure
 
 ## 1. Tentang proyek
@@ -193,13 +193,15 @@ npm run preview
 
 PowerShell: gunakan `Copy-Item .env.example .env` dan `npm.cmd` bila diperlukan. Server dev menampilkan URL localhost; `VITE_SERVER_URL` kosong menjalankan core game tanpa backend. Uji browser memerlukan Chrome: `npm run test:browser -- URL foundation-dev`. Bukti, pengujian produksi subpath, keterbatasan dan screenshot: [`docs/BASELINE_TEST_REPORT.md`](docs/BASELINE_TEST_REPORT.md). README Bruno asli: [`docs/upstream/BRUNO_README.md`](docs/upstream/BRUNO_README.md).
 
+**M2:** dekati marker **Zona Uji M2** di depan tulisan Bruno, dekat bangku tambahan pada area awal. E/Enter masuk; di zona uji, E/Enter membuka panel atau kembali melalui gerbang, Esc menutup panel, R mereset kendaraan ke spawn zona. Panduan, API reusable dan bukti pengujian: [`docs/M2_SHARED_GAME_EXTENSION.md`](docs/M2_SHARED_GAME_EXTENSION.md).
+
 ## 10. Roadmap status
 
 | Milestone | Fokus | Status saat dokumen dibuat |
 |---|---|---|
 | M0 | Audit source Bruno, lisensi, aset, build dan visual baseline | SELESAI — bukti pada BASELINE_TEST_REPORT; clearance SFX/font sebelum publikasi |
 | M1 | Finalisasi detail paper dan spesifikasi algoritma | DRAFT / paper GWO terverifikasi, ACO DBpia belum |
-| M2 | Sistem zona, tombol E/Enter, kamera, respawn | BELUM DIMULAI |
+| M2 | Sistem zona, tombol E/Enter, kamera, respawn | SELESAI — Main↔satu zona uji, panel, safety reset; laporan M2 tersedia |
 | M3 | Cloud Mini-World sebagai vertical slice | BELUM DIMULAI |
 | M4 | Engine ACO & GWO, seeded RNG, unit tests | BELUM DIMULAI |
 | M5 | ACO/GWO worlds dan animasi dari trace nyata | BELUM DIMULAI |
@@ -251,4 +253,4 @@ Repository saat penulisan masih **Private**; perubahan ke Public direncanakan ol
 
 Proyek ini mengadaptasi fondasi open-source **Bruno Simon — Folio 2025** (MIT). Lisensi sumber dan pemberitahuan hak cipta wajib dipertahankan ketika kode/asetnya dimasukkan. Pihak ketiga dapat memiliki lisensi berbeda sehingga harus diperiksa sebelum redistribusi. Kontribusi karya kelompok harus dicatat dengan jelas, termasuk bagian yang dibangun sendiri dan yang merupakan adaptasi.
 
-**Status klaim:** fondasi game M0 sudah diuji. Algoritma, mini-world, mode presentasi dan deployment masih rencana; materi desain kelompok dipertahankan.
+**Status klaim:** M0 dan shared extension M2 sudah diuji. Algoritma, mini-world edukasi, UI mode presentasi dan deployment masih rencana; materi desain kelompok dipertahankan. M1 tidak dikerjakan pada sesi M2 sesuai instruksi pemilik.

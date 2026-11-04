@@ -3,7 +3,7 @@
 - **Destination:** https://github.com/Arkanzahir/Soka-cloud-ops-scheduling-adventure
 - **Source foundation:** https://github.com/brunosimon/folio-2025
 - **Read first:** `README.md`, `AGENTS.md`, `docs/MASTER_PROMPT.md`, `docs/PAPER_REVIEW.md`.
-- **Status terbaru:** M0 selesai; lihat bagian Penutupan M0 dan `BASELINE_TEST_REPORT.md`. Catatan jeda di bawah disimpan sebagai riwayat. M1 belum dikerjakan.
+- **Status terbaru:** M0 dan M2 selesai; lihat `M2_SHARED_GAME_EXTENSION.md` serta penutupan M2 di akhir dokumen. M1 belum dikerjakan. Catatan jeda di bawah adalah riwayat.
 
 # WORK HANDOFF — ringkasan untuk sesi baru
 
@@ -69,3 +69,14 @@ Gunakan jawaban default minimal: desktop browser 16:9; demo berurutan tetapi zon
 - Source audit terdahulu tetap berlaku. Perubahan source baru terbatas pada Whispers fallback; core vehicle/camera/physics/material tidak berubah. README diperbarui pada status/setup, desain kelompok tetap dipertahankan.
 - Sisa: dependency vulnerabilities, Google Fonts eksternal diblok lingkungan uji, clearance SFX/Pally; Blender round-trip/WebGL/mobile/gamepad belum diuji. Bukan blocker render baseline, tetap gate QA/publikasi terkait.
 - Tidak mengerjakan paper/engine/M1 atau mini-world. Menunggu instruksi berikutnya setelah M0.
+
+## Penutupan M2 — 2026-11-04
+
+- **Selesai sesuai instruksi pemilik.** Branch `development/m2-shared-game-extension`, base M0 `54681c4`. Identitas commit penutupan: `git log -1 --format=%H` pada branch ini.
+- Baca **hanya** [M2_SHARED_GAME_EXTENSION.md](M2_SHARED_GAME_EXTENSION.md) untuk melanjutkan, lalu source terkait. Audit M0 tidak perlu diulang.
+- Reusable `ZoneManager`, `InteractiveStation`, `CarTransitionController`, `PresentationController`; `TestArea` mewarisi Area. Satu sektor uji memakai terrain/material/vehicle/physics asli; E/Enter gate dua arah, native panel/Esc, R zona, boundary recovery, safe return search.
+- Integrasi world step 2; source Player/View/Physics/material tetap identik. Registry station/panel/checkpoint siap diperluas, tanpa Cloud/ACO/GWO engine atau tiga mini-world.
+- PASS: browser dev 27 checks; production subpath 30; normal release 6; integritas 3; seluruh 958 aset dist cocok; build produksi. Screenshot/JSON/log di docs/evidence/m2-*.
+- Hasil uji penting: footprint return dekat props tidak selalu aman; cari titik tervalidasi terdekat sebelum transit. Flag VITE_GAME_PUBLIC=1 hanya untuk tes introspeksi; release normal sudah diuji tanpa flag.
+- Sisa M0 tetap: font eksternal diblok lingkungan uji, dependency vulnerabilities, clearance lisensi SFX/Pally; mobile/gamepad/WebGL belum diuji. Tidak merge/main/public/deploy.
+- **Berhenti di M2.** M1 belum dikerjakan; milestone berikutnya menunggu permintaan pemilik.

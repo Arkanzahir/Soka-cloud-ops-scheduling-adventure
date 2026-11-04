@@ -1,0 +1,412 @@
+{
+  "url": "http://127.0.0.1:4180/Soka-cloud-ops-scheduling-adventure/",
+  "browser": "156.0.8078.74",
+  "checks": [
+    {
+      "name": "single original vehicle / Area / Zones registration",
+      "passed": true
+    },
+    {
+      "name": "reject duplicate and invalid zone definitions",
+      "passed": true
+    },
+    {
+      "name": "remote interaction cannot teleport",
+      "passed": true
+    },
+    {
+      "name": "main-gate: world visible",
+      "passed": true
+    },
+    {
+      "name": "unsafe checkpoint rejected before locking",
+      "passed": true
+    },
+    {
+      "name": "bench obstruction rejected",
+      "passed": true
+    },
+    {
+      "name": "airborne gate refused",
+      "passed": true
+    },
+    {
+      "name": "e: transition locks input and collision",
+      "passed": true,
+      "detail": {
+        "zone": "main",
+        "state": "TRANSITION",
+        "busy": true,
+        "position": [
+          42.532955169677734,
+          0.9075602889060974,
+          44.050865173339844
+        ],
+        "camera": [
+          60.66266026047006,
+          17.424584714656298,
+          62.18108705972197
+        ],
+        "linear": {
+          "x": -0.011744349263608456,
+          "y": 0.06591621041297913,
+          "z": 0.025057317689061165
+        },
+        "angular": {
+          "x": 0.03686053678393364,
+          "y": 0.00005316641181707382,
+          "z": 0.01731051504611969
+        },
+        "contacts": 2,
+        "enabled": false,
+        "filters": [
+          "cloudOpsTransition"
+        ],
+        "error": null
+      }
+    },
+    {
+      "name": "e: test zone grounded, finite and unlocked",
+      "passed": true,
+      "detail": {
+        "zone": "test",
+        "state": "DRIVING",
+        "busy": false,
+        "position": [
+          -65,
+          1.0489916801452637,
+          65
+        ],
+        "camera": [
+          -46.870137237626594,
+          17.42458471341605,
+          83.1298627623734
+        ],
+        "linear": {
+          "x": 0,
+          "y": -0.04464920610189438,
+          "z": 0
+        },
+        "angular": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "contacts": 4,
+        "enabled": true,
+        "filters": [
+          "wandering"
+        ],
+        "error": null
+      }
+    },
+    {
+      "name": "e: no residual teleport velocity",
+      "passed": true
+    },
+    {
+      "name": "e: camera follows destination",
+      "passed": true
+    },
+    {
+      "name": "test-zone: world visible",
+      "passed": true
+    },
+    {
+      "name": "vehicle and camera move inside test zone",
+      "passed": true,
+      "detail": {
+        "before": {
+          "zone": "test",
+          "state": "DRIVING",
+          "busy": false,
+          "position": [
+            -65,
+            1.048938274383545,
+            65
+          ],
+          "camera": [
+            -46.870137237626594,
+            17.42458471341605,
+            83.1298627623734
+          ],
+          "linear": {
+            "x": 0,
+            "y": -0.043195098638534546,
+            "z": 0
+          },
+          "angular": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "contacts": 4,
+          "enabled": true,
+          "filters": [
+            "wandering"
+          ],
+          "error": null
+        },
+        "after": {
+          "zone": "test",
+          "state": "DRIVING",
+          "busy": false,
+          "position": [
+            -60.61452865600586,
+            1.0482299327850342,
+            65
+          ],
+          "camera": [
+            -43.21588625852992,
+            17.48542960445292,
+            83.1931704131687
+          ],
+          "linear": {
+            "x": 4.677126407623291,
+            "y": -0.04390264302492142,
+            "z": 0
+          },
+          "angular": {
+            "x": 0,
+            "y": 0,
+            "z": 0.002709787804633379
+          },
+          "contacts": 4,
+          "enabled": true,
+          "filters": [
+            "wandering"
+          ],
+          "error": null
+        }
+      }
+    },
+    {
+      "name": "panel freezes vehicle with held driving input",
+      "passed": true
+    },
+    {
+      "name": "panel: world visible",
+      "passed": true
+    },
+    {
+      "name": "Esc restores zone driving and body",
+      "passed": true
+    },
+    {
+      "name": "R resets in current zone, repeated R safe",
+      "passed": true,
+      "detail": {
+        "zone": "test",
+        "state": "DRIVING",
+        "busy": false,
+        "position": [
+          -65,
+          1.0489510297775269,
+          65
+        ],
+        "camera": [
+          -46.870137237626594,
+          17.42458471341605,
+          83.1298627623734
+        ],
+        "linear": {
+          "x": 0,
+          "y": -0.04483688995242119,
+          "z": 0
+        },
+        "angular": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "contacts": 4,
+        "enabled": true,
+        "filters": [
+          "wandering"
+        ],
+        "error": null
+      }
+    },
+    {
+      "name": "boundary guard recovers within same zone",
+      "passed": true
+    },
+    {
+      "name": "e: returns to saved Main location",
+      "passed": true,
+      "detail": {
+        "zone": "main",
+        "state": "DRIVING",
+        "busy": false,
+        "position": [
+          44.532955169677734,
+          1.0604405403137207,
+          44.050865173339844
+        ],
+        "camera": [
+          62.66281793205114,
+          17.42458471341605,
+          62.18072793571325
+        ],
+        "linear": {
+          "x": 3.011503224570333e-7,
+          "y": -0.05781402066349983,
+          "z": 0.0000017810664303397061
+        },
+        "angular": {
+          "x": 0.0000036024073324369965,
+          "y": -4.869806389251607e-7,
+          "z": -8.581563974985329e-7
+        },
+        "contacts": 4,
+        "enabled": true,
+        "filters": [
+          "wandering"
+        ],
+        "error": null
+      }
+    },
+    {
+      "name": "Enter: transition locks input and collision",
+      "passed": true,
+      "detail": {
+        "zone": "main",
+        "state": "TRANSITION",
+        "busy": true,
+        "position": [
+          42.49101638793945,
+          0.907644510269165,
+          44.044708251953125
+        ],
+        "camera": [
+          60.620107786575545,
+          17.424584738543178,
+          62.17617610395019
+        ],
+        "linear": {
+          "x": -0.012805351056158543,
+          "y": 0.06975548714399338,
+          "z": 0.026188010349869728
+        },
+        "angular": {
+          "x": 0.03873959556221962,
+          "y": -0.00003059767186641693,
+          "z": 0.018924647942185402
+        },
+        "contacts": 2,
+        "enabled": false,
+        "filters": [
+          "cloudOpsTransition"
+        ],
+        "error": null
+      }
+    },
+    {
+      "name": "Enter: test zone grounded, finite and unlocked",
+      "passed": true,
+      "detail": {
+        "zone": "test",
+        "state": "DRIVING",
+        "busy": false,
+        "position": [
+          -65,
+          1.048964500427246,
+          65
+        ],
+        "camera": [
+          -46.870137237626594,
+          17.42458471341605,
+          83.1298627623734
+        ],
+        "linear": {
+          "x": 0,
+          "y": -0.04372451454401016,
+          "z": 0
+        },
+        "angular": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "contacts": 4,
+        "enabled": true,
+        "filters": [
+          "wandering"
+        ],
+        "error": null
+      }
+    },
+    {
+      "name": "Enter: no residual teleport velocity",
+      "passed": true
+    },
+    {
+      "name": "Enter: camera follows destination",
+      "passed": true
+    },
+    {
+      "name": "Enter: returns to saved Main location",
+      "passed": true,
+      "detail": {
+        "zone": "main",
+        "state": "DRIVING",
+        "busy": false,
+        "position": [
+          44.49101638793945,
+          1.0845941305160522,
+          44.044708251953125
+        ],
+        "camera": [
+          62.62087915031286,
+          17.42458471341605,
+          62.17457101432653
+        ],
+        "linear": {
+          "x": 9.364780595433331e-8,
+          "y": -0.11985977739095688,
+          "z": 0.0000017599926422917633
+        },
+        "angular": {
+          "x": 0.000003901507625414524,
+          "y": -3.1121714982873527e-7,
+          "z": -8.143566674334579e-7
+        },
+        "contacts": 4,
+        "enabled": true,
+        "filters": [
+          "wandering"
+        ],
+        "error": null
+      }
+    },
+    {
+      "name": "original Map and Esc still work",
+      "passed": true
+    },
+    {
+      "name": "checkpoint navigation rejects unknown section",
+      "passed": true
+    },
+    {
+      "name": "checkpoint next uses shared transition",
+      "passed": true
+    },
+    {
+      "name": "checkpoint previous returns safely",
+      "passed": true
+    },
+    {
+      "name": "no page errors",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "no local HTTP errors",
+      "passed": true,
+      "detail": []
+    }
+  ],
+  "errors": [],
+  "requests": [],
+  "passed": true
+}

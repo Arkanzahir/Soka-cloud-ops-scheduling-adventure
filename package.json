@@ -11,7 +11,8 @@
     "test": "node --test tests/*.test.mjs",
     "test:browser": "node scripts/test-browser.mjs",
     "audit:assets": "node scripts/audit-assets.mjs",
-    "test:build": "node scripts/verify-build.mjs"
+    "test:build": "node scripts/verify-build.mjs",
+    "test:m2": "node scripts/test-m2.mjs"
   },
   "author": "",
   "license": "MIT",

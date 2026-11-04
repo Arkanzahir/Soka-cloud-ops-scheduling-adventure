@@ -24,6 +24,7 @@ async function captureWorld(){
 try {
  await page.goto(url,{waitUntil:'networkidle',timeout:90000});
  if(production){
+  check('release does not expose debug Game',await page.evaluate(()=>window.game===undefined));
   await page.waitForTimeout(8000);await page.keyboard.press('Enter');await page.waitForTimeout(7000);
   await captureWorld();
   await page.keyboard.press('Escape');await page.waitForTimeout(1500);
