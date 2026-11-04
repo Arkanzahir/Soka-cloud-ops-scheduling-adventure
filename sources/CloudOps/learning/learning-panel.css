@@ -1,0 +1,88 @@
+/* Scoped learning overlay: game canvas remains visible on desktop. */
+.co-learning[hidden], .co-learning [hidden] { display: none !important; }
+.co-learning {
+  box-sizing: border-box; position: fixed; z-index: 95; right: 20px; top: 16px;
+  width: min(440px, 44vw); max-height: calc(100dvh - 32px); display: flex; flex-direction: column;
+  border: 3px solid #6e4d45; border-radius: 20px;
+  background: #fff5dd; color: #382c38; box-shadow: 0 20px 65px #34282a70;
+  font: 500 14px/1.55 Nunito, 'Trebuchet MS', sans-serif;
+  overflow: hidden; isolation: isolate;
+}
+.co-learning *, .co-learning *::before, .co-learning *::after { box-sizing: border-box; }
+.co-learning button, .co-learning a { -webkit-tap-highlight-color: transparent; }
+.co-learning button { font: inherit; cursor: pointer; }
+.co-learning button:focus-visible, .co-learning a:focus-visible { outline: 3px solid #50958b; outline-offset: 3px; }
+.co-learning button:disabled { opacity: .4; cursor: not-allowed; }
+.co-learning .co-header { padding: 16px 18px 12px; background: #e9d4b2; border-bottom: 2px solid #b99b7e; display: flex; justify-content: space-between; gap: 10px; align-items: center; }
+.co-learning .co-brand { color: #8b4d3a; font-size: 12px; font-weight: 900; letter-spacing: .12em; }
+.co-learning .co-brand span { font-size: 10px; color: #725e59; letter-spacing: .06em; }
+.co-learning .co-heading { font-size: 18px; font-weight: 900; line-height: 1.3; }
+.co-learning .co-button { background: #fff5df; border: 2px solid #94796c; border-radius: 10px; padding: 7px 10px; min-height: 36px; color: #382c38; font-weight: 800; white-space: nowrap; }
+.co-learning .co-button:hover:not(:disabled) { background: #f1e0bf; }
+.co-learning .co-button-primary { background: #d99158; border-color: #9b6446; }
+.co-learning .co-button-primary:hover:not(:disabled) { background: #eeb47b; }
+.co-learning .co-close { font-size: 17px; flex-shrink: 0; }
+.co-learning .co-nav { display: grid; grid-template-columns: repeat(6,minmax(0,1fr)); background: #f7e8cf; padding: 10px 12px; gap: 5px; border-bottom: 1px solid #d8bfa7; }
+.co-learning .co-nav-item { border: 0; padding: 7px 2px; border-radius: 7px; font-size: 11px; font-weight: 900; background: transparent; color: #7c6661; }
+.co-learning .co-nav-item.is-current { color: #fff9e8; background: #805a4a; }
+.co-learning .co-content { padding: 18px 20px; overflow-y: auto; overscroll-behavior: contain; }
+.co-learning .co-eyebrow { color: #aa6549; font-size: 11px; font-weight: 900; letter-spacing: .12em; margin-bottom: 6px; }
+.co-learning .co-title { margin: 0 0 8px; font: 900 24px/1.2 Nunito, 'Trebuchet MS', sans-serif; }
+.co-learning .co-question { margin: 0 0 9px; font-weight: 900; font-size: 15px; }
+.co-learning .co-explanation { margin: 0; color: #695956; }
+.co-learning .co-takeaway { background: #e4efe2; margin: 15px 0 4px; border: 1px solid #9daf9b; border-radius: 11px; padding: 11px 13px; }
+.co-learning .co-takeaway span { font-weight: 900; letter-spacing: .06em; font-size: 10px; color: #3d6c60; }
+.co-learning .co-takeaway p { margin: 4px 0 0; font-size: 13px; font-weight: 800; }
+.co-learning .co-simulation, .co-learning .co-comparison, .co-learning .co-papers { margin-top: 20px; border-top: 2px dashed #c9b39e; padding-top: 15px; }
+.co-learning .co-panel-heading { font-weight: 900; font-size: 12px; display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.co-learning .co-panel-heading span { font-size: 11px; color: #90756c; }
+.co-learning .co-demo-label, .co-learning .co-demo-footnote { font-size: 11px; color: #826c60; margin: 4px 0 12px; }
+.co-learning .co-step-title { font-size: 16px; font-weight: 900; margin-bottom: 6px; }
+.co-learning .co-step-summary { margin: 0 0 8px; }
+.co-learning .co-step-details { border-left: 4px solid #5d9a8d; background: #e9f1e7; padding: 8px 12px; border-radius: 7px; }
+.co-learning .co-step-details:empty { display: none; }
+.co-learning .co-step-details p { font-size: 12px; margin: 3px 0; }
+.co-learning .co-controls { display: flex; flex-wrap: wrap; gap: 6px; margin: 14px 0 6px; }
+.co-learning .co-controls .co-button { font-size: 12px; }
+.co-learning .co-demo-footnote { margin: 8px 0 0; }
+.co-learning .co-metrics { margin: 12px 0; display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 7px; }
+.co-learning .co-metric { display: flex; flex-direction: column; border-radius: 10px; padding: 9px; background: #f2ddc5; border: 1px solid #d0ab8a; min-width: 0; }
+.co-learning .co-metric--aco { background: #f4e2cc; }
+.co-learning .co-metric--gwo { background: #dbebe2; border-color: #a5c5bb; }
+.co-learning .co-metric span { font-size: 11px; font-weight: 900; }
+.co-learning .co-metric strong { font-size: 20px; white-space: nowrap; }
+.co-learning .co-metric small { font-size: 9px; line-height: 1.3; color: #6d5f57; }
+.co-learning .co-plot-wrap { border: 1px solid #cdb59e; border-radius: 10px; padding: 10px 12px; background: #fff9e9; }
+.co-learning .co-plot-title { font-weight: 900; font-size: 12px; }
+.co-learning .co-plot svg { width: 100%; height: auto; max-height: 150px; display: block; }
+.co-learning .co-legend { font-size: 11px; color: #705c54; margin: -2px 0 0; }
+.co-learning .co-result-disclosure { margin-top: 14px; }
+.co-learning .co-assignment-table { width: 100%; margin-top: 8px; border-collapse: collapse; font-variant-numeric: tabular-nums; font-size: 12px; }
+.co-learning .co-assignment-table th, .co-learning .co-assignment-table td { padding: 5px 8px; text-align: left; border-bottom: 1px solid #e3ccb0; }
+.co-learning .co-assignment-table thead { background: #ead6bc; }
+.co-learning .co-paper { margin: 10px 0; padding: 12px; border: 1px solid #d7c0aa; background: #fff9e9; border-radius: 10px; display: flex; flex-direction: column; gap: 5px; }
+.co-learning .co-paper strong { font-size: 12px; }
+.co-learning .co-paper a { color: #865543; font-weight: 800; font-size: 13px; overflow-wrap: anywhere; }
+.co-learning .co-paper small { color: #806a63; font-size: 11px; }
+.co-learning .co-disclaimer { font-size: 11px; line-height: 1.5; color: #756458; margin: 14px 0; }
+.co-learning .co-feedback { margin-top: 8px; font-size: 12px; font-weight: 800; color: #a25835; }
+.co-learning .co-feedback:empty { display: none; }
+.co-learning .co-footer { border-top: 1px solid #ceb6a0; background: #e9d4b2; padding: 11px 15px; display: flex; gap: 8px; align-items: center; justify-content: space-between; }
+.co-learning .co-footer .co-button { font-size: 12px; }
+.co-learning .co-slide-count { font-weight: 900; font-size: 12px; }
+.co-learning--embedded { position: relative; top: auto; right: auto; width: 100%; max-height: min(75dvh, 800px); box-shadow: none; }
+@media (max-width: 930px) {
+  .co-learning:not(.co-learning--embedded) { width: min(420px, 53vw); }
+  .co-learning .co-metrics { grid-template-columns: repeat(3,minmax(0,1fr)); }
+  .co-learning .co-metric strong { font-size: 16px; }
+}
+@media (max-width: 650px) {
+  .co-learning:not(.co-learning--embedded) { inset: auto 8px 8px 8px; width: auto; max-height: 80dvh; }
+  .co-learning .co-header { padding: 11px 13px; }
+  .co-learning .co-content { padding: 12px 15px; }
+  .co-learning .co-title { font-size: 20px; }
+  .co-learning .co-metric strong { font-size: 15px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .co-learning, .co-learning * { scroll-behavior: auto; transition: none !important; }
+}
