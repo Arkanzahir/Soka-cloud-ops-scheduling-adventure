@@ -63,7 +63,14 @@ export class CloudArea extends Area {
   this.paintQueue=count=>{
    ctx.fillStyle='#a87762';ctx.fillRect(0,0,1024,512)
    ctx.strokeStyle='#fff0bf';ctx.lineWidth=5;ctx.fillStyle='#fff0bf';ctx.font='bold 38px sans-serif';ctx.textAlign='left'
-   for(let i=0;i<count;i++){const x=58+(i%4)*251,z=35+Math.floor(i/4)*256;ctx.strokeRect(x,z,155,202);ctx.fillText(`T${i+1}`,x+12,z+43)}
+   const columns=count===6?3:4
+   const spacingX=225,cellWidth=155
+   const left=(1024-((columns-1)*spacingX+cellWidth))/2
+   for(let i=0;i<count;i++){
+    const x=left+(i%columns)*spacingX
+    const z=count===4?155:35+Math.floor(i/columns)*256
+    ctx.strokeRect(x,z,cellWidth,202);ctx.fillText(`T${i+1}`,x+12,z+43)
+   }
    paint.needsUpdate=true
   };this.paintQueue(TASK_MI.length)
   const markings=k.mesh(new THREE.PlaneGeometry(9.8,4),new MeshDefaultMaterial({colorNode:texture(paint),hasDropShadows:false,hasCoreShadows:false}),new THREE.Vector3(-65,.365,-31.5))
@@ -115,9 +122,37 @@ export class CloudArea extends Area {
  applySchedule(input){let state;try{state=scheduleState(input,this.experiment)}catch(error){this.lastVisualizationError=error.message;return false}this.resetVisualization();this.tasks.forEach((task,i)=>{if(i>=(this.experiment?.taskCount??8))return;task.vm=state.assignments[i];this.positionTask(task,this.allocationTarget(i,task.vm))});this.displayLoads(state.vmLoads,state.makespan);return true}
  resetVisualization(){this.tasks.forEach(task=>{task.motion=null;task.vm=null;task.mesh.scale.setScalar(1);this.positionTask(task,task.home)});this.vms.forEach(vm=>vm.selection.visible=false);this.lastAllocation=null;this.lastVisualizationError=null;this.displayLoads([0,0,0],0)}
  setPreviewMode(enabled){this.previewMode=!!enabled;this.displayLoads(this.vms.map(vm=>vm.load),Math.max(...this.vms.map(vm=>vm.load)))}
+ // Centers active task rows, keeping dispatch boxes, labels and parking guides aligned.
+ layoutQueue(count){
+  const columns=count===6?3:4
+  for(const [i,task] of this.tasks.entries()){
+   const col=i%columns,row=Math.floor(i/columns)
+   const x=-65+(col-(columns-1)/2)*2.4
+   const z=count===4?-31.5:-32.5+row*2
+   task.home.set(x,.4,z)
+  }
+ }
+ // Shifts Cloud VM buildings and their Rapier colliders together; never just
+ // move the decorative mesh and leave an invisible collision behind.
+ layoutVMs(count){
+  const destinations=count===2?[-68,-62,-59]:[-71,-65,-59]
+  this.vms.forEach((vm,i)=>{
+   const nextX=destinations[i],dx=nextX-vm.x
+   if(Math.abs(dx)<1e-6)return
+   for(const node of vm.visualNodes)node.position.x+=dx
+   if(vm.physical?.body){
+    const position=vm.physical.body.translation()
+    vm.physical.body.setTranslation({x:nextX,y:position.y,z:position.z},true)
+   }
+   vm.x=nextX
+  })
+ }
  setExperimentConfig({taskCount,vmCount}){
   if(![4,6,8].includes(taskCount)||![2,3].includes(vmCount))throw new RangeError('Unsupported Cloud world configuration')
-  this.experiment={taskCount,vmCount};this.resetVisualization();this.paintQueue(taskCount)
+  this.experiment={taskCount,vmCount}
+  this.layoutQueue(taskCount)
+  this.layoutVMs(vmCount)
+  this.resetVisualization();this.paintQueue(taskCount)
   this.statusLabel.write(`${taskCount} TASKS / ${vmCount} VMs`)
   this.vms.forEach((vm,i)=>{if(i<vmCount)this.game.objects.enable(vm.object);else this.game.objects.disable(vm.object)})
   this.refreshExperimentVisibility()
