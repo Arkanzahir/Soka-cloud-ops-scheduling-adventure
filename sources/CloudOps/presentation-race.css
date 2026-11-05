@@ -1,8 +1,7 @@
 .presentation-race-hud {
   position: fixed;
-  left: 50%;
-  top: 16px;
-  transform: translateX(-50%);
+  left: 16px;
+  bottom: 16px;
   z-index: 12;
   display: flex;
   align-items: center;
@@ -17,6 +16,8 @@
   font: 700 15px Nunito, sans-serif;
 }
 .presentation-race-hud[hidden] { display: none; }
+body:has(.presentation-race-hud:not([hidden])) .js-cloud-ops-status { visibility: hidden; }
 .race-progress { color: #377e78; }
+.race-playback { color: #377e78; font-size: 13px; }
 .race-stop { background: transparent; border: 1px solid #a87762; border-radius: 6px; padding: 5px 9px; cursor: pointer; }
 .co-learning--race .co-nav, .co-learning--race .co-footer { display: none; }

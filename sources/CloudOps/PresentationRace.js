@@ -35,11 +35,12 @@ export class PresentationRace
         this.hud = document.createElement('aside')
         this.hud.className = 'presentation-race-hud'
         this.hud.hidden = true
-        this.hud.innerHTML = '<div><strong class="race-progress"></strong><div class="race-target" aria-live="polite"></div></div><button type="button" class="race-stop">Akhiri</button>'
+        this.hud.innerHTML = '<div><strong class="race-progress"></strong><div class="race-target" aria-live="polite"></div><small class="race-playback" hidden></small></div><button type="button" class="race-stop">Akhiri</button>'
         this.cancel = this.hud.querySelector('.race-stop')
         this.cancel.onclick = () => this.stop()
         this.progress = this.hud.querySelector('.race-progress')
         this.hint = this.hud.querySelector('.race-target')
+        this.playback = this.hud.querySelector('.race-playback')
         document.body.appendChild(this.hud)
 
         const kit = new YardKit({ game, objects: { hideable: [] } })
@@ -115,6 +116,7 @@ export class PresentationRace
                 rotation: start.rotation
             }, () => {})
             this.active = true
+            this.learning.button.hidden = true
             this.viewed.clear()
             this.mountExhibits()
             this.game.audio.raceMusic.load()
@@ -177,6 +179,18 @@ export class PresentationRace
         this.hud.hidden = false
         this.progress.textContent = `Presentation Race · ${this.viewed.size}/${STOPS.length} pos`
         this.hint.textContent = hint
+        this.updatePlayback(this.learning.panel.player?.snapshot())
+    }
+
+    updatePlayback(snapshot)
+    {
+        const world = this.ready && STOPS[this.learning.panel.slide]?.world
+        const status = snapshot?.status
+        this.playback.hidden = !world || (status !== 'playing' && status !== 'finished')
+        if(this.playback.hidden) return
+        const title = world === 'cloud' ? 'Cloud' : world.toUpperCase()
+        const label = status === 'playing' ? 'berjalan' : 'selesai'
+        this.playback.textContent = `${title} ${label} · ${snapshot.cursor}/${snapshot.total}`
     }
 
     onCountdown()
@@ -231,7 +245,7 @@ export class PresentationRace
         if(this.learning.open(index, 'racing'))
         {
             this.viewed.add(index)
-            this.show('Esc untuk kembali mengemudi. Timer balap terus berjalan.')
+            this.hud.hidden = true
         }
         else this.learning.panel.setRaceChapter(false)
     }
@@ -251,6 +265,7 @@ export class PresentationRace
         this.learning.panel.pauseLesson()
         this.learning.panel.setRaceChapter(false)
         this.learning.button.disabled = false
+        this.learning.button.hidden = false
         this.cancel.disabled = false
         this.hud.hidden = true
         this.game.audio.setRaceMusic(false)

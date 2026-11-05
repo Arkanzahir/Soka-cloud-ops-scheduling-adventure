@@ -6,7 +6,7 @@ export class LearningHost {
   this.game=game;this.manager=manager;this.busy=false;
   manager.presentation.sections=['main','cloud','aco','gwo'];
   manager.registerPanel('learning');
-  this.panel=new LearningPanel({mount:document.querySelector('#learning-mount'),embedded:true,escapeCloses:false,worlds:{cloud:game.world.areas.cloud,aco:game.world.areas.aco,gwo:game.world.areas.gwo},onClose:()=>game.modals.close(),navigate:id=>this.navigate(id)});
+  this.panel=new LearningPanel({mount:document.querySelector('#learning-mount'),embedded:true,escapeCloses:false,worlds:{cloud:game.world.areas.cloud,aco:game.world.areas.aco,gwo:game.world.areas.gwo},onClose:()=>game.modals.close(),onPlayback:snapshot=>game.world.presentationRace?.updatePlayback(snapshot),navigate:id=>this.navigate(id)});
   this.floating=new FloatingDashboard(this.panel.root);
   const learningModal=game.modals.items.get('learning');
   learningModal.events.on('open',()=>game.audio.setMusicMix({ducked:true}));

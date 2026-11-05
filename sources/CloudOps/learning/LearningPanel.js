@@ -10,7 +10,7 @@ const $ = (root, selector) => root.querySelector(selector)
 export class LearningPanel
 {
     constructor({ mount = document.body, worlds = {}, navigate = null, onOpen = () => {},
-        onClose = () => {}, embedded = false, escapeCloses = !embedded, seed = 42 } = {})
+        onClose = () => {}, onPlayback = () => {}, embedded = false, escapeCloses = !embedded, seed = 42 } = {})
     {
         if(!mount || typeof mount.appendChild !== 'function') throw new TypeError('DOM mount is required')
         if(!Number.isInteger(seed) || seed < 0 || seed > 0xffffffff) throw new RangeError('Invalid seed')
@@ -19,6 +19,7 @@ export class LearningPanel
         this.navigate = navigate
         this.onOpen = onOpen
         this.onClose = onClose
+        this.onPlayback = onPlayback
         this.escapeCloses = escapeCloses
         this.seed = seed
         this.iterations = 50
@@ -43,7 +44,7 @@ export class LearningPanel
             <div class="co-header">
                 <div><div class="co-brand">✦ CLOUD OPS <span>LEARNING STATION</span></div>
                   <div class="co-heading">Scheduling Adventure</div></div>
-                <button type="button" data-action="close" class="co-button co-close" aria-label="Tutup materi">✕</button>
+                <button type="button" data-action="close" class="co-button co-close" aria-label="Sembunyikan dashboard" title="Sembunyikan dashboard (Esc)">✕</button>
             </div>
             <nav class="co-nav" aria-label="Urutan presentasi"></nav>
             <div class="co-content">
@@ -84,7 +85,7 @@ export class LearningPanel
                   <button type="button" class="co-button" data-action="reset">↺ Reset</button>
                   <button type="button" class="co-button" data-action="aco-display-mode" hidden>🐜 Mode Koloni: 12 semut</button>
                 </div>
-                <div class="co-demo-footnote">World 3D: <strong class="co-world-connection"></strong>. Tekan Step untuk mengamati keputusan berikutnya.</div>
+                <div class="co-demo-footnote">World 3D: <strong class="co-world-connection"></strong>. Tekan Esc atau × untuk melihat world. Simulasi Play tetap berjalan.</div>
               </div>
               <div class="co-comparison" hidden>
                 <div class="co-panel-heading">HASIL PERHITUNGAN ENGINE <span>MI / MIPS · MAKESPAN</span></div>
@@ -323,8 +324,12 @@ export class LearningPanel
             return item
         }))
         $(this.root, '[data-action="step"]').disabled = snapshot.status === 'finished'
-        $(this.root, '[data-action="pause"]').disabled = snapshot.status !== 'playing'
-        $(this.root, '[data-action="play"]').textContent = snapshot.status === 'finished' ? '↻ Play lagi' : '▶ Play'
+        const playing = snapshot.status === 'playing'
+        $(this.root, '[data-action="pause"]').disabled = !playing
+        const play = $(this.root, '[data-action="play"]')
+        play.disabled = playing
+        play.textContent = playing ? '▶ Berjalan' : snapshot.status === 'finished' ? '↻ Play lagi' : '▶ Play'
+        this.onPlayback(snapshot)
     }
 
     renderResults()
