@@ -32,6 +32,16 @@ for(const taskCount of [4,6,8])for(const vmCount of [2,3])for(const iterations o
   const demo=createLesson('aco',{problem,seed:42,iterations:4,ants:12,sampledAnt:1})
   assert.equal(demo.timeline.length,4*(taskCount+1))
   for(const step of demo.timeline)if(step.kind==='ant-choice'){
+   assert.equal(step.colonyChoices.length,12,'Each displayed task includes every actual ant')
+   assert.equal(new Set(step.colonyChoices.map(c=>c.ant)).size,12,'All ants must be distinct')
+   for(const choice of step.colonyChoices){
+    const original=demo.run.events.find(e=>
+     e.type==='aco-choice'&&e.iteration===step.source.iteration&&
+     e.taskIndex===step.source.taskIndex&&e.ant===choice.ant)
+    assert.ok(original,'Every visible ant must correspond to an engine decision')
+    assert.equal(choice.selectedVM,original.selectedVM,'The drawn VM cannot differ from the engine')
+    assert.ok(choice.selectedVM<vmCount,'No choice may lead to an inactive VM')
+   }
    assert.ok(step.source.selectedVM<vmCount)
    assert.equal(step.source.probabilities.length,vmCount)
    assert.equal(step.source.pheromone.length,vmCount)
