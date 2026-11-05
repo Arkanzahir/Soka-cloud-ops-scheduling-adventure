@@ -83,6 +83,7 @@ export class World
             this.lanterns = new Lanterns()
             this.scenery = new Scenery()
             this.areas = new Areas()
+            this.campus = new MainHub(this.game)
         }
         else if(step === 2)
         {
@@ -91,7 +92,7 @@ export class World
             this.areas.gwo = new GwoWorld(this.cloudOps)
             this.areas.aco = registerAcoWorld(this.game,this.cloudOps)
             this.learning = new LearningHost(this.game,this.cloudOps)
-            this.campus = new MainHub(this.game)
+            this.campus.setWayfinding()
         }
     }
 
