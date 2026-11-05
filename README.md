@@ -6,7 +6,7 @@ Jelajahi kampus dengan mobil 3D, kirim task ke virtual machine, dan amati bagaim
 
 ![Cloud Ops Campus dan kendaraan](docs/evidence/final-branding-main.png)
 
-**Rilis ini** mencakup Classic Race dengan enam pos materi dan simulasi Cloud, ACO, serta GWO. Gunakan [langkah menjalankan game secara lokal](#instalasi-dan-menjalankan-lokal) untuk memainkan versi pada checkout ini. Deployment GitHub Pages dijalankan terpisah. [Checkpoint QA terbaru](docs/WORK_HANDOFF.md#presentation-race-audio-mix--2026-11-06) · [Lisensi aset](THIRD_PARTY_NOTICES.md)
+[Mainkan di GitHub Pages](https://arkanzahir.github.io/Soka-cloud-ops-scheduling-adventure/) · [Jalankan secara lokal](#instalasi-dan-menjalankan-lokal) · [Dokumentasi teknis](#dokumentasi-lanjutan)
 
 <details>
 <summary>Pratinjau world, presentasi, dan hasil</summary>
@@ -31,23 +31,35 @@ Cloud Task Scheduling menentukan **task mana dijalankan pada VM mana**. Task mem
 
 Game memperagakan pencarian jadwal dengan **makespan minimum**: waktu sampai seluruh task selesai. ACO membangun solusi melalui pilihan probabilistik dan feromon; GWO memperbarui populasi solusi dengan panduan tiga pemimpin. Keduanya dibandingkan dengan Round Robin pada data yang sama.
 
-## Fitur utama
+## World dan gameplay
 
-- Mobil, kamera, terrain, pencahayaan, dan fisika dari fondasi Bruno Simon.
-- **Cloud Ops Campus:** identitas Kelompok 8, tiga tujuan pembelajaran, dan Credits transparan.
-- **Cloud Compute Yard:** delapan paket task, tiga VM, animasi alokasi nyata, beban VM, dan penanda antrean.
-- **Ant Research Park:** dua belas semut bergerak mengikuti pilihan VM dari engine, dengan mode fokus untuk mengamati satu kandidat dan jalur feromon yang mengikuti pembaruan simulasi.
-- **Wolf Field Research:** lima kandidat terpilih dari populasi 12, Alpha/Beta/Delta, fitness, serta papan pembagian task per kandidat.
-- **Step / Play / Pause / Reset**, tabel assignment, makespan, biaya simulasi, utilization proxy, dan grafik konvergensi.
-- Enam pos presentasi di sisi lintasan **Classic Race**, dengan timer balap dan dashboard yang bisa disembunyikan sambil simulasi berjalan.
-- Grafis **Low/High** yang tersimpan. Low membatasi DPR ke 1; High mempertahankan batas DPR 2.
+| World | Isi dan interaksi |
+| --- | --- |
+| **Cloud Ops Campus** | Hub utama dengan kendaraan 3D, gerbang ke tiga zona, arena Classic Race, dan akses ke kredit proyek. |
+| **Cloud Compute Yard** | Antrean paket task dan rak VM. Animasi Round Robin memperlihatkan paket berpindah, beban tiap VM bertambah, dan makespan berubah. |
+| **Ant Research Park** | Sarang, 12 semut, jalur feromon, dan pintu VM. Mode Koloni memperlihatkan pilihan seluruh semut. Mode Fokus menampilkan keputusan dan probabilitas satu semut. |
+| **Wolf Field Research** | Lima kandidat terbaik dari 12 serigala. Label Alpha, Beta, dan Delta, papan alokasi task, serta rekor makespan mengikuti hasil engine. |
+
+**Free Drive** memberi akses ke zona melalui gerbang kampus. **Classic Race** menempatkan enam pos opsional di sisi lintasan: Pembukaan → Cloud → ACO → GWO → Hasil → Paper. Satu lap memakai sembilan crossing asli dan timer balap. Dashboard bisa disembunyikan sambil balapan dan simulasi terus berjalan.
+
+**Dashboard** menyediakan Langkah, Play, Pause, dan Reset. Tab Hasil menyajikan tabel alokasi task, makespan, biaya simulasi, utilisasi proksi, dan grafik konvergensi. Pengaturan grafis Low/High tersedia melalui menu.
+
+| Kontrol | Fungsi |
+| --- | --- |
+| **WASD / tombol panah** | Mengemudi dan membelokkan mobil. |
+| **B / Shift** | Rem / boost. |
+| **E / Enter** | Berinteraksi dengan gerbang atau stasiun terdekat. |
+| **Esc** | Menyembunyikan dashboard atau menutup menu. |
+| **R** | Reset kendaraan di Free Drive. |
+| **L** | Membuka dashboard di zona aktif atau saat berada di marka pos balap. |
+| **M** | Mematikan atau menyalakan semua audio. |
 
 ## Algoritma dan representasi solusi
 
 | Metode | Alur inti | Visualisasi |
 | --- | --- | --- |
 | **Round Robin** | Membagi task bergiliran ke VM1 → VM2 → VM3. | Paket berpindah ke VM dan beban terakumulasi. |
-| **ACO baseline** | Tiap semut menyusun jadwal dengan feromon dan heuristik beban; evaluasi diikuti evaporasi/deposit. | Satu semut contoh, keputusan task→VM, probabilitas, dan pembaruan feromon nyata. |
+| **ACO baseline** | Tiap semut menyusun jadwal dengan feromon dan heuristik beban; evaluasi diikuti evaporasi/deposit. | Pilihan VM seluruh koloni, probabilitas semut fokus, dan pembaruan feromon. |
 | **GWO baseline** | Alpha/Beta/Delta memandu pembaruan vektor kandidat; koordinat didiskretisasi menjadi indeks VM lalu dievaluasi. | Lima jadwal, ID/peran/fitness, VM tujuan setiap task, dan perubahan assignment per ID. |
 
 Satu kandidat adalah delapan pilihan VM, misalnya `[0,1,2,0,1,2,0,1]` pada engine; tampilan memakai VM1–VM3. **Satu serigala mewakili satu jadwal lengkap, bukan satu task.** Pencarian terjadi pada solusi pembagian task, bukan jarak berjalan menuju VM. [Cara membaca papan GWO](docs/GWO_SCHEDULE_EXPLAINER.md).
@@ -56,7 +68,7 @@ Implementasi adalah **baseline edukatif**, bukan reproduksi identik OACC atau GW
 
 ## Dataset dan model matematis
 
-Demo memakai **8 task independen, non-preemptive** dan **3 VM heterogen**. Setiap task mendapat tepat satu VM, dengan eksekusi berurutan pada VM tersebut. Model tidak memasukkan transfer jaringan, kedatangan dinamis, kegagalan, atau overhead virtualisasi. Dataset UI tetap; konfigurasi tambahan tersedia melalui API pengembang.
+Skenario standar memakai **8 task independen, non-preemptive** dan **3 VM heterogen**. Setiap task mendapat tepat satu VM, dengan eksekusi berurutan pada VM tersebut. Model tidak memasukkan transfer jaringan, kedatangan dinamis, kegagalan, atau overhead virtualisasi. Panel eksperimen Cloud dan ACO mendukung 4, 6, atau 8 task serta 2 atau 3 VM. Pengaturan 10, 25, atau 50 iterasi berlaku untuk hasil eksperimen ACO. Demo GWO dan tab Hasil memakai skenario standar.
 
 | Task | T1 | T2 | T3 | T4 | T5 | T6 | T7 | T8 |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
@@ -80,39 +92,20 @@ utilizationProxy = jumlah load[j] / (jumlah VM × makespan)
 
 Contoh terverifikasi: T1 pada VM1 membutuhkan **1200/600 = 2 detik**. Round Robin menghasilkan beban **[11,833333; 8,1; 2,2] detik**, makespan **11,833333 detik**, biaya **0,029483333 unit simulasi**, dan mean utilization proxy **62,35%**. Biaya bukan tarif cloud nyata; proxy bukan pengukuran CPU utilization.
 
-Perbandingan memakai dataset sama, seed **42**, **50 iterasi** untuk metaheuristik, dan populasi **12**. Demo Step menggunakan trace pelajaran singkat. Anggaran evaluasi antaralgoritma berbeda. [Spesifikasi model dan pengujian](docs/ALGORITHM_SPEC.md).
-
-## Cara bermain dan presentasi
-
-| Kontrol | Fungsi |
-| --- | --- |
-| **WASD / tombol panah** | Mengemudi dan membelokkan mobil. |
-| **B / Shift** | Rem / boost. |
-| **E / Enter** | Berinteraksi dengan gerbang atau stasiun terdekat. |
-| **Esc** | Menutup panel/menu dan kembali mengemudi. |
-| **R** | Reset kendaraan ke titik aman zona aktif. |
-| **L** | Membuka dashboard world aktif saat Free Drive. |
-
-Datangi gerbang Cloud, ACO, atau GWO, lalu tekan E/Enter. Di dalam zona, gunakan stasiun riset untuk membuka pelajaran. Gerbang **Kembali ke Main** membawa mobil pulang.
-
-Klik **MULAI PRESENTASI** untuk menuju garis start Classic Race. Tekan **E/Enter**, tunggu lampu hijau, lalu ikuti checkpoint asli sirkuit. Musik **Sky Blue Street** mulai saat timer berjalan.
-
-Di sisi lintasan ada enam pos berurutan **Pembukaan → Cloud → ACO → GWO → Hasil → Paper**. Menepi dan berhenti di marka pos, lalu tekan **E/Enter**. Kamu bisa melewati pos dan tetap finis. **Akhiri** mengembalikan Free Drive.
-
-**Langkah** menjalankan satu event, **Play/Pause** menjalankan atau menahan simulasi, dan **Reset** mengulang. **Esc** menyembunyikan dashboard dan mengembalikan kontrol mobil. Timer balap dan simulasi yang sedang Play tetap berjalan. Buka pos yang sama untuk melanjutkan dari langkah terakhir.
+Tab Hasil memakai dataset yang sama, seed **42**, **50 iterasi** untuk ACO dan GWO, serta populasi **12**. Makespan standar adalah **11,83 detik** untuk Round Robin, **6,00 detik** untuk ACO, dan **6,50 detik** untuk GWO. Demo ACO dan GWO memakai empat iterasi sehingga nilainya dapat berbeda. Anggaran evaluasi antaralgoritma berbeda. [Spesifikasi model dan pengujian](docs/ALGORITHM_SPEC.md).
 
 ## Instalasi dan menjalankan lokal
 
 Gunakan **Node.js 22.17.0** seperti lingkungan uji. Vite mensyaratkan Node 20.19+ atau 22.12+. Browser yang diuji adalah Google Chrome desktop dengan WebGPU. WebGPU membutuhkan HTTPS atau localhost. Fallback WebGL tersedia dari fondasi renderer, tetapi belum termasuk penerimaan perangkat proyek.
 
 ```bash
-git clone --branch release/m7-final https://github.com/Arkanzahir/Soka-cloud-ops-scheduling-adventure.git
+git clone https://github.com/Arkanzahir/Soka-cloud-ops-scheduling-adventure.git
 cd Soka-cloud-ops-scheduling-adventure
-npm install
+npm ci
 npm run dev
 ```
 
-Buka URL localhost dari Vite. `.env` tidak wajib untuk demo lokal dan backend tidak diperlukan. Untuk pengaturan opsional, salin `.env.example` menjadi `.env`; pertahankan `VITE_SERVER_URL` dan `VITE_GAME_PUBLIC` kosong pada rilis normal. Jangan memasukkan credential ke repository.
+Buka URL localhost yang ditampilkan Vite. Game berjalan langsung dengan pengaturan bawaan. `.env` dan backend bersifat opsional. Biarkan `VITE_SERVER_URL` dan `VITE_GAME_PUBLIC` kosong untuk build publik.
 
 `.npmrc` menggunakan `legacy-peer-deps=true` untuk plugin upstream lama yang peer range-nya belum mencakup Vite 7. Versi dependency tidak di-upgrade pada finalisasi ini. Di PowerShell, gunakan `npm.cmd` bila diperlukan.
 
@@ -133,8 +126,6 @@ npm run preview -- --host 127.0.0.1 --port 4173 --base /Soka-cloud-ops-schedulin
 
 Buka `http://127.0.0.1:4173/Soka-cloud-ops-scheduling-adventure/`. Tes browser otomatis memerlukan Chrome dan Playwright; perintah serta hasilnya ada di [laporan QA final](docs/FINAL_RELEASE.md).
 
-Untuk presentasi, mulai dari **Menu → Options → Quality: Low** dan muat game sebelum giliran demo. Startup sebelumnya sekitar **21 detik** pada lingkungan uji; hasil headless RTX 3050 bukan jaminan performa semua laptop. Uji foreground pada perangkat presentasi dan siapkan localhost sebagai fallback.
-
 ## Teknologi
 
 **JavaScript, HTML/CSS, Three.js/TSL, WebGPURenderer, Rapier 3D, Vite, GLB/Blender**, CanvasTexture dan SVG. Evaluator/algoritma terpisah dari renderer; M5 meneruskan trace ke world dan M6 menyajikan pembelajaran serta perbandingan.
@@ -153,14 +144,8 @@ Paper pertama membahas improved ACO/OACC; paper kedua membahas GWO_C/M dengan cr
 
 Fondasi teknis dan visual berasal dari **[Folio 2025 karya Bruno Simon](https://github.com/brunosimon/folio-2025)**: kendaraan, kamera, physics, terrain, renderer, aset dan interaksi. Copyright **© 2025 Bruno Simon** dan [lisensi MIT](license.md) dipertahankan. Proyek ini tidak menyatakan endorsement Bruno Simon.
 
-Musik dikreditkan kepada **Kounine** sesuai keterangan CC0 upstream. Paket Pages memakai font Nunito dan Amatic SC (SIL OFL) serta efek sintetis original. Gambar galeri portofolio lama dikeluarkan. [Third-party notices](THIRD_PARTY_NOTICES.md) · [Inventaris aset](docs/ASSET_CATALOG.md) · [Kesiapan deployment dan demo lokal](docs/DEPLOYMENT_READINESS.md). Credits tersedia melalui menu **Tentang Proyek** di game.
+Musik latar oleh **Kounine** dan musik balap **Sky Blue Street** oleh **MintoDog** memakai CC0. Kredit model semut, serigala, audio lolongan, dan font tersedia di menu **Tentang Proyek** dan [Third-party notices](THIRD_PARTY_NOTICES.md).
 
 ## Dokumentasi lanjutan
 
-[QA final](docs/FINAL_RELEASE.md) · [Panduan presentasi](docs/PRESENTATION_GUIDE.md) · [Model algoritma](docs/ALGORITHM_SPEC.md) · [Arsitektur fondasi](docs/ARCHITECTURE_AUDIT.md) · [Aturan kontribusi](CONTRIBUTING.md) · [Riwayat README/milestone](docs/history/README_BEFORE_FINAL_RELEASE.md).
-
-### Dashboard dan musik
-
-Di Cloud/ACO/GWO tekan **L** atau **Buka Dashboard** tanpa mendekati stasiun; posisi mobil dipertahankan. **Esc/L** menutup dan mengembalikan kontrol mobil. E/Enter di stasiun tetap tersedia. Seret header dashboard untuk memindah panel penuh; **↺ Posisi** mengembalikan posisi awal. Posisi bertahan saat berganti materi dan dibatasi viewport.
-
-Settings menyediakan Musik latar On/Off dan volume; **M** mute seluruh audio. Musik Kounine yang sudah tersedia diputar setelah interaksi, mengecil menjadi25% saat dashboard terbuka, lalu kembali ke volume pilihan. ACO menampilkan ant/Task/VM/probabilitas/feromon dari event nyata; GWO mempertahankan papan assignment5 kandidat dari12 dengan animasi ringan ketika kandidat berubah. Gerak dekoratif tidak menentukan makespan.
+[QA terbaru](docs/WORK_HANDOFF.md#presentation-race-audio-mix--2026-11-06) · [Model algoritma](docs/ALGORITHM_SPEC.md) · [Arsitektur fondasi](docs/ARCHITECTURE_AUDIT.md) · [Kontribusi](CONTRIBUTING.md) · [Inventaris aset](docs/ASSET_CATALOG.md) · [Deployment](docs/DEPLOYMENT_READINESS.md)
