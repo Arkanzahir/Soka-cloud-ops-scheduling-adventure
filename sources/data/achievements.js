@@ -18,15 +18,15 @@ export default
     ],
     [
         'projects',
-        'But can you fix the wifi?',
-        'Check every project in the <strong>projects</strong> area.',
+        'Studio Simulasi',
+        'Buka materi dari Studio Simulasi.',
         projectsData.length,
         true // Unique
     ],
     [
         'lab',
-        'I\'m a bit of a scientist myself',
-        'Check every project in the <strong>lab</strong> area.',
+        'Peneliti Scheduling',
+        'Buka materi dari Laboratorium Scheduling.',
         labData.length,
         true // Unique
     ],
@@ -201,8 +201,8 @@ export default
     ],
     [
         'fan',
-        'You’re my only fan',
-        'Spawn a fan.',
+        'Pendingin Server',
+        'Aktifkan kipas pendingin kampus.',
         1
     ],
     [

@@ -11,3 +11,4 @@ dist
 *.blend1
 resources/sounds/
 test-results/
+.cache/

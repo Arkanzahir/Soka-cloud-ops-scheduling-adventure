@@ -1,4 +1,6 @@
-# CLOUD OPS — Scheduling Adventure
+# Cloud Ops: Scheduling Adventure — Kelompok 8
+
+**Kelompok 8 — Cloud Ops Campus:** kandidat branding berada di `feature/group8-mainworld-branding`, berbasis rilis teruji `bc1d0dd`. Main World, Beranda, navigasi, ikon aplikasi, dan Credits telah diadaptasi; tautan pribadi/galeri portofolio dinonaktifkan atau diganti materi SOKA. [Laporan, pengujian, performa dan screenshot](docs/GROUP8_MAINWORLD.md). Belum merge atau deploy.
 
 **Kandidat rilis M7:** game lengkap berada di `release/m7-final`, dengan checkpoint `integration/m7-demo` tetap tersedia. Gunakan tombol **Presentasi** atau gerbang Cloud/ACO/GWO. Untuk perangkat berat, buka **Menu → Options → Quality: Low**; pilihan tersimpan dan DPR dibatasi 1. [Profil performa, QA akhir, screenshot dan batasan](docs/M7_RELEASE.md). Belum merge ke main atau deploy; catatan milestone lama di bawah adalah riwayat.
 
@@ -8,9 +10,9 @@
 
 ## 1. Tentang proyek
 
-**CLOUD OPS** adalah rancangan presentasi HTML interaktif dalam bentuk game mobil 3D. Pemain mengendarai mobil, mengeksplorasi lingkungan, memasuki area pembelajaran, lalu mempelajari dan menjalankan **Ant Colony Optimization (ACO)** serta **Grey Wolf Optimizer (GWO)** untuk menyelesaikan kasus **Cloud Task Scheduling**.
+**CLOUD OPS** adalah game edukasi HTML interaktif dari **Kelompok 8** dalam bentuk petualangan mobil 3D. Pemain mengeksplorasi kampus, memasuki area pembelajaran, lalu mempelajari **Round Robin, Ant Colony Optimization (ACO)** dan **Grey Wolf Optimizer (GWO)** untuk menyelesaikan kasus **Cloud Task Scheduling**.
 
-Berbeda dengan PowerPoint konvensional, penjelasan algoritma tidak berhenti pada definisi dan gambar. Pemain dapat mengubah jumlah task, kemampuan Virtual Machine (VM), parameter algoritma, kemudian menjalankan kode JavaScript dan melihat bagaimana jadwal serta metrik evaluasinya berubah.
+Demo menggunakan dataset **8 task dan 3 Virtual Machine (VM)** dengan parameter edukasi tetap. Pemain menjalankan Step/Play/Pause/Reset dan membandingkan alokasi, beban VM, makespan, biaya simulasi, serta utilization proxy dari kode algoritma nyata. Konfigurasi engine tersedia melalui API; UI demo belum menyediakan editor dataset atau parameter.
 
 **Prinsip proyek:** game 3D adalah cara *menyampaikan* materi. Nilai akademik utamanya tetap terletak pada paper, penjelasan algoritma, studi kasus task→algoritma→solusi, dan visualisasi hasil perhitungan yang benar.
 
@@ -204,11 +206,11 @@ PowerShell: gunakan `Copy-Item .env.example .env` dan `npm.cmd` bila diperlukan.
 | M0 | Audit source Bruno, lisensi, aset, build dan visual baseline | SELESAI — bukti pada BASELINE_TEST_REPORT; clearance SFX/font sebelum publikasi |
 | M1 | Finalisasi detail paper dan spesifikasi algoritma | DRAFT / paper GWO terverifikasi, ACO DBpia belum |
 | M2 | Sistem zona, tombol E/Enter, kamera, respawn | SELESAI — Main↔satu zona uji, panel, safety reset; laporan M2 tersedia |
-| M3 | Cloud Mini-World sebagai vertical slice | TAHAP 1 selesai: kerangka CloudArea, 1 stasiun, 3 VM placeholder; M3 penuh belum selesai |
-| M4 | Engine ACO & GWO, seeded RNG, unit tests | BELUM DIMULAI |
-| M5 | ACO/GWO worlds dan animasi dari trace nyata | BELUM DIMULAI |
-| M6 | Results, paper station, Presentation Mode | BELUM DIMULAI |
-| M7 | Production QA dan deployment GitHub Pages | BELUM DIMULAI |
+| M3 | Cloud Compute Yard | SELESAI — Cloud Final, 8 task/3 VM dan API visualisasi teruji |
+| M4 | Round Robin, ACO & GWO, seeded RNG | SELESAI — numerical engine dan unit tests tersedia |
+| M5 | SimulationBridge dan adapter world | SELESAI — trace engine menggerakkan tiga world |
+| M6 | Results, paper station, Presentation Mode | SELESAI — enam bagian, chart dan assignment teruji |
+| M7 | Integrasi, performance QA, kandidat rilis | TERUJI — rilis/branding menunggu review; deployment belum dilakukan |
 
 Silakan lihat [`docs/IMPLEMENTATION_PLAN.md`](docs/IMPLEMENTATION_PLAN.md). Jangan mengubah status menjadi **Completed** tanpa bukti test/build.
 

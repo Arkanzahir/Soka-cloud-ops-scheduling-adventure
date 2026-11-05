@@ -20,6 +20,7 @@ async function sample(id,quality){
   };game.ticker.events.on('tick',tick,999);
  }),report.sampleMs);
  const after=await metrics();report.scenarios.push({id,quality,...frames,cpu:{taskMs:(after.TaskDuration-before.TaskDuration)*1000,scriptMs:(after.ScriptDuration-before.ScriptDuration)*1000,layoutMs:(after.LayoutDuration-before.LayoutDuration)*1000},heapBytes:after.JSHeapUsedSize});console.log(label,id,quality,frames.fps.toFixed(1)+' FPS',frames.p95Ms.toFixed(1)+' ms p95');
+ if(process.argv.includes('--capture-low')&&id==='main'&&quality===1)await page.screenshot({path:`docs/evidence/${label}-main-low.png`});
 }
 try{
  report.gpu=await root.send('SystemInfo.getInfo');await cdp.send('Performance.enable');const start=Date.now();

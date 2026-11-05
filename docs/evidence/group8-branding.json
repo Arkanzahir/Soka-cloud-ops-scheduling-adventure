@@ -1,0 +1,95 @@
+{
+  "checks": [
+    {
+      "name": "project title and metadata identify Kelompok 8",
+      "passed": true
+    },
+    {
+      "name": "true 3D welcome landmark loads without font fallback",
+      "passed": true
+    },
+    {
+      "name": "three campus destinations, one campus group, four original zones",
+      "passed": true
+    },
+    {
+      "name": "personal letters and verified social-logo bodies disabled and invisible",
+      "passed": true
+    },
+    {
+      "name": "Home contains project explanation, course and shared CTA",
+      "passed": true
+    },
+    {
+      "name": "no personal account destinations remain in HTML",
+      "passed": true
+    },
+    {
+      "name": "Home CTA uses existing M6 and locks driving",
+      "passed": true
+    },
+    {
+      "name": "Credits distinguish contributions and preserve MIT copyright",
+      "passed": true
+    },
+    {
+      "name": "1366 Home CTA reachable and panel has no horizontal overflow",
+      "passed": true
+    },
+    {
+      "name": "1920 Home CTA reachable and panel has no horizontal overflow",
+      "passed": true
+    },
+    {
+      "name": "projects native research interaction opens M6 without old cinematic",
+      "passed": true
+    },
+    {
+      "name": "lab native research interaction opens M6 without old cinematic",
+      "passed": true
+    },
+    {
+      "name": "social repository destination is the actual group project",
+      "passed": true
+    },
+    {
+      "name": "social credits interaction opens attribution menu",
+      "passed": true
+    },
+    {
+      "name": "social presentation interaction uses existing M6",
+      "passed": true
+    },
+    {
+      "name": "career is a six-topic CTS learning path, not personal history",
+      "passed": true
+    },
+    {
+      "name": "native reset retains disabled personal props and valid social dependencies",
+      "passed": true
+    },
+    {
+      "name": "vehicle drives through branded Main without new decoration collisions",
+      "passed": true
+    },
+    {
+      "name": "R remains grounded and title remains branded while driving",
+      "passed": true
+    },
+    {
+      "name": "campus map returns from mini-world through ZoneManager safely",
+      "passed": true
+    },
+    {
+      "name": "no personal account was opened by any tested interaction",
+      "passed": true
+    },
+    {
+      "name": "no JavaScript or local resource errors",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "httpErrors": [],
+  "passed": true
+}

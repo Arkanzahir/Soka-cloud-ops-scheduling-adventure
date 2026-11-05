@@ -1,10 +1,10 @@
 import {chromium} from 'playwright';import assert from 'node:assert/strict';import fs from 'node:fs';
 const browser=await chromium.launch({channel:'chrome',headless:true}),context=await browser.newContext({viewport:{width:1366,height:768},deviceScaleFactor:2}),page=await context.newPage();
-const url=process.argv[2]||'http://127.0.0.1:4192/Soka-cloud-ops-scheduling-adventure/';const report={checks:[],errors:[]};page.on('pageerror',e=>report.errors.push(e.message));
+const url=process.argv[2]||'http://127.0.0.1:4192/Soka-cloud-ops-scheduling-adventure/';const label=process.argv[3]||'release';const report={checks:[],errors:[]};page.on('pageerror',e=>report.errors.push(e.message));
 const check=(name,value)=>{report.checks.push({name,passed:!!value});assert.ok(value,name);console.log('PASS '+name)};
 const ready=()=>page.waitForFunction(()=>window.game?.world?.learning,null,{timeout:120000});
 const panel=()=>page.waitForFunction(()=>game.world.learning.panel.visible&&!game.world.learning.busy&&game.modals.state===1,null,{timeout:30000});
-const shot=name=>page.screenshot({path:`docs/evidence/release-${name}.png`});
+const shot=name=>page.screenshot({path:`docs/evidence/${label}-${name}.png`});
 async function toggle(){await page.evaluate(()=>game.menu.open('options'));await page.waitForFunction(()=>game.menu.state===1);await page.locator('.js-quality-toggle').click();await page.keyboard.press('Escape');await page.waitForFunction(()=>game.menu.state===3)}
 try{
  await page.goto(url+'#skip',{waitUntil:'networkidle'});await ready();await page.waitForTimeout(2000);
@@ -26,4 +26,4 @@ try{
   await page.keyboard.press('Escape');await page.waitForFunction(()=>game.world.cloudOps.state==='DRIVING');
  }
  check('no JavaScript page errors',report.errors.length===0);report.passed=true;
-}catch(error){report.passed=false;report.failure=error.stack;await shot('ui-failure').catch(()=>{});throw error}finally{fs.writeFileSync('docs/evidence/release-ui.json',JSON.stringify(report,null,2));await browser.close()}
+}catch(error){report.passed=false;report.failure=error.stack;await shot('ui-failure').catch(()=>{});throw error}finally{fs.writeFileSync(`docs/evidence/${label}-ui.json`,JSON.stringify(report,null,2));await browser.close()}

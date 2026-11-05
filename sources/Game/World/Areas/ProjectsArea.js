@@ -8,6 +8,7 @@ import { add, color, float, Fn, If, luminance, mix, mul, normalWorld, positionGe
 import { Inputs } from '../../Inputs/Inputs.js'
 import { MeshDefaultMaterial } from '../../Materials/MeshDefaultMaterial.js'
 import { Area } from './Area.js'
+import {configureExhibit} from '../../../CloudOps/campus/exhibit.js'
 
 export class ProjectsArea extends Area
 {
@@ -34,34 +35,11 @@ export class ProjectsArea extends Area
         this.state = ProjectsArea.STATE_CLOSED
 
         this.setSounds()
-        this.setInteractivePoint()
-        this.setInputs()
-        this.setCinematic()
-        this.setShadeMix()
-        this.setTexts()
-        this.setHover()
-        this.setNavigation()
-        this.setImages()
-        this.setPagination()
-        this.setAttributes()
-        this.setAdjacents()
-        this.setTitle()
-        this.setUrl()
-        this.setDistinctions()
-        this.setBlackBoard()
         this.setOven()
         this.setGrinder()
         this.setAnvil()
         this.setAchievement()
-
-        this.changeProject(0, ProjectsArea.DIRECTION_NEXT, false, true)
-
-        // Debug
-        if(this.game.debug.active)
-        {
-            this.debugPanel.addButton({ title: 'open', label: 'open' }).on('click', () => { this.open() })
-            this.debugPanel.addButton({ title: 'close', label: 'close' }).on('click', () => { this.close() })
-        }
+        configureExhibit(this, 'projects', projectsData[0].title)
     }
 
     setSounds()

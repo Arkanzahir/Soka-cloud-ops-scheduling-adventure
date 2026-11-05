@@ -1,5 +1,7 @@
 import {allocationEvent,scheduleState} from './cloud/visualState.js'
 import * as THREE from 'three/webgpu'
+import {texture} from 'three/tsl'
+import {MeshDefaultMaterial} from '../Game/Materials/MeshDefaultMaterial.js'
 import { Area } from '../Game/World/Areas/Area.js'
 import { YardKit } from './cloud/YardKit.js'
 import { Trees } from '../Game/World/Trees.js'
@@ -53,6 +55,17 @@ export class CloudArea extends Area {
  buildQueue(){const k=this.kit
   // Two staggered rows on a compact dispatch dock. Face labels travel with their modules.
   k.rounded(-65,.18,-31.5,10,.36,4.2,'wood')
+  // One static painted surface; these are parking outlines, never duplicate task actors.
+  const canvas=document.createElement('canvas');canvas.width=1024;canvas.height=512
+  const ctx=canvas.getContext('2d');ctx.fillStyle='#a87762';ctx.fillRect(0,0,1024,512)
+  ctx.strokeStyle='#fff0bf';ctx.lineWidth=5;ctx.fillStyle='#fff0bf';ctx.font='bold 38px sans-serif';ctx.textAlign='left'
+  for(let i=0;i<TASK_MI.length;i++){
+   const x=58+(i%4)*251,z=35+Math.floor(i/4)*256
+   ctx.strokeRect(x,z,155,202);ctx.fillText(`T${i+1}`,x+12,z+43)
+  }
+  const paint=new THREE.CanvasTexture(canvas);paint.colorSpace=THREE.SRGBColorSpace
+  const markings=k.mesh(new THREE.PlaneGeometry(9.8,4),new MeshDefaultMaterial({colorNode:texture(paint),hasDropShadows:false,hasCoreShadows:false}),new THREE.Vector3(-65,.365,-31.5))
+  markings.rotation.x=-Math.PI/2;markings.castShadow=false;markings.receiveShadow=false
   TASK_MI.forEach((mi,i)=>{
    const group=new THREE.Group(),x=-68.6+(i%4)*2.4,z=-32.5+Math.floor(i/4)*2
    group.position.set(x,.4,z);const height=.76+mi/14000,accent=['coral','sage','blue'][i%3]

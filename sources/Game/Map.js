@@ -43,16 +43,16 @@ export class Map
         this.locations.items = [
             { name: 'Achievements', respawnName: 'achievements', offset: { x: 0, y: -0.01 } },
             { name: 'Altar', respawnName: 'altar', offset: { x: 0, y: -0.05 } },
-            { name: 'Behind<br /> the scene', respawnName: 'behindTheScene', offset: { x: 0.01, y: 0 } },
+            { name: 'Tentang<br /> Proyek', respawnName: 'behindTheScene', offset: { x: 0.01, y: 0 } },
             { name: 'Bowling', respawnName: 'bowling', offset: { x: -0.08, y: 0.03 } },
-            { name: 'Career', respawnName: 'career', offset: { x: 0, y: -0.06 } },
+            { name: 'Jalur CTS', respawnName: 'career', offset: { x: 0, y: -0.06 } },
             { name: 'Circuit', respawnName: 'circuit', offset: { x: -0.08, y: -0.05 } },
             { name: 'Cookie', respawnName: 'cookie', offset: { x: -0.02, y: -0.01 } },
-            { name: 'Lab', respawnName: 'lab', offset: { x: -0.03, y: 0 } },
-            { name: 'Landing', respawnName: 'landing', offset: { x: 0.02, y: 0 } },
-            { name: 'Projects', respawnName: 'projects', offset: { x: 0, y: -0.02 } },
-            { name: 'Social', respawnName: 'social', offset: { x: -0.01, y: -0.04 } },
-            { name: 'Time Machine', respawnName: 'timeMachine', offset: { x: 0, y: 0 } },
+            { name: 'Lab Scheduling', respawnName: 'lab', offset: { x: -0.03, y: 0 } },
+            { name: 'Cloud Ops Campus', respawnName: 'landing', offset: { x: 0.02, y: 0 } },
+            { name: 'Studio Simulasi', respawnName: 'projects', offset: { x: 0, y: -0.02 } },
+            { name: 'Kolaborasi', respawnName: 'social', offset: { x: -0.01, y: -0.04 } },
+            { name: 'Arsip Proyek', respawnName: 'timeMachine', offset: { x: 0, y: 0 } },
         ]
 
         for(const item of this.locations.items)
@@ -77,13 +77,21 @@ export class Map
             
             this.element.append(element)
 
-            element.addEventListener('click', () =>
+            element.addEventListener('click', async () =>
             {
+                if(this.navigating) return
+                this.navigating = true
+                await new Promise(resolve => {
+                    const done = () => { this.modal.events.off('closed', done); resolve() }
+                    this.modal.events.on('closed', done)
+                    this.game.modals.close()
+                })
+                if(this.game.world.cloudOps.currentZone !== 'main' && !await this.game.world.cloudOps.enter('main', true)) { this.navigating = false; return }
                 this.game.player.respawn(item.respawnName, () =>
                 {
                     this.game.view.focusPoint.isTracking = true
+                    this.navigating = false
                 })
-                this.game.modals.close()
             })
         }
     }
@@ -108,7 +116,7 @@ export class Map
         
         this.texture.update = () =>
         {
-            const url = this.game.dayCycles.intervalEvents.get('night').inInterval ? 'ui/map/map-night.webp' : 'ui/map/map-day.webp'
+            const url = 'campus/map.svg'
 
             if(url !== this.texture.previousUrl)
             {
