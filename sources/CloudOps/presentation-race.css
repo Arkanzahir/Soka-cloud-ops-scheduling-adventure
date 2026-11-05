@@ -20,4 +20,5 @@ body:has(.presentation-race-hud:not([hidden])) .js-cloud-ops-status { visibility
 .race-progress { color: #377e78; }
 .race-playback { color: #377e78; font-size: 13px; }
 .race-stop { background: transparent; border: 1px solid #a87762; border-radius: 6px; padding: 5px 9px; cursor: pointer; }
+.learning-host .container:has(.co-learning--race) { width: min(380px, calc(100vw - 32px)); }
 .co-learning--race .co-nav, .co-learning--race .co-footer { display: none; }

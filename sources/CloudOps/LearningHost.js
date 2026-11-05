@@ -43,7 +43,15 @@ export class LearningHost {
    await this.game.world.presentationRace.start();
   }finally{this.busy=false;this.button.disabled=this.game.world.presentationRace.active}
  }
- open(index,category){if(!this.manager.openPanel('learning',category))return false;this.panel.open(index);return true}
+ open(index,category){
+  if(!this.manager.openPanel('learning',category))return false;
+  // Cloud is on the left of the parked camera. ACO and GWO are on its right.
+  const dockLeft=category==='racing'&&(index===2||index===3);
+  this.floating.setDock(dockLeft?'left':'right');
+  this.panel.open(index);
+  this.floating.fit();
+  return true;
+ }
  openStation(index){
   this.open(index);
  }
