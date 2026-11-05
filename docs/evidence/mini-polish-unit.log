@@ -1,0 +1,236 @@
+
+> cloud-ops-scheduling-adventure@0.0.0 test
+> node --test tests/*.test.mjs
+
+TAP version 13
+# Subtest: Cloud rejects invalid payloads without accepting ambiguous destinations
+ok 1 - Cloud rejects invalid payloads without accepting ambiguous destinations
+  ---
+  duration_ms: 1.6394
+  type: 'test'
+  ...
+# Subtest: Cloud accepts Round Robin snapshot with exact externally supplied loads
+ok 2 - Cloud accepts Round Robin snapshot with exact externally supplied loads
+  ---
+  duration_ms: 2.7974
+  type: 'test'
+  ...
+# Subtest: Bruno vehicle, camera, world, physics, materials and license remain byte-identical
+ok 3 - Bruno vehicle, camera, world, physics, materials and license remain byte-identical
+  ---
+  duration_ms: 22.5411
+  type: 'test'
+  ...
+# Subtest: all imported runtime assets retain upstream bytes except the subpath manifest
+ok 4 - all imported runtime assets retain upstream bytes except the subpath manifest
+  ---
+  duration_ms: 6995.8082
+  type: 'test'
+  ...
+# Subtest: HTML entrypoint assets exist and resolve beneath a repository subpath
+ok 5 - HTML entrypoint assets exist and resolve beneath a repository subpath
+  ---
+  duration_ms: 12.1526
+  type: 'test'
+  ...
+# Subtest: public campus destinations never use upstream personal account URLs
+ok 6 - public campus destinations never use upstream personal account URLs
+  ---
+  duration_ms: 2.1116
+  type: 'test'
+  ...
+# Subtest: public HTML identity and legal attribution are kept separate
+ok 7 - public HTML identity and legal attribution are kept separate
+  ---
+  duration_ms: 1.2763
+  type: 'test'
+  ...
+# Subtest: served MIT notice and third party acknowledgments retain exact source bytes
+ok 8 - served MIT notice and third party acknowledgments retain exact source bytes
+  ---
+  duration_ms: 14.1447
+  type: 'test'
+  ...
+# Subtest: GWO event is cloned and invalid leader/assignment/fitness is rejected
+ok 9 - GWO event is cloned and invalid leader/assignment/fitness is rejected
+  ---
+  duration_ms: 1.4274
+  type: 'test'
+  ...
+# Subtest: Round Robin oracle: 8 tasks / 3 VMs, makespan, cost and utilization proxy
+ok 10 - Round Robin oracle: 8 tasks / 3 VMs, makespan, cost and utilization proxy
+  ---
+  duration_ms: 1.7473
+  type: 'test'
+  ...
+# Subtest: Manual calculation: 1 task, 1 VM
+ok 11 - Manual calculation: 1 task, 1 VM
+  ---
+  duration_ms: 11.2207
+  type: 'test'
+  ...
+# Subtest: Known globally optimal assignment from exhaustive 3^8 oracle
+ok 12 - Known globally optimal assignment from exhaustive 3^8 oracle
+  ---
+  duration_ms: 0.3586
+  type: 'test'
+  ...
+# Subtest: Exhaustive oracle proves optimum 6 sec and exactly 9 optimal schedules
+ok 13 - Exhaustive oracle proves optimum 6 sec and exactly 9 optimal schedules
+  ---
+  duration_ms: 34.8495
+  type: 'test'
+  ...
+# Subtest: Reject invalid problem, assignment, seed, and algorithm parameters
+ok 14 - Reject invalid problem, assignment, seed, and algorithm parameters
+  ---
+  duration_ms: 0.89
+  type: 'test'
+  ...
+# Subtest: RNG repeats exactly for the same seed and differs across seeds
+ok 15 - RNG repeats exactly for the same seed and differs across seeds
+  ---
+  duration_ms: 0.1862
+  type: 'test'
+  ...
+# Subtest: ACO reproducible with seeded choices, positive pheromone and monotone best
+ok 16 - ACO reproducible with seeded choices, positive pheromone and monotone best
+  ---
+  duration_ms: 51.8306
+  type: 'test'
+  ...
+# Subtest: GWO seeded reproducibility, leader validity, continuous update and discretization
+ok 17 - GWO seeded reproducibility, leader validity, continuous update and discretization
+  ---
+  duration_ms: 17.4068
+  type: 'test'
+  ...
+# Subtest: ACO/GWO trace disabled still provides history and valid solution
+ok 18 - ACO/GWO trace disabled still provides history and valid solution
+  ---
+  duration_ms: 0.9499
+  type: 'test'
+  ...
+# Subtest: Highly heterogeneous two VMs and extreme valid input never emit NaN
+ok 19 - Highly heterogeneous two VMs and extreme valid input never emit NaN
+  ---
+  duration_ms: 0.9565
+  type: 'test'
+  ...
+# Subtest: Cloud lesson explains each of eight real Round Robin assignments
+ok 20 - Cloud lesson explains each of eight real Round Robin assignments
+  ---
+  duration_ms: 1.8353
+  type: 'test'
+  ...
+# Subtest: ACO sampled ant choices come directly from M4, pheromone is real task row
+ok 21 - ACO sampled ant choices come directly from M4, pheromone is real task row
+  ---
+  duration_ms: 3.1176
+  type: 'test'
+  ...
+# Subtest: ACO adapter works with actual AcoWorld surface (only applyEvent)
+ok 22 - ACO adapter works with actual AcoWorld surface (only applyEvent)
+  ---
+  duration_ms: 0.3362
+  type: 'test'
+  ...
+# Subtest: GWO adapter preserves actual ranking, continuous wolves and final fitness
+ok 23 - GWO adapter preserves actual ranking, continuous wolves and final fitness
+  ---
+  duration_ms: 10.6341
+  type: 'test'
+  ...
+# Subtest: Player step, reset, seek and finished maintain deterministic cursor
+ok 24 - Player step, reset, seek and finished maintain deterministic cursor
+  ---
+  duration_ms: 0.6467
+  type: 'test'
+  ...
+# Subtest: Player Play/Pause uses injected timer, never advances after pause
+ok 25 - Player Play/Pause uses injected timer, never advances after pause
+  ---
+  duration_ms: 0.2517
+  type: 'test'
+  ...
+# Subtest: Reject adapter mismatch and invalid sampled ant, unknown lesson
+ok 26 - Reject adapter mismatch and invalid sampled ant, unknown lesson
+  ---
+  duration_ms: 8.6857
+  type: 'test'
+  ...
+# Subtest: Comparison uses actual engine results and aligned iteration series
+ok 27 - Comparison uses actual engine results and aligned iteration series
+  ---
+  duration_ms: 2.3421
+  type: 'test'
+  ...
+# Subtest: M6 has six ordered learning sections with correct zone mapping and plain Indonesian explanations
+ok 28 - M6 has six ordered learning sections with correct zone mapping and plain Indonesian explanations
+  ---
+  duration_ms: 1.1906
+  type: 'test'
+  ...
+# Subtest: Comparison model uses M4 results (not manually written scores) and identical 8 task 3 VM dataset
+ok 29 - Comparison model uses M4 results (not manually written scores) and identical 8 task 3 VM dataset
+  ---
+  duration_ms: 38.2827
+  type: 'test'
+  ...
+# Subtest: Comparison seed reproducible across repeated rendering
+ok 30 - Comparison seed reproducible across repeated rendering
+  ---
+  duration_ms: 5.9308
+  type: 'test'
+  ...
+# Subtest: SVG convergence coordinates represent actual data monotonically in x and scale y as expected
+ok 31 - SVG convergence coordinates represent actual data monotonically in x and scale y as expected
+  ---
+  duration_ms: 0.5952
+  type: 'test'
+  ...
+# Subtest: Step explanations show genuine per-task allocation, ACO probabilities and wolf leader scores
+ok 32 - Step explanations show genuine per-task allocation, ACO probabilities and wolf leader scores
+  ---
+  duration_ms: 20.9746
+  type: 'test'
+  ...
+# Subtest: Reference titles and academic caveats explicitly distinguish baseline vs improved research
+ok 33 - Reference titles and academic caveats explicitly distinguish baseline vs improved research
+  ---
+  duration_ms: 0.333
+  type: 'test'
+  ...
+# Subtest: M6 playback can be finished, reset, and replayed without fake 3D adapters
+ok 34 - M6 playback can be finished, reset, and replayed without fake 3D adapters
+  ---
+  duration_ms: 0.4357
+  type: 'test'
+  ...
+# Subtest: real M5 twelve-wolf events reach five-wolf world
+ok 35 - real M5 twelve-wolf events reach five-wolf world
+  ---
+  duration_ms: 15.9904
+  type: 'test'
+  ...
+# Subtest: rejected Cloud visualization pauses before advancing cursor
+ok 36 - rejected Cloud visualization pauses before advancing cursor
+  ---
+  duration_ms: 0.7384
+  type: 'test'
+  ...
+# Subtest: reused pheromone buffer matches fresh tube geometry without changing identity
+ok 37 - reused pheromone buffer matches fresh tube geometry without changing identity
+  ---
+  duration_ms: 11.7621
+  type: 'test'
+  ...
+1..37
+# tests 37
+# suites 0
+# pass 37
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 7141.6787
