@@ -52,14 +52,14 @@ transforming...
 ../cloud-ops/node_modules/vm-browserify/index.js (110:11): Use of eval in "../cloud-ops/node_modules/vm-browserify/index.js" is strongly discouraged as it poses security risks and may cause issues with minification.
 rendering chunks...
 computing gzip size...
-../dist/index.html                                60.74 kB │ gzip:     9.82 kB
+../dist/index.html                                60.74 kB │ gzip:     9.83 kB
 ../dist/assets/rapier_wasm3d_bg-0Vyjx73g.wasm  1,698.49 kB │ gzip:   627.43 kB
 ../dist/assets/index-B8penicE.css                 50.27 kB │ gzip:     8.98 kB
-../dist/assets/rapier-D25trP0C.js                229.93 kB │ gzip:    34.81 kB
+../dist/assets/rapier-e7mIBp49.js                229.93 kB │ gzip:    34.81 kB
+../dist/assets/index-BQldCxc1.js               5,244.64 kB │ gzip: 1,119.25 kB
 
 (!) Some chunks are larger than 500 kB after minification. Consider:
 - Using dynamic import() to code-split the application
 - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
-../dist/assets/index-B6Lo6aAr.js               5,244.53 kB │ gzip: 1,119.22 kB
 - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
-✓ built in 16.84s
+✓ built in 17.00s
