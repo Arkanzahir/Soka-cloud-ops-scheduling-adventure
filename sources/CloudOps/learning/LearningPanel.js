@@ -24,6 +24,7 @@ export class LearningPanel
         this.iterations = 50
         this.demoIterations = 4
         this.acoDisplayMode='colony'
+        this.experimentExpanded=false
         this.experiment={...EXPERIMENT_DEFAULTS,seed:this.seed}
         this.experimentProblem=createExperimentProblem(this.experiment)
         this.experimentRuns=this.computeExperiment()
@@ -53,7 +54,8 @@ export class LearningPanel
               <div class="co-takeaway"><span>INTI PEMBELAJARAN</span><p></p></div>
               <p class="co-config-scope" hidden>Mode eksperimen hanya berlaku untuk Cloud dan ACO. Demonstrasi GWO serta tab Hasil tetap memakai skenario standar 8 task / 3 VM / 50 iterasi agar perbandingan referensi konsisten.</p>
               <div class="co-experiment" hidden>
-                <div class="co-panel-heading">EKSPERIMEN PARAMETER ACO <span>8 task · 3 VM · 50 iterasi (awal)</span></div>
+                <div class="co-panel-heading">EKSPERIMEN PARAMETER ACO <button type="button" class="co-button co-experiment-toggle" data-action="experiment-toggle" aria-expanded="false">⚙ Atur</button></div>
+                <div class="co-experiment-body" hidden>
                 <p class="co-demo-label">Ubah jumlah task, jumlah VM, atau iterasi. Dunia Cloud/ACO dan engine menggunakan konfigurasi yang sama.</p>
                 <div class="co-experiment-fields">
                   <label>Task <select data-experiment="taskCount" aria-label="Jumlah task"><option value="4">4</option><option value="6">6</option><option value="8">8</option></select></label>
@@ -66,6 +68,7 @@ export class LearningPanel
                 </div>
                 <div class="co-experiment-result" aria-live="polite"></div>
                 <p class="co-demo-label">Demo 3D memutar maksimal 4 iterasi awal; angka hasil ACO dihitung dari seluruh iterasi yang dipilih. Tab Hasil tetap perbandingan standar.</p>
+                </div>
               </div>
               <div class="co-simulation" hidden>
                 <div class="co-panel-heading">SIMULASI LANGKAH NYATA <span class="co-step-count"></span></div>
@@ -113,6 +116,7 @@ export class LearningPanel
             }
         }
         this.makeNav()
+        this.updateExperimentDisclosure()
         this.render()
     }
 
@@ -193,6 +197,15 @@ export class LearningPanel
         }
     }
 
+    updateExperimentDisclosure()
+    {
+        const panel=$(this.root,'.co-experiment-body')
+        const toggle=$(this.root,'[data-action="experiment-toggle"]')
+        panel.hidden=!this.experimentExpanded
+        toggle.setAttribute('aria-expanded',String(this.experimentExpanded))
+        toggle.textContent=this.experimentExpanded?'▲ Sembunyikan':'⚙ Atur'
+    }
+
     renderExperiment()
     {
         for(const key of ['taskCount','vmCount','iterations']) $(this.root,`[data-experiment="${key}"]`).value=String(this.experiment[key])
@@ -223,6 +236,8 @@ export class LearningPanel
             this.experimentProblem=problem
             this.experimentRuns={baseline,aco}
             this.render()
+            this.experimentExpanded=false
+            this.updateExperimentDisclosure()
             this.feedback(`Konfigurasi aktif: ${valid.taskCount} task, ${valid.vmCount} VM, ${valid.iterations} iterasi. Tekan Langkah untuk melihat simulasi.`)
         }
         catch(error){this.feedback(`Konfigurasi tidak dapat diterapkan: ${error.message}`)}
@@ -378,7 +393,11 @@ export class LearningPanel
         const trigger = event.target.closest('[data-action]')
         if(!trigger || !this.root.contains(trigger) || !this.visible) return
         const action = trigger.dataset.action
-        if(action === 'aco-display-mode'){
+        if(action === 'experiment-toggle'){
+            this.experimentExpanded=!this.experimentExpanded
+            this.updateExperimentDisclosure()
+        }
+        else if(action === 'aco-display-mode'){
             this.acoDisplayMode=this.acoDisplayMode==='colony'?'focus':'colony'
             this.worlds.aco?.setColonyMode?.(this.acoDisplayMode)
             const button=$(this.root,'[data-action="aco-display-mode"]')
