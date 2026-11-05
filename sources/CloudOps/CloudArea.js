@@ -158,8 +158,10 @@ export class CloudArea extends Area {
   this.refreshExperimentVisibility()
  }
  refreshExperimentVisibility(){
-  this.tasks.forEach((task,i)=>{const active=i<this.experiment.taskCount;task.mesh.visible=active;task.label.mesh.visible=active})
-  this.vms.forEach((vm,i)=>{const active=i<this.experiment.vmCount;for(const node of vm.visualNodes)node.visible=active})
+  // Respect Area's frustum culling; inactive objects stay hidden even when re-entering.
+  const inView=this.frustum?.isIn!==false
+  this.tasks.forEach((task,i)=>{const visible=inView&&i<this.experiment.taskCount;task.mesh.visible=visible;task.label.mesh.visible=visible})
+  this.vms.forEach((vm,i)=>{const visible=inView&&i<this.experiment.vmCount;for(const node of vm.visualNodes)node.visible=visible})
  }
  update(){if(!this.tasks)return;this.refreshExperimentVisibility();const dt=this.game.ticker.delta;for(const vm of this.vms){vm.activity.scale.setScalar(vm.selection.visible?1.25+Math.sin(this.game.ticker.elapsed*4)*.2:1)}for(const task of this.tasks){if(!task.motion)continue;const m=task.motion;m.elapsed=Math.min(m.duration,m.elapsed+dt);const p=m.elapsed/m.duration,eased=p*p*(3-2*p),position=this.motionPosition;position.copy(m.from).lerp(m.to,eased);position.y+=Math.sin(p*Math.PI)*1.25;this.positionTask(task,position);if(p===1){task.motion=null;task.mesh.scale.setScalar(1)}}}
 }
