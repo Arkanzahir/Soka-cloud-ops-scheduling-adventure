@@ -11,7 +11,8 @@ for(const [,href] of html.matchAll(/(?:src|href)="([^"#]+)"/g)){
  if(/^(https?:|mailto:|data:)/.test(href))continue;
  const url=new URL(href,'https://example.test/Soka-cloud-ops-scheduling-adventure/');
  assert.ok(url.pathname.startsWith('/Soka-cloud-ops-scheduling-adventure/'),href);
- assert.ok(fs.existsSync(path.join('dist',href.split('?')[0])),href);
+ const relative=decodeURIComponent(url.pathname.slice('/Soka-cloud-ops-scheduling-adventure/'.length));
+ assert.ok(fs.existsSync(path.join('dist',relative)),href);
 }
 assert.ok(walk('dist/assets').some(p=>p.endsWith('.wasm')),'Rapier WASM bundle');
 console.log(`PASS: ${assets.length} copied assets match source SHA-256; HTML paths and Rapier WASM valid`);

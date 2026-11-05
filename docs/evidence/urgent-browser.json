@@ -1,0 +1,139 @@
+{
+  "checks": [
+    {
+      "name": "Low mode keeps DPR1",
+      "passed": true
+    },
+    {
+      "name": "Settings campus branding retained",
+      "passed": true
+    },
+    {
+      "name": "cloud L opens current lesson without teleport or mute",
+      "passed": true
+    },
+    {
+      "name": "cloud drag preserves simulation and fits viewport",
+      "passed": true
+    },
+    {
+      "name": "cloud Play/Pause holds real timeline",
+      "passed": true
+    },
+    {
+      "name": "real RR task assignments",
+      "passed": true
+    },
+    {
+      "name": "cloud music ducking",
+      "passed": true
+    },
+    {
+      "name": "cloud Reset clears progress",
+      "passed": true
+    },
+    {
+      "name": "cloud Esc restores driving/audio",
+      "passed": true
+    },
+    {
+      "name": "cloud car drives after close",
+      "passed": true
+    },
+    {
+      "name": "aco L opens current lesson without teleport or mute",
+      "passed": true
+    },
+    {
+      "name": "aco drag preserves simulation and fits viewport",
+      "passed": true
+    },
+    {
+      "name": "aco Play/Pause holds real timeline",
+      "passed": true
+    },
+    {
+      "name": "recognizable ant and actual selected path/probabilities",
+      "passed": true
+    },
+    {
+      "name": "real pheromone update",
+      "passed": true
+    },
+    {
+      "name": "aco music ducking",
+      "passed": true
+    },
+    {
+      "name": "aco Reset clears progress",
+      "passed": true
+    },
+    {
+      "name": "aco Esc restores driving/audio",
+      "passed": true
+    },
+    {
+      "name": "aco car drives after close",
+      "passed": true
+    },
+    {
+      "name": "gwo L opens current lesson without teleport or mute",
+      "passed": true
+    },
+    {
+      "name": "gwo drag preserves simulation and fits viewport",
+      "passed": true
+    },
+    {
+      "name": "gwo Play/Pause holds real timeline",
+      "passed": true
+    },
+    {
+      "name": "five real candidates, assignments, leaders and articulated wolves",
+      "passed": true
+    },
+    {
+      "name": "gwo music ducking",
+      "passed": true
+    },
+    {
+      "name": "gwo Reset clears progress",
+      "passed": true
+    },
+    {
+      "name": "gwo Esc restores driving/audio",
+      "passed": true
+    },
+    {
+      "name": "gwo car drives after close",
+      "passed": true
+    },
+    {
+      "name": "Music Off pauses playlist",
+      "passed": true
+    },
+    {
+      "name": "Music resumes one track with selected volume",
+      "passed": true
+    },
+    {
+      "name": "presentation reopens from GWO to Main",
+      "passed": true
+    },
+    {
+      "name": "six sections and references intact",
+      "passed": true
+    },
+    {
+      "name": "resize keeps full panel inside viewport",
+      "passed": true
+    },
+    {
+      "name": "no critical JS or local resource errors",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "httpErrors": [],
+  "passed": true
+}

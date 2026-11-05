@@ -1,3 +1,5 @@
+> Historical checkpoint report. Latest urgent UX/audio work and current release gate: [URGENT_RELEASE.md](URGENT_RELEASE.md). Astra work was unavailable; owner authorized takeover.
+
 # Final integration, QA dan persetujuan rilis — 5 November 2026
 
 ## Riwayat integrasi yang terverifikasi

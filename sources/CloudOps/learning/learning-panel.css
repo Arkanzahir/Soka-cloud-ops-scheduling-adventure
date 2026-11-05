@@ -88,3 +88,9 @@
 }
 
 .modals:has(.learning-host.is-displayed){justify-content:flex-end;padding-right:16px;box-sizing:border-box}.learning-host .container{width:min(440px,calc(100vw - 32px))}.learning-host .content{padding:0}
+.learning-host .container{position:fixed;right:16px;top:12vh}.learning-host .co-learning--embedded{max-height:calc(100dvh - 32px)}
+.co-learning .co-header{cursor:grab;touch-action:none;user-select:none}.co-learning .co-header:active{cursor:grabbing}.co-learning .co-position{font-size:11px;margin-left:auto;padding:5px}
+#dashboard-open{position:fixed;z-index:15;left:16px;bottom:52px;padding:12px 16px;border:2px solid #805a4a;border-radius:12px;background:#fff0bf;color:#382c38;font-weight:800;cursor:pointer}#dashboard-open[hidden]{display:none}
+.co-music-controls{display:flex;flex-direction:column;gap:12px;margin-top:18px;padding:12px;border:1px solid #94796c;border-radius:10px}.co-music-controls label{display:flex;align-items:center;gap:12px}.co-music-controls small{font-size:12px}.co-music-controls input{accent-color:#75b7ae}
+.modals:has(.learning-host.is-displayed){z-index:200}
+body:has(.learning-host.is-displayed) .campus-overlay{visibility:hidden;pointer-events:none}

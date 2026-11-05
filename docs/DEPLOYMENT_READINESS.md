@@ -1,11 +1,11 @@
 # Kesiapan deployment dan fallback demo — 5 November 2026
 
-**Tidak ada deployment pada tugas ini.** Merge PR #10 ke main memerlukan persetujuan akhir pemilik. Deployment publik juga memerlukan persetujuan dan penyelesaian izin aset; izin merge bukan clearance aset.
+**Deployment belum dilakukan.** Instruksi urgent memberi izin merge main/Pages bersyarat: tes kritis lulus dan seluruh izin redistribusi yang diperlukan terverifikasi. Syarat izin belum terpenuhi; main/deployment tetap ditahan. Lihat URGENT_RELEASE.md.
 
 ## Infrastruktur
 
 - Metadata API repository diverifikasi: visibility **Public**, `has_pages=false`, homepage kosong. Sesi ini tidak mengubah visibility atau Settings Pages.
-- Tidak ada `.github/workflows` pada kandidat. Status commit dan review GitHub tidak memuat pemeriksaan CI/review penolakan; QA otomatis dijalankan lokal dan log disimpan, bukan CI hijau yang dikarang.
+- Workflow Pages manual kini disiapkan; tanpa trigger push dan rights_verified default false. Belum dijalankan. Pada checkpoint sebelumnya tidak ada workflow. Status commit dan review GitHub tidak memuat pemeriksaan CI/review penolakan; QA otomatis dijalankan lokal dan log disimpan, bukan CI hijau yang dikarang.
 - Vite membangun `sources/` ke `dist/`, menyalin `static/`, dan memakai `base: './'`. Preview diuji pada subpath `/Soka-cloud-ops-scheduling-adventure/`; HTML, GLB/texture/audio, credit download dan Rapier WASM memakai jalur relatif.
 - WebGPU memerlukan HTTPS/localhost. Chrome desktop/WebGPU diuji; fallback WebGL dari fondasi renderer belum diterima melalui matriks browser/perangkat proyek. Google Fonts adalah request eksternal; fallback UI lokal diperiksa terpisah dengan request eksternal diblokir.
 - File Pally WOFF/WOFF2/TTF memang ada di `static/fonts`; warning resolusi font saat bundling tidak boleh dianggap sebagai bukti clearance lisensi. Tidak ada resource lokal gagal pada alur browser final yang dinyatakan lulus.
