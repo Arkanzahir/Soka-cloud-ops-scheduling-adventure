@@ -1,5 +1,7 @@
 import { createLesson, createWorldAdapter, LessonPlayer } from '../simulation/SimulationBridge.js'
 import { buildComparison, convergencePolyline, fmt, lessonDetail, PAPERS, PRESENTATION_SECTIONS } from './PresentationContent.js'
+import { runACO, runRoundRobin } from '../scheduling/index.js'
+import { EXPERIMENT_DEFAULTS, createExperimentProblem, validateExperimentConfig } from './ExperimentConfig.js'
 
 const CHART_NS = 'http://www.w3.org/2000/svg'
 const $ = (root, selector) => root.querySelector(selector)
@@ -21,6 +23,9 @@ export class LearningPanel
         this.seed = seed
         this.iterations = 50
         this.demoIterations = 4
+        this.experiment={...EXPERIMENT_DEFAULTS,seed:this.seed}
+        this.experimentProblem=createExperimentProblem(this.experiment)
+        this.experimentRuns=this.computeExperiment()
         this.slide = 0
         this.visible = false
         this.player = null
@@ -45,6 +50,22 @@ export class LearningPanel
               <p class="co-question"></p>
               <p class="co-explanation"></p>
               <div class="co-takeaway"><span>INTI PEMBELAJARAN</span><p></p></div>
+              <p class="co-config-scope" hidden>Mode eksperimen hanya berlaku untuk Cloud dan ACO. Demonstrasi GWO serta tab Hasil tetap memakai skenario standar 8 task / 3 VM / 50 iterasi agar perbandingan referensi konsisten.</p>
+              <div class="co-experiment" hidden>
+                <div class="co-panel-heading">EKSPERIMEN PARAMETER ACO <span>8 task · 3 VM · 50 iterasi (awal)</span></div>
+                <p class="co-demo-label">Ubah jumlah task, jumlah VM, atau iterasi. Dunia Cloud/ACO dan engine menggunakan konfigurasi yang sama.</p>
+                <div class="co-experiment-fields">
+                  <label>Task <select data-experiment="taskCount" aria-label="Jumlah task"><option value="4">4</option><option value="6">6</option><option value="8">8</option></select></label>
+                  <label>VM <select data-experiment="vmCount" aria-label="Jumlah VM"><option value="2">2</option><option value="3">3</option></select></label>
+                  <label>Iterasi <select data-experiment="iterations" aria-label="Jumlah iterasi ACO"><option value="10">10</option><option value="25">25</option><option value="50">50</option></select></label>
+                </div>
+                <div class="co-controls">
+                  <button type="button" class="co-button co-button-primary" data-action="experiment-apply">▶ Terapkan &amp; Hitung</button>
+                  <button type="button" class="co-button" data-action="experiment-default">↺ Default</button>
+                </div>
+                <div class="co-experiment-result" aria-live="polite"></div>
+                <p class="co-demo-label">Demo 3D memutar maksimal 4 iterasi awal; angka hasil ACO dihitung dari seluruh iterasi yang dipilih. Tab Hasil tetap perbandingan standar.</p>
+              </div>
               <div class="co-simulation" hidden>
                 <div class="co-panel-heading">SIMULASI LANGKAH NYATA <span class="co-step-count"></span></div>
                 <div class="co-demo-label">Demo pendek dengan hasil engine M4, bukan animasi acak.</div>
@@ -162,11 +183,53 @@ export class LearningPanel
         }
     }
 
+    computeExperiment()
+    {
+        return {
+            baseline:runRoundRobin(this.experimentProblem),
+            aco:runACO(this.experimentProblem,{seed:this.experiment.seed,iterations:this.experiment.iterations,ants:12,trace:false})
+        }
+    }
+
+    renderExperiment()
+    {
+        for(const key of ['taskCount','vmCount','iterations']) $(this.root,`[data-experiment="${key}"]`).value=String(this.experiment[key])
+        const {taskCount,vmCount,iterations}=this.experiment
+        const {baseline,aco}=this.experimentRuns
+        $(this.root,'.co-experiment-result').textContent=`${taskCount} task · ${vmCount} VM · ${iterations} iterasi | Round Robin: ${fmt(baseline.metrics.makespan)} s | ACO: ${fmt(aco.metrics.makespan)} s | Alokasi terbaik: ${aco.bestAssignment.map((vm,i)=>`T${i+1}→VM${vm+1}`).join(', ')}`
+    }
+
+    applyExperiment(reset=false)
+    {
+        const config=reset?{...EXPERIMENT_DEFAULTS,seed:this.seed}:{
+            taskCount:Number($(this.root,'[data-experiment="taskCount"]').value),
+            vmCount:Number($(this.root,'[data-experiment="vmCount"]').value),
+            iterations:Number($(this.root,'[data-experiment="iterations"]').value),
+            seed:this.seed
+        }
+        try
+        {
+            const valid=validateExperimentConfig(config)
+            const problem=createExperimentProblem(valid)
+            // Recompute before touching the running 3D scene.
+            const baseline=runRoundRobin(problem)
+            const aco=runACO(problem,{seed:valid.seed,iterations:valid.iterations,ants:12,trace:false})
+            this.player?.pause()
+            this.worlds.cloud?.setExperimentConfig(valid)
+            this.worlds.aco?.setExperimentConfig(valid)
+            this.experiment=valid
+            this.experimentProblem=problem
+            this.experimentRuns={baseline,aco}
+            this.render()
+            this.feedback(`Konfigurasi aktif: ${valid.taskCount} task, ${valid.vmCount} VM, ${valid.iterations} iterasi. Tekan Langkah untuk melihat simulasi.`)
+        }
+        catch(error){this.feedback(`Konfigurasi tidak dapat diterapkan: ${error.message}`)}
+    }
+
     setupLesson(algorithm)
     {
-        const config = algorithm === 'cloud' ? {} : { seed: this.seed, iterations: this.demoIterations }
-        if(algorithm === 'aco') Object.assign(config, { ants: 12, sampledAnt: 1 })
-        if(algorithm === 'gwo') Object.assign(config, { wolves: 12 })
+        const config=algorithm==='gwo'?{seed:this.seed,iterations:this.demoIterations,wolves:12}
+            :{problem:this.experimentProblem,...(algorithm==='aco'?{seed:this.experiment.seed,iterations:Math.min(this.demoIterations,this.experiment.iterations),ants:12,sampledAnt:1}:{})}
         this.player?.dispose()
         this.lesson = createLesson(algorithm, config)
         let adapter = null
@@ -200,6 +263,10 @@ export class LearningPanel
         }
         $(this.root, '.co-simulation').hidden = !['problem', 'aco', 'gwo'].includes(section.id)
         $(this.root, '.co-comparison').hidden = section.id !== 'results'
+        $(this.root, '.co-experiment').hidden = !['problem','aco'].includes(section.id)
+        const standard=this.experiment.taskCount===8&&this.experiment.vmCount===3&&this.experiment.iterations===50
+        $(this.root,'.co-config-scope').hidden = standard||!['gwo','results'].includes(section.id)
+        if(['problem','aco'].includes(section.id))this.renderExperiment()
         $(this.root, '.co-papers').hidden = section.id !== 'paper'
         if(section.id === 'problem') this.setupLesson('cloud')
         if(section.id === 'aco') this.setupLesson('aco')
@@ -305,7 +372,9 @@ export class LearningPanel
         const trigger = event.target.closest('[data-action]')
         if(!trigger || !this.root.contains(trigger) || !this.visible) return
         const action = trigger.dataset.action
-        if(action === 'close') this.close()
+        if(action === 'experiment-apply') this.applyExperiment(false)
+        else if(action === 'experiment-default') this.applyExperiment(true)
+        else if(action === 'close') this.close()
         else if(action === 'slide') void this.goTo(Number(trigger.dataset.index))
         else if(action === 'previous') void this.goTo(Math.max(0, this.slide - 1))
         else if(action === 'next') void this.goTo(Math.min(PRESENTATION_SECTIONS.length - 1, this.slide + 1))
