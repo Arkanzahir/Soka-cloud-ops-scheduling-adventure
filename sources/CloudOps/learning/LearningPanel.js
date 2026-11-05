@@ -23,6 +23,7 @@ export class LearningPanel
         this.seed = seed
         this.iterations = 50
         this.demoIterations = 4
+        this.acoDisplayMode='colony'
         this.experiment={...EXPERIMENT_DEFAULTS,seed:this.seed}
         this.experimentProblem=createExperimentProblem(this.experiment)
         this.experimentRuns=this.computeExperiment()
@@ -77,6 +78,7 @@ export class LearningPanel
                   <button type="button" class="co-button" data-action="play">▶ Play</button>
                   <button type="button" class="co-button" data-action="pause">Ⅱ Pause</button>
                   <button type="button" class="co-button" data-action="reset">↺ Reset</button>
+                  <button type="button" class="co-button" data-action="aco-display-mode" hidden>🐜 Mode Koloni: 12 semut</button>
                 </div>
                 <div class="co-demo-footnote">World 3D: <strong class="co-world-connection"></strong>. Tekan Step untuk mengamati keputusan berikutnya.</div>
               </div>
@@ -270,6 +272,10 @@ export class LearningPanel
         $(this.root, '.co-papers').hidden = section.id !== 'paper'
         if(section.id === 'problem') this.setupLesson('cloud')
         if(section.id === 'aco') this.setupLesson('aco')
+        const colonyControl=$(this.root,'[data-action="aco-display-mode"]')
+        colonyControl.hidden=section.id!=='aco'
+        colonyControl.textContent=this.acoDisplayMode==='colony'?'🐜 Mode Koloni: 12 semut':'🔎 Mode Fokus: 1 semut'
+        if(section.id==='aco')this.worlds.aco?.setColonyMode?.(this.acoDisplayMode)
         if(section.id === 'gwo') this.setupLesson('gwo')
         if(section.id === 'results') this.renderResults()
         if(section.id === 'paper') this.renderPapers()
@@ -372,7 +378,14 @@ export class LearningPanel
         const trigger = event.target.closest('[data-action]')
         if(!trigger || !this.root.contains(trigger) || !this.visible) return
         const action = trigger.dataset.action
-        if(action === 'experiment-apply') this.applyExperiment(false)
+        if(action === 'aco-display-mode'){
+            this.acoDisplayMode=this.acoDisplayMode==='colony'?'focus':'colony'
+            this.worlds.aco?.setColonyMode?.(this.acoDisplayMode)
+            const button=$(this.root,'[data-action="aco-display-mode"]')
+            button.textContent=this.acoDisplayMode==='colony'?'🐜 Mode Koloni: 12 semut':'🔎 Mode Fokus: 1 semut'
+            this.feedback(this.acoDisplayMode==='colony'?'Koloni: 12 semut mengikuti keputusan engine untuk task yang sama.':'Fokus: satu semut contoh ditampilkan agar probabilitas mudah dipahami.')
+        }
+        else if(action === 'experiment-apply') this.applyExperiment(false)
         else if(action === 'experiment-default') this.applyExperiment(true)
         else if(action === 'close') this.close()
         else if(action === 'slide') void this.goTo(Number(trigger.dataset.index))
