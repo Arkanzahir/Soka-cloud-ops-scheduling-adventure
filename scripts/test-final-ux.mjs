@@ -1,0 +1,35 @@
+import {chromium} from 'playwright';import assert from 'node:assert/strict';import fs from 'node:fs';
+const browser=await chromium.launch({channel:'chrome',headless:true}),page=await browser.newPage({viewport:{width:1366,height:768}}),report={checks:[],errors:[],httpErrors:[]};
+const check=(name,value)=>{report.checks.push({name,passed:!!value});assert.ok(value,name);console.log('PASS '+name)};
+page.on('pageerror',e=>report.errors.push(e.message));page.on('response',r=>{if(r.status()>=400&&r.url().startsWith('http://127.0.0.1'))report.httpErrors.push(r.url())});
+const driving=()=>page.waitForFunction(()=>game.world.cloudOps.canInteract(),null,{timeout:30000});
+const panel=()=>page.waitForFunction(()=>game.world.learning.panel.visible&&!game.world.learning.busy&&game.modals.state===1,null,{timeout:30000});
+try{
+ await page.goto((process.argv[2]||'http://127.0.0.1:1256/')+'#skip',{waitUntil:'networkidle'});await page.waitForFunction(()=>window.game?.world?.learning,null,{timeout:90000});await driving();
+ await page.evaluate(()=>game.quality.changeLevel(1));check('Low mode keeps DPR1',await page.evaluate(()=>game.rendering.renderer.getPixelRatio()===1));
+ check('Settings campus branding retained',await page.locator('.options-preview img').getAttribute('src')==='campus/preview.svg');
+ for(const [zone,index]of [['cloud',1],['aco',2],['gwo',3]]){
+  await page.evaluate(id=>game.world.cloudOps.enter(id,true),zone);await driving();await page.locator('#dashboard-open').waitFor({state:'visible'});
+  const position=await page.evaluate(()=>game.player.position.toArray());await page.keyboard.press('l');await panel();
+  check(zone+' L opens current lesson without teleport or mute',await page.evaluate(({position,index})=>game.world.learning.panel.slide===index&&game.player.position.distanceTo({x:position[0],y:position[1],z:position[2]})<.1&&!game.audio.mute.active&&!game.physicalVehicle.chassis.physical.body.isEnabled(),{position,index}));
+  await page.locator('.co-learning [data-action="step"]').click();const cursor=await page.evaluate(()=>game.world.learning.panel.player.cursor);
+  const header=page.locator('.co-header');const rect=await header.boundingBox();await page.mouse.move(rect.x+60,rect.y+22);await page.mouse.down();await page.mouse.move(70,80,{steps:8});await page.mouse.up();
+  check(zone+' drag preserves simulation and fits viewport',await page.evaluate(c=>{const r=document.querySelector('.learning-host .container').getBoundingClientRect();return game.world.learning.panel.player.cursor===c&&r.left>=7&&r.top>=7&&r.right<=innerWidth-7&&r.bottom<=innerHeight-7},cursor));
+  await page.locator('.co-learning [data-action="play"]').click();await page.waitForTimeout(1050);await page.locator('.co-learning [data-action="pause"]').click();const paused=await page.evaluate(()=>game.world.learning.panel.player.cursor);await page.waitForTimeout(1000);check(zone+' Play/Pause holds real timeline',await page.evaluate(c=>c>1&&game.world.learning.panel.player.cursor===c,paused));
+  if(zone==='cloud')check('real RR task assignments',await page.evaluate(()=>{const w=game.world.areas.cloud,e=game.world.learning.panel.player.snapshot().step.source;return w.tasks[e.taskIndex].vm===e.selectedVM}));
+  if(zone==='aco'){
+   check('recognizable ant and actual selected path/probabilities',await page.evaluate(()=>{const w=game.world.areas.aco,e=game.world.learning.panel.player.snapshot().step.source;return w.ants[0].mesh.userData.legs.length===6&&w.ants[0].mesh.userData.antennae.length===2&&w.ants[0].vm===e.selectedVM&&w.event.probabilities.every((v,i)=>v===e.probabilities[i])&&w.pathMeshes[e.selectedVM].material===w.mat.leaf}));
+   await page.evaluate(()=>game.world.learning.panel.player.seek(9));check('real pheromone update',await page.evaluate(()=>{const w=game.world.areas.aco,e=game.world.learning.panel.player.snapshot().step.source;return w.iteration.iteration===e.iteration&&w.iteration.pheromoneSnapshot[7].every((v,i)=>v===e.pheromoneSnapshot[7][i])}));
+  }
+  if(zone==='gwo')check('five real candidates, assignments, leaders and articulated wolves',await page.evaluate(()=>{const w=game.world.areas.gwo,e=game.world.learning.panel.player.snapshot().step.source;return w.state.candidates.length===5&&w.state.candidates.every(c=>e.wolves.some(x=>x.id===c.id&&x.fitness===c.fitness&&x.assignment.every((v,j)=>v===c.assignment[j])))&&w.state.leaders.alpha===e.leaders.alpha.id&&w.wolves.every(w=>!!w.mesh.userData.tail&&!!w.mesh.userData.head)}));
+  check(zone+' music ducking',await page.evaluate(()=>game.audio.music.ducked&&Math.abs(game.audio.playlist.current.sound.volume()-game.audio.music.volume*.25)<1e-6));
+  await page.locator('[data-action="reset"]').click();check(zone+' Reset clears progress',await page.evaluate(()=>game.world.learning.panel.player.cursor===0));await page.keyboard.press('Escape');await driving();check(zone+' Esc restores driving/audio',await page.evaluate(()=>!game.audio.music.ducked&&game.physicalVehicle.chassis.physical.body.isEnabled()));
+  const before=await page.evaluate(()=>game.player.position.toArray());await page.keyboard.down('ArrowUp');await page.waitForTimeout(600);await page.keyboard.up('ArrowUp');check(zone+' car drives after close',await page.evaluate(a=>Math.hypot(...game.player.position.toArray().map((v,i)=>v-a[i]))>.15,before));
+  await page.locator('#dashboard-open').click();await panel();await page.keyboard.press('l');await driving();
+ }
+ await page.evaluate(()=>{game.audio.setMusicMix({enabled:false});});check('Music Off pauses playlist',await page.evaluate(()=>!game.audio.playlist.current.sound.playing()));await page.evaluate(()=>game.audio.setMusicMix({enabled:true,volume:.08}));check('Music resumes one track with selected volume',await page.evaluate(()=>game.audio.playlist.songs.filter(s=>s.sound.playing()).length===1&&Math.abs(game.audio.playlist.current.sound.volume()-.08)<1e-6));
+ await page.locator('#presentation-open').click();await panel();check('presentation reopens from GWO to Main',await page.evaluate(()=>game.world.cloudOps.currentZone==='main'&&game.world.learning.panel.slide===0));
+ for(let i=1;i<6;i++){await page.locator(`[data-index="${i}"]`).click();await panel()};check('six sections and references intact',await page.locator('.co-paper').count()===3);
+ await page.locator('[data-index="3"]').click();await panel();await page.locator('[data-action="step"]').click();await page.locator('.co-position').click();await page.setViewportSize({width:1100,height:650});check('resize keeps full panel inside viewport',await page.evaluate(()=>{const r=document.querySelector('.learning-host .container').getBoundingClientRect();return r.left>=0&&r.right<=innerWidth&&r.bottom<=innerHeight}));
+ await page.screenshot({path:'docs/evidence/urgent-final.png'});check('no critical JS or local resource errors',!report.errors.length&&!report.httpErrors.length);report.passed=true;
+}catch(error){report.passed=false;report.failure=error.stack;throw error}finally{fs.writeFileSync('docs/evidence/urgent-browser.json',JSON.stringify(report,null,2));await browser.close()}

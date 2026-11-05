@@ -1,0 +1,128 @@
+{
+  "checks": [
+    {
+      "name": "Low mode keeps DPR1",
+      "passed": true
+    },
+    {
+      "name": "Settings campus branding retained",
+      "passed": true
+    },
+    {
+      "name": "cloud L opens current lesson without teleport or mute",
+      "passed": true
+    },
+    {
+      "name": "cloud drag preserves simulation and fits viewport",
+      "passed": true
+    },
+    {
+      "name": "cloud Play/Pause holds real timeline",
+      "passed": true
+    },
+    {
+      "name": "real RR task assignments",
+      "passed": true
+    },
+    {
+      "name": "cloud music ducking",
+      "passed": true
+    },
+    {
+      "name": "cloud Reset clears progress",
+      "passed": true
+    },
+    {
+      "name": "cloud Esc restores driving/audio",
+      "passed": true
+    },
+    {
+      "name": "cloud car drives after close",
+      "passed": true
+    },
+    {
+      "name": "aco L opens current lesson without teleport or mute",
+      "passed": true
+    },
+    {
+      "name": "aco drag preserves simulation and fits viewport",
+      "passed": true
+    },
+    {
+      "name": "aco Play/Pause holds real timeline",
+      "passed": true
+    },
+    {
+      "name": "recognizable ant and actual selected path/probabilities",
+      "passed": true
+    },
+    {
+      "name": "real pheromone update",
+      "passed": true
+    },
+    {
+      "name": "aco music ducking",
+      "passed": true
+    },
+    {
+      "name": "aco Reset clears progress",
+      "passed": true
+    },
+    {
+      "name": "aco Esc restores driving/audio",
+      "passed": true
+    },
+    {
+      "name": "aco car drives after close",
+      "passed": true
+    },
+    {
+      "name": "gwo L opens current lesson without teleport or mute",
+      "passed": true
+    },
+    {
+      "name": "gwo drag preserves simulation and fits viewport",
+      "passed": true
+    },
+    {
+      "name": "gwo Play/Pause holds real timeline",
+      "passed": true
+    },
+    {
+      "name": "five real candidates, assignments, leaders and articulated wolves",
+      "passed": true
+    },
+    {
+      "name": "gwo music ducking",
+      "passed": true
+    },
+    {
+      "name": "gwo Reset clears progress",
+      "passed": true
+    },
+    {
+      "name": "gwo Esc restores driving/audio",
+      "passed": true
+    },
+    {
+      "name": "gwo car drives after close",
+      "passed": true
+    },
+    {
+      "name": "Music Off pauses playlist",
+      "passed": true
+    },
+    {
+      "name": "Music resumes one track with selected volume",
+      "passed": true
+    },
+    {
+      "name": "presentation reopens from GWO to Main",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "httpErrors": [],
+  "passed": false,
+  "failure": "locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-index=\"1\"]')\u001b[22m\n\u001b[2m    - locator resolved to <button type=\"button\" data-index=\"1\" class=\"co-nav-item\" data-action=\"slide\" aria-label=\"2. Cloud\">Cloud</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <aside class=\"campus-overlay\" aria-label=\"Cloud Ops Kelompok 8\">…</aside> intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <aside class=\"campus-overlay\" aria-label=\"Cloud Ops Kelompok 8\">…</aside> intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    54 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - <aside class=\"campus-overlay\" aria-label=\"Cloud Ops Kelompok 8\">…</aside> intercepts pointer events\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\n    at D:\\Download\\Soka-cloud-ops-scheduling-adventure-main\\mini-world-polish\\scripts\\test-final-ux.mjs:32:65"
+}

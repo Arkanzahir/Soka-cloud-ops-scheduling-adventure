@@ -6,7 +6,7 @@ Jelajahi kampus dengan mobil 3D, kirim task ke virtual machine, dan amati bagaim
 
 ![Cloud Ops Campus dan kendaraan](docs/evidence/final-branding-main.png)
 
-**Status:** kandidat rilis di `release/m7-final`; PR #10 ke `main` belum merged. Checkpoint dokumentasi/QA ini tidak mencakup revisi Astra yang masih dikerjakan (ACO/GWO, dashboard, aset dan musik). Integrasi final menunggu PR revisi dan pengujian berikutnya. **Belum ada deployment publik; izin sebagian aset belum tuntas.** [Hasil QA dan batasan rilis](docs/FINAL_RELEASE.md).
+**Status:** kandidat rilis di `release/m7-final`; PR #10 ke `main` belum merged. Revisi Astra tidak tersedia; pekerjaan dilanjutkan pada branch `feature/final-ux-aco-gwo-audio`. Status dan bukti terbaru: [urgent release](docs/URGENT_RELEASE.md). **Belum ada deployment publik; izin sebagian aset belum tuntas.** [Hasil QA dan batasan rilis](docs/FINAL_RELEASE.md).
 
 <details>
 <summary>Pratinjau world, presentasi, dan hasil</summary>
@@ -158,3 +158,9 @@ Musik dikreditkan kepada **Kounine** sesuai keterangan CC0 upstream. Lisensi kod
 ## Dokumentasi lanjutan
 
 [QA final](docs/FINAL_RELEASE.md) · [Panduan presentasi](docs/PRESENTATION_GUIDE.md) · [Model algoritma](docs/ALGORITHM_SPEC.md) · [Arsitektur fondasi](docs/ARCHITECTURE_AUDIT.md) · [Aturan kontribusi](CONTRIBUTING.md) · [Riwayat README/milestone](docs/history/README_BEFORE_FINAL_RELEASE.md).
+
+### Dashboard dan musik
+
+Di Cloud/ACO/GWO tekan **L** atau **Buka Dashboard** tanpa mendekati stasiun; posisi mobil dipertahankan. **Esc/L** menutup dan mengembalikan kontrol mobil. E/Enter di stasiun tetap tersedia. Seret header dashboard untuk memindah panel penuh; **↺ Posisi** mengembalikan posisi awal. Posisi bertahan saat berganti materi dan dibatasi viewport.
+
+Settings menyediakan Musik latar On/Off dan volume; **M** mute seluruh audio. Musik Kounine yang sudah tersedia diputar setelah interaksi, mengecil menjadi25% saat dashboard terbuka, lalu kembali ke volume pilihan. ACO menampilkan ant/Task/VM/probabilitas/feromon dari event nyata; GWO mempertahankan papan assignment5 kandidat dari12 dengan animasi ringan ketika kandidat berubah. Gerak dekoratif tidak menentukan makespan.

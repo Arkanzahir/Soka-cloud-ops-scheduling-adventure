@@ -8,7 +8,7 @@ export function makeWolf(world,variant=0){
  add(new T.IcosahedronGeometry(1,1),fur,-.08,.92,0,1,.47,.38)
  add(new T.IcosahedronGeometry(.62,1),fur,.47,1.13,0,.8,1,.82)
  add(new T.ConeGeometry(.43,.9,7),'light',.49,1.03,0).rotation.z=.22
- add(new T.IcosahedronGeometry(.45,1),fur,.83,1.48,0,.95,1,.9)
+ const head=add(new T.IcosahedronGeometry(.45,1),fur,.83,1.48,0,.95,1,.9)
  add(new T.CylinderGeometry(.17,.28,.55,6),'light',1.13,1.32,0).rotation.z=-Math.PI/2
  add(new T.IcosahedronGeometry(.13,0),'dark',1.42,1.32,0,1,.75,1)
  for(const side of [-1,1]){
@@ -25,6 +25,6 @@ export function makeWolf(world,variant=0){
  add(new T.IcosahedronGeometry(.17,0),'light',-1.55,.39,0)
  const collar=add(new T.CylinderGeometry(.34,.34,.16,8),'sand',.57,1.3,0);collar.rotation.z=-.3
  const medallion=add(new T.IcosahedronGeometry(.13,0),'sand',.68,1.12,.35)
- root.userData.accents=[collar,medallion];root.userData.body=body
+ root.userData.accents=[collar,medallion];root.userData.body=body;root.userData.head=head;root.userData.tail=tail
  return root
 }

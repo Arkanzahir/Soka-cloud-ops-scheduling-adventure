@@ -1,0 +1,35 @@
+{
+  "checks": [
+    {
+      "name": "normal release no debug Game",
+      "passed": true
+    },
+    {
+      "name": "production Cloud Step",
+      "passed": true
+    },
+    {
+      "name": "production L reopens without station",
+      "passed": true
+    },
+    {
+      "name": "production music Off control",
+      "passed": true
+    },
+    {
+      "name": "production volume keyboard control",
+      "passed": true
+    },
+    {
+      "name": "Settings preview local campus image",
+      "passed": true
+    },
+    {
+      "name": "production subpath no JS/local resource errors",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "httpErrors": [],
+  "passed": true
+}

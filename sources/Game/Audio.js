@@ -12,6 +12,7 @@ export class Audio
         this.game = Game.getInstance()
 
         this.initiated = false
+        this.music = { enabled: true, volume: 0.12, ducked: false }
         this.groups = new Map()
         this.events = new Events()
 
@@ -175,7 +176,7 @@ export class Audio
                 autoplay: false,
                 loop: false,
                 preload: false,
-                volume: 0.2,
+                volume: this.music.volume,
                 onend: () =>
                 {
                     this.playlist.next()
@@ -214,7 +215,8 @@ export class Audio
                     this.playlist.current.sound.load()
                 }
 
-                this.playlist.current.sound.play()
+                this.playlist.switching = false
+                this.setMusicMix({})
 
                 // Notification
                 const html = /* html */`
@@ -243,15 +245,22 @@ export class Audio
             if(!this.playlist.current.loaded)
             {
                 this.playlist.current.sound.load()
+                this.playlist.current.loaded = true
             }
 
-            this.playlist.current.sound.play()
+            if(!this.playlist.current.sound.playing()) this.playlist.current.sound.play()
         }
 
-        if(import.meta.env.VITE_MUSIC)
-        {
-            this.playlist.play()
-        }
+        this.setMusicMix({})
+    }
+
+    setMusicMix({enabled=this.music.enabled, volume=this.music.volume, ducked=this.music.ducked})
+    {
+        this.music = { enabled: !!enabled, volume: clamp(volume, 0, 0.3), ducked: !!ducked }
+        if(!this.playlist) return
+        for(const song of this.playlist.songs) song.sound.volume(this.music.volume * (this.music.ducked ? 0.25 : 1))
+        if(!this.music.enabled || this.mute.active || document.hidden) this.playlist.current?.sound.pause()
+        else if(!this.playlist.switching) this.playlist.play()
     }
 
     setAmbiants()
@@ -680,7 +689,7 @@ export class Audio
 
         // Inputs keyboard
         this.game.inputs.addActions([
-            { name: 'mute', categories: [ 'intro', 'modal', 'menu', 'racing', 'cinematic', 'wandering' ], keys: [ 'Keyboard.l' ] },
+            { name: 'mute', categories: [ 'intro', 'modal', 'menu', 'racing', 'cinematic', 'wandering' ], keys: [ 'Keyboard.m' ] },
         ])
         this.game.inputs.events.on('mute', (action) =>
         {
@@ -703,8 +712,7 @@ export class Audio
             {
                 Howler.mute(false)
 
-                if(this.playlist?.current)
-                    this.playlist.current.sound.play()
+                if(this.playlist?.current) this.setMusicMix({})
             }
         })
 
