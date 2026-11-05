@@ -24,23 +24,40 @@ export class MainHub {
   this.label(this.landmark,'SCHEDULING ADVENTURE',0,1.13,.04,5.9,.48);
   this.label(this.landmark,'KELOMPOK 8  /  SOKA',0,.68,.08,3.6,.4,'#5b9a92','#fff0bf');
   for(const [x,height]of [[-3.6,1.2],[3.6,1.65]]){this.box(this.landmark,x,height/2+.3,0,.7,height,.85,'teal');for(const y of [.65,.9])this.box(this.landmark,x,y,.45,.45,.1,.04,'cream');}
-  this.signs=[];
-  for(const destination of DESTINATIONS){
-   const area=game.world.areas[destination.id],position=destination.id==='gwo'?area.mainGate.position:[area.entry.position.x,area.entry.position.z];
-   const sign=new T.Group();sign.name='campus-wayfinding-'+destination.id;sign.position.set(position[0]-2,0,position[1]-2.2);sign.rotation.y=Math.PI/4;this.root.add(sign);
-   for(const x of [-1.75,1.75])this.box(sign,x,.8,0,.14,1.6,.18,'wood');
-   this.box(sign,0,1.72,-.06,4.1,1.0,.18,'wood');
-   this.label(sign,destination.title,0,1.92,.05,3.85,.34,destination.color,'#fff0bf');
-   this.label(sign,destination.subtitle,0,1.58,.05,3.85,.28);
-   this.label(sign,'GERBANG  →  E / ENTER',0,1.08,.05,3.1,.26);
-   this.signs.push({destination,group:sign});
-  }
-  this.bindUI();
-  game.ticker.events.on('tick',()=>{this.root.visible=game.world.cloudOps.currentZone==='main'},10);
+  game.ticker.events.on('tick',()=>{this.root.visible=(game.world.cloudOps?.currentZone??'main')==='main'},10);
   this.readyPromise=new TTFLoader().loadAsync('fonts/Nunito.ttf').then(data=>{
    const geometry=new TextGeometry('CLOUD OPS',{font:new Font(data),size:.9,depth:.14,curveSegments:2,bevelEnabled:true,bevelThickness:.018,bevelSize:.015,bevelSegments:1});geometry.computeBoundingBox();geometry.translate(-(geometry.boundingBox.min.x+geometry.boundingBox.max.x)/2,0,0);
    const mesh=new T.Mesh(geometry,this.materials.cream);mesh.position.set(0,1.55,0);mesh.castShadow=true;this.landmark.add(mesh);this.title=mesh;this.freeze();this.ready=true;
   }).catch(error=>{this.lastError=error.message;this.label(this.landmark,'CLOUD OPS',0,1.95,0,6.3,.85);this.freeze();this.ready=true;});
+ }
+ setWayfinding(){
+  this.signs=[];
+  for(const destination of DESTINATIONS){
+   const area=this.game.world.areas[destination.id];
+   const position=destination.id==='gwo'?area.mainGate.position:[area.entry.position.x,area.entry.position.z];
+   const isAco=destination.id==='aco';
+   const ground=isAco?area.entry.position.y-1.5:0;
+   const sign=new T.Group();
+   sign.name='campus-wayfinding-'+destination.id;
+   sign.position.set(position[0] - (isAco ? .9 : 2), ground, position[1] - (isAco ? .9 : 2.2));
+   sign.rotation.y=Math.PI/4;
+   this.root.add(sign);
+   for(const x of [-1.75,1.75])this.box(sign,x,.8,0,.14,1.6,.18,'wood');
+   this.box(sign,0,1.72,-.06,4.1,1.0,.18,'wood');
+   this.label(sign,destination.title,0,1.92,.05,3.85,.34,destination.color,'#fff0bf');
+   this.label(sign,destination.subtitle,0,1.58,.05,3.85,.28);
+   this.label(sign,isAco?'LINGKARAN · E / ENTER':'GERBANG  →  E / ENTER',0,1.08,.05,3.1,.26);
+   if(isAco){
+    const ring=new T.Mesh(new T.RingGeometry(1.85,2,36),this.materials.coral);
+    ring.name='aco-entry-marker';
+    ring.rotation.x=-Math.PI/2;
+    ring.position.set(position[0],ground+.045,position[1]);
+    this.root.add(ring);
+   }
+   this.signs.push({destination,group:sign});
+  }
+  this.freeze();
+  this.bindUI();
  }
  box(parent,x,y,z,w,h,d,material){const mesh=new T.Mesh(this.boxGeometry,this.materials[material]);mesh.position.set(x,y,z);mesh.scale.set(w,h,d);mesh.castShadow=true;mesh.receiveShadow=true;parent.add(mesh);return mesh}
  label(parent,text,x,y,z,w,h,background='#fff0bf',foreground='#383039'){

@@ -71,6 +71,7 @@ export class ZoneManager
     {
         const station = new InteractiveStation(this, definition)
         this.stations.push(station)
+        station.update()
         return station
     }
 
