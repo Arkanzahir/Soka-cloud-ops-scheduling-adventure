@@ -17,7 +17,9 @@ export class CloudArea extends Area {
   // Probe before creating geometry, then validate again after the yard has colliders.
   manager.transitions.safeSpawn(spawn)
   this.vms=[-71,-65,-59].map((x,i)=>this.addVM(i,x,-40))
-  this.buildQueue();this.buildEnvironment()
+  this.buildQueue()
+  this.raceVisuals=this.objects.hideable.slice()
+  this.buildEnvironment()
   manager.transitions.safeSpawn(spawn)
   manager.register({id:'cloud',name:'Cloud Compute Yard',center,radius,spawn})
   this.entry=manager.createStation({zone:'main',label:'Cloud Compute Yard',position:[49,1.5,34.5],onInteract:()=>manager.enter('cloud')})
@@ -159,7 +161,7 @@ export class CloudArea extends Area {
  }
  refreshExperimentVisibility(){
   // Respect Area's frustum culling; inactive objects stay hidden even when re-entering.
-  const inView=this.frustum?.isIn!==false
+  const inView=this.trackside||this.frustum?.isIn!==false
   this.tasks.forEach((task,i)=>{const visible=inView&&i<this.experiment.taskCount;task.mesh.visible=visible;task.label.mesh.visible=visible})
   this.vms.forEach((vm,i)=>{const visible=inView&&i<this.experiment.vmCount;for(const node of vm.visualNodes)node.visible=visible})
  }

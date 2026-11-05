@@ -7,6 +7,8 @@
   display: flex;
   align-items: center;
   gap: 12px;
+  width: max-content;
+  max-width: min(480px, 88vw);
   padding: 10px 14px;
   border: 2px solid #a87762;
   border-radius: 12px;
@@ -14,8 +16,7 @@
   color: #383039;
   font: 700 15px Nunito, sans-serif;
 }
-.presentation-race-hud[hidden], #presentation-race-open[hidden] { display: none; }
-.race-arrow { font-size: 32px; color: #377e78; line-height: 1; }
+.presentation-race-hud[hidden] { display: none; }
 .race-progress { color: #377e78; }
 .race-stop { background: transparent; border: 1px solid #a87762; border-radius: 6px; padding: 5px 9px; cursor: pointer; }
 .co-learning--race .co-nav, .co-learning--race .co-footer { display: none; }

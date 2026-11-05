@@ -3,7 +3,7 @@ import { InteractivePoints } from '../Game/InteractivePoints.js'
 
 export class InteractiveStation
 {
-    constructor(manager, { zone, label, position, onInteract, isAvailable = () => true })
+    constructor(manager, { zone, label, position, onInteract, category = 'wandering', isAvailable = () => true })
     {
         this.manager = manager
         this.zone = zone
@@ -16,7 +16,7 @@ export class InteractiveStation
             this.position, label, InteractivePoints.ALIGN_RIGHT, InteractivePoints.STATE_HIDDEN,
             () =>
             {
-                if(this.enabled && this.trigger.isIn && manager.canInteract() && Math.abs(game.player.position.y - this.position.y) < 3)
+                if(this.enabled && this.trigger.isIn && manager.canInteract(category) && Math.abs(game.player.position.y - this.position.y) < 3)
                     onInteract()
             },
             () => game.inputs.interactiveButtons.addItems(['interact']),

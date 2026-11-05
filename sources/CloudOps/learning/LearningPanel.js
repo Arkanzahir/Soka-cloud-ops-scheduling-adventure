@@ -139,12 +139,12 @@ export class LearningPanel
 
     open(index = this.slide)
     {
-        if(this.visible) { this.goTo(index); return }
+        if(this.visible) { if(index !== this.slide) this.goTo(index); return }
         this.onOpen()
         this.visible = true
         this.root.hidden = false
         if(this.escapeCloses) document.addEventListener('keydown', this.escapeHandler, true)
-        this.goTo(index)
+        if(index !== this.slide) this.goTo(index)
         this.root.tabIndex = -1
         this.root.focus()
     }
@@ -152,12 +152,16 @@ export class LearningPanel
     close()
     {
         if(!this.visible) return
-        this.player?.pause()
-        if(this.lesson?.algorithm==='aco')this.worlds.aco?.setPaused?.(true)
         this.visible = false
         this.root.hidden = true
         document.removeEventListener('keydown', this.escapeHandler, true)
         this.onClose()
+    }
+
+    pauseLesson()
+    {
+        this.player?.pause()
+        if(this.lesson?.algorithm === 'aco') this.worlds.aco?.setPaused?.(true)
     }
 
     dispose()
@@ -172,7 +176,7 @@ export class LearningPanel
     {
         if(!Number.isInteger(index) || index < 0 || index >= PRESENTATION_SECTIONS.length)
             throw new RangeError('Invalid slide index')
-        this.player?.pause()
+        this.pauseLesson()
         this.slide = index
         const section = PRESENTATION_SECTIONS[index]
         this.render()

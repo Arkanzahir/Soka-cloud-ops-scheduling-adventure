@@ -18,8 +18,10 @@ export class AcoWorld {
   this.game=game; this.origin=origin; this.ants=[]; this.paths=[]; this.pathMeshes=[]; this.pathBeds=[]; this.taskActors=[]; this.vmActors=[]; this.vmIndicators=[]; this.experiment={taskCount:8,vmCount:3}; this.nest={x:-2.5,z:-5}; this.dispatch={x:8.5,z:-3}; this.colonyMode='colony'; this.returning=false; this.moving=false; this.elapsed=0; this.demo=false;this.antPosition=new T.Vector3();this.antTangent=new T.Vector3()
   this.group=new T.Group(); this.group.position.copy(origin); game.scene.add(this.group)
   this.mat={}; for(const [n,c] of Object.entries({sand:'#ffcf8b',wood:'#a87762',soil:'#ac6942',trail:'#925f49',dark:'#382c38',leaf:'#b8b62e',cream:'#fff0bf',red:'#b85b47',teal:'#377e78',gold:'#df9a3d'})) this.mat[n]=new MeshDefaultMaterial({colorNode:color(c)})
-  this.build(); this.decorate(); this.makeFeedback(); this.resetVisualization()
-  this.tick=()=>{const active=!this.isActive||this.isActive();this.group.visible=active;if(active)this.update(game.ticker.delta)}; game.ticker.events.on('tick',this.tick,10)
+  this.build(); this.decorate()
+  this.raceVisuals.push(this.makeFeedback())
+  this.resetVisualization()
+  this.tick=()=>{const active=!this.isActive||this.isActive();this.group.visible=active;if(active||this.trackside)this.update(game.ticker.delta)}; game.ticker.events.on('tick',this.tick,10)
  }
  distanceToShore(position){
   return Math.min(HALF_WIDTH-Math.abs(position.x-this.origin.x),HALF_DEPTH-Math.abs(position.z-this.origin.z))
@@ -57,6 +59,7 @@ export class AcoWorld {
   for(const x of [-14.7,-9.3])this.box(x,1.4,11.5,.24,2.8,.24,'wood',true)
   this.box(-12,2.65,11.5,6,1.65,.3,'wood');this.label('ANT RESEARCH PARK',-12,3.05,11.68,5.6)
   this.label('ANT COLONY OPTIMIZATION',-12,2.25,11.68,5)
+  const exhibitStart=this.group.children.length
   // Give the anthill the visual center of the park, with the scheduling
   // platform moved right so the mound, stones and ants have breathing room.
   const {x:nx,z:nz}=this.nest,{x:dx,z:dz}=this.dispatch
@@ -110,6 +113,7 @@ export class AcoWorld {
    if(i===0)ant.children[2].material=this.mat.cream
    this.group.add(ant);this.ants.push({mesh:ant,antId:i+1,vm:0,phase:i/12})
   }
+  this.raceVisuals=this.group.children.slice(exhibitStart)
   this.box(-9,1.3,5,4.5,2.6,.35,'wood',true);this.label('ACO RESEARCH',-9,2,5.2,4);this.label('E / ENTER : INSPECT',-9,1.2,5.2,4)
   this.researchPosition=this.origin.clone().add(new T.Vector3(-9,1,7))
   this.point=this.game.interactivePoints.create(this.researchPosition,'Research',InteractivePoints.ALIGN_RIGHT,InteractivePoints.STATE_CONCEALED,()=>this.onResearch?.());this.point.show()
@@ -152,7 +156,7 @@ export class AcoWorld {
   }
   return {body:[.29,.18,.23].map(r=>new T.SphereGeometry(r,8,6)),legs,antenna:new T.CylinderGeometry(.018,.018,.32,4)}
  }
- makeFeedback(){const c=document.createElement('canvas');c.width=1024;c.height=256;const ctx=c.getContext('2d'),tex=new T.CanvasTexture(c);tex.colorSpace=T.SRGBColorSpace;this.mesh(new T.PlaneGeometry(9,2.25),new MeshDefaultMaterial({colorNode:texture(tex)}),this.dispatch.x,3.4,-8.4);this.writeFeedback=lines=>{ctx.fillStyle='#fff0bf';ctx.fillRect(0,0,c.width,c.height);ctx.fillStyle='#382c38';ctx.textAlign='center';ctx.font='bold 38px sans-serif';lines.forEach((line,i)=>ctx.fillText(line,512,55+i*65,980));tex.needsUpdate=true}}
+ makeFeedback(){const c=document.createElement('canvas');c.width=1024;c.height=256;const ctx=c.getContext('2d'),tex=new T.CanvasTexture(c);tex.colorSpace=T.SRGBColorSpace;const board=this.mesh(new T.PlaneGeometry(9,2.25),new MeshDefaultMaterial({colorNode:texture(tex)}),this.dispatch.x,3.4,-8.4);this.writeFeedback=lines=>{ctx.fillStyle='#fff0bf';ctx.fillRect(0,0,c.width,c.height);ctx.fillStyle='#382c38';ctx.textAlign='center';ctx.font='bold 38px sans-serif';lines.forEach((line,i)=>ctx.fillText(line,512,55+i*65,980));tex.needsUpdate=true};return board}
  decorate(){
   const refs=[];for(const [x,z]of [[-13,-10],[-3,-12],[10,-12],[15,-11],[-14,1],[13,9]]){const r=new T.Object3D();r.position.copy(this.origin).add(new T.Vector3(x,0,z));r.scale.setScalar(.7);r.updateMatrixWorld();refs.push(r)}
   this.trees=new Trees('ACO trees',this.game.resources.oakTreesVisualModel.scene.clone(true),refs,'#b4b536','#d8cf3b')

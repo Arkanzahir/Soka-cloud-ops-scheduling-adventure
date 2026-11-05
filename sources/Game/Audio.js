@@ -149,6 +149,12 @@ export class Audio
 
     setPlaylist()
     {
+        this.raceMusic = new Howl({
+            src: ['sounds/musics/Sky Blue Street.ogg'],
+            loop: true,
+            preload: false,
+            volume: 0
+        })
         this.playlist = {}
         this.playlist.songs = [
             {
@@ -220,6 +226,8 @@ export class Audio
                 this.playlist.switching = false
                 this.setMusicMix({})
 
+                if(this.raceMusicActive) return
+
                 // Notification
                 const html = /* html */`
                     <div class="top">
@@ -256,13 +264,35 @@ export class Audio
         this.setMusicMix({})
     }
 
+    setRaceMusic(active)
+    {
+        if(active === this.raceMusicActive) return
+        this.raceMusicActive = active
+        if(!active && this.raceSoundId != null)
+        {
+            this.raceMusic.stop(this.raceSoundId)
+            this.raceSoundId = null
+        }
+        this.setMusicMix({})
+    }
+
     setMusicMix({enabled=this.music.enabled, volume=this.music.volume, ducked=this.music.ducked})
     {
         this.music = { enabled: !!enabled, volume: clamp(volume, 0, 0.3), ducked: !!ducked }
         if(!this.playlist) return
-        for(const song of this.playlist.songs) song.sound.volume(this.music.volume * (this.music.ducked ? 0.25 : 1))
-        if(!this.music.enabled || this.mute.active || document.hidden) this.playlist.current?.sound.pause()
-        else if(!this.playlist.switching) this.playlist.play()
+        const mixVolume = this.music.volume * (this.music.ducked ? 0.25 : 1)
+        const audible = this.music.enabled && !this.mute.active && !document.hidden
+        for(const song of this.playlist.songs) song.sound.volume(mixVolume)
+        this.raceMusic.volume(mixVolume)
+        if(!audible || this.raceMusicActive) this.playlist.current?.sound.pause()
+        if(this.raceMusicActive)
+        {
+            if(audible && !this.raceMusic.playing(this.raceSoundId))
+                this.raceSoundId = this.raceMusic.play(this.raceSoundId ?? undefined)
+            else if(!audible && this.raceSoundId != null)
+                this.raceMusic.pause(this.raceSoundId)
+        }
+        else if(audible && !this.playlist.switching) this.playlist.play()
     }
 
     setAmbiants()
@@ -676,6 +706,7 @@ export class Audio
             localStorage.setItem('soundToggle', '1')
             document.documentElement.classList.add('is-audio-muted')
             this.events.trigger('muteChange', [ true ])
+            this.setMusicMix({})
         }
 
         this.mute.deactivate = () =>
@@ -688,6 +719,7 @@ export class Audio
             localStorage.setItem('soundToggle', '0')
             document.documentElement.classList.remove('is-audio-muted')
             this.events.trigger('muteChange', [ false ])
+            this.setMusicMix({})
         }
 
         // From local storage
@@ -710,8 +742,8 @@ export class Audio
         {
             Howler.mute(true)
 
-            if(this.playlist?.current)
-                this.playlist.current.sound.pause()
+            this.playlist?.current?.sound.pause()
+            if(this.raceSoundId != null) this.raceMusic.pause(this.raceSoundId)
         })
 
         window.addEventListener('focus', () =>
@@ -720,7 +752,7 @@ export class Audio
             {
                 Howler.mute(false)
 
-                if(this.playlist?.current) this.setMusicMix({})
+                this.setMusicMix({})
             }
         })
 

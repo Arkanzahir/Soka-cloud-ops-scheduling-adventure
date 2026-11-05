@@ -95,13 +95,11 @@ Perbandingan memakai dataset sama, seed **42**, **50 iterasi** untuk metaheurist
 
 Datangi gerbang Cloud, ACO, atau GWO, lalu tekan E/Enter. Di dalam zona, gunakan stasiun riset untuk membuka pelajaran. Gerbang **Kembali ke Main** membawa mobil pulang.
 
-Untuk demo kelas, klik **MULAI PRESENTASI**:
+Klik **MULAI PRESENTASI** untuk menuju garis start Classic Race. Tekan **E/Enter**, tunggu lampu hijau, lalu ikuti checkpoint asli sirkuit. Musik **Sky Blue Street** mulai saat timer berjalan.
 
-**Pembukaan → Cloud → ACO → GWO → Hasil → Paper**.
+Di sisi lintasan ada enam pos berurutan **Pembukaan → Cloud → ACO → GWO → Hasil → Paper**. Menepi dan berhenti di marka pos, lalu tekan **E/Enter**. Kamu bisa melewati pos dan tetap finis. **Akhiri** mengembalikan Free Drive.
 
-**Langkah** menjalankan satu event; **Play/Pause** menjalankan/menahan trace; **Reset** mengulang. Next/Previous mengatur zona dan panel yang sama. Tutup panel dengan Esc untuk melihat seluruh meja ACO dari stasiunnya; overlap pada sudut tersebut masih menjadi batas tampilan yang didokumentasikan.
-
-Untuk mengemudi selama demo, pilih **Presentation Race** di Main World. Ikuti panah relatif mobil, masuk ke lingkaran checkpoint, berhenti, lalu tekan **E**. Tekan **Esc** setelah menjelaskan materi untuk menampilkan arah berikutnya. Gunakan gerbang **Kembali ke Main** untuk berpindah antar-world. Setelah Hasil dan Paper, datangi **Finish** dan tekan E. Tombol **Akhiri** mengembalikan Free Drive. Balapan sirkuit dapat dimulai kembali sesudahnya.
+**Langkah** menjalankan satu event, **Play/Pause** menjalankan atau menahan simulasi, dan **Reset** mengulang. **Esc** menyembunyikan dashboard dan mengembalikan kontrol mobil. Timer balap dan simulasi yang sedang Play tetap berjalan. Buka pos yang sama untuk melanjutkan dari langkah terakhir.
 
 ## Instalasi dan menjalankan lokal
 

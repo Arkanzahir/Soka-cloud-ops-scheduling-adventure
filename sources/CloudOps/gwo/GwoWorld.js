@@ -30,6 +30,7 @@ export class GwoWorld extends Area {
   const roof=this.block(-69,3.3,73.5,5.7,.22,2.1,'dark');roof.rotation.z=.05
   this.board=this.sign('',-69,1.6,73.7,4.5)
   this.schedules=new CandidateBoard(this)
+  this.raceVisuals=this.objects.hideable.slice()
   this.sign('RESEARCH | E / ENTER',-69,.95,73.7,4)
   this.block(-69,.7,73.5,5,.14,1.8,'wood')
   // Observation binoculars: an environmental cue, not a second game camera.
@@ -72,5 +73,5 @@ export class GwoWorld extends Area {
   const detail=document.getElementById('gwo-state');if(detail)detail.textContent=`${preview?'DEMO / PREVIEW — synthetic values':'External engine event'}; iteration ${state.iteration}; best makespan ${state.bestMakespan} s. `+state.candidates.map(c=>`${c.id}: [${c.assignment.join(',')}] fitness ${c.fitness}`).join('; ')
  }
  resetVisualization(){this.schedules.reset();this.state=null;this.preview=false;this.board.write('5 of 12 candidates | waiting for engine');for(const [i,w] of this.wolves.entries()){w.mesh.position.copy(w.base);w.mesh.rotation.y=0;w.targetRotation=0;w.motion=0;w.targetScale=1;w.mesh.scale.setScalar(1);w.mesh.userData.body.rotation.z=0;w.role=null;w.label.mesh.visible=false;w.mesh.userData.accents.forEach(m=>m.material=this.materials.wood);w.pad.material=this.materials.wood;w.assignment=null;w.label.write(`CANDIDATE ${i+1} | waiting`)}this.time=0}
- update(){if(!this.wolves)return;if(this.manager.currentZone!=='gwo')return;this.time+=this.game.ticker.delta;for(const w of this.wolves){w.motion=Math.max(0,(w.motion||0)-this.game.ticker.delta);w.mesh.position.y=w.base.y+Math.sin((1-w.motion)*Math.PI*4)*.05*w.motion;w.mesh.userData.body.scale.y=1+Math.sin(this.time*1.8+w.base.x)*.009;w.mesh.userData.head.rotation.z=Math.sin(this.time*1.1+w.base.x)*.025;w.mesh.userData.tail.rotation.x=Math.sin(this.time*1.6+w.base.x)*.12;w.mesh.scale.setScalar(w.mesh.scale.x+((w.targetScale||1)-w.mesh.scale.x)*Math.min(1,this.game.ticker.delta*4));w.mesh.rotation.y+=(w.targetRotation-w.mesh.rotation.y)*Math.min(1,this.game.ticker.delta*4);w.mesh.userData.body.rotation.z=Math.sin(this.time*1.4+w.base.x)*.012}}
+ update(){if(!this.wolves)return;if(this.manager.currentZone!=='gwo'&&!this.trackside) return;this.time+=this.game.ticker.delta;for(const w of this.wolves){w.motion=Math.max(0,(w.motion||0)-this.game.ticker.delta);w.mesh.position.y=w.base.y+Math.sin((1-w.motion)*Math.PI*4)*.05*w.motion;w.mesh.userData.body.scale.y=1+Math.sin(this.time*1.8+w.base.x)*.009;w.mesh.userData.head.rotation.z=Math.sin(this.time*1.1+w.base.x)*.025;w.mesh.userData.tail.rotation.x=Math.sin(this.time*1.6+w.base.x)*.12;w.mesh.scale.setScalar(w.mesh.scale.x+((w.targetScale||1)-w.mesh.scale.x)*Math.min(1,this.game.ticker.delta*4));w.mesh.rotation.y+=(w.targetRotation-w.mesh.rotation.y)*Math.min(1,this.game.ticker.delta*4);w.mesh.userData.body.rotation.z=Math.sin(this.time*1.4+w.base.x)*.012}}
 }

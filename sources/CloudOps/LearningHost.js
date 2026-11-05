@@ -9,7 +9,8 @@ export class LearningHost {
   this.panel=new LearningPanel({mount:document.querySelector('#learning-mount'),embedded:true,escapeCloses:false,worlds:{cloud:game.world.areas.cloud,aco:game.world.areas.aco,gwo:game.world.areas.gwo},onClose:()=>game.modals.close(),navigate:id=>this.navigate(id)});
   this.floating=new FloatingDashboard(this.panel.root);
   const learningModal=game.modals.items.get('learning');
-  learningModal.events.on('opened',()=>{this.floating.fit();game.audio.setMusicMix({ducked:true})});
+  learningModal.events.on('open',()=>game.audio.setMusicMix({ducked:true}));
+  learningModal.events.on('opened',()=>this.floating.fit());
   learningModal.events.on('close',()=>game.audio.setMusicMix({ducked:false}));
   game.modals.items.get('learning').events.on('close',()=>this.panel.close());
   for(const [id,index] of [['cloud',1],['aco',2],['gwo',3]])game.world.areas[id].onLearn=()=>this.openStation(index);
@@ -27,14 +28,12 @@ export class LearningHost {
   try{
    // Return while the native modal is still closed, avoiding an open/close transition race.
    if(this.manager.currentZone!=='main'&&!await this.manager.enter('main',true))return;
-   this.open(0);
-  }finally{this.busy=false;this.button.disabled=false}
+   await this.game.world.presentationRace.start();
+  }finally{this.busy=false;this.button.disabled=this.game.world.presentationRace.active}
  }
- open(index){this.manager.openPanel('learning');this.panel.open(index)}
+ open(index,category){if(!this.manager.openPanel('learning',category))return false;this.panel.open(index);return true}
  openStation(index){
-  const race=this.game.world.presentationRace;
-  if(race?.active)race.openCheckpoint(index);
-  else this.open(index);
+  this.open(index);
  }
  async navigate(id){
   if(id===this.manager.currentZone)return true;

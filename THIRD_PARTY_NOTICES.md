@@ -45,3 +45,7 @@ Catat secara faktual tugas yang dikerjakan oleh setiap anggota melalui commit/PR
 - [Draco](https://github.com/google/draco/blob/main/LICENSE) dan [Basis Universal](https://github.com/BinomialLLC/basis_universal/blob/master/LICENSE) menyertakan teks Apache 2.0 pada direktori masing-masing. Pemberitahuan lisensi MIT upstream tetap ada di game dan di paket Pages.
 
 Rincian izin dan uji paket: [DEPLOYMENT_READINESS.md](docs/DEPLOYMENT_READINESS.md).
+
+## Musik Presentation Race
+
+- Sky Blue Street (165 BPM), MintoDog. CC0 1.0. [Unggahan kreator](https://opengameart.org/node/170985). Aset: `static/sounds/musics/Sky Blue Street.ogg`.

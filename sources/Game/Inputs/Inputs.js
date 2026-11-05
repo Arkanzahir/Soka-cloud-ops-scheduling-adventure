@@ -68,14 +68,14 @@ export class Inputs
         {
             this.updateMode(Inputs.MODE_MOUSEKEYBOARD)
             this.start(`Keyboard.${key}`)
-            this.start(`Keyboard.${code}`)
+            if(code !== key) this.start(`Keyboard.${code}`)
         })
 
         this.keyboard.events.on('up', (key, code) =>
         {
             this.updateMode(Inputs.MODE_MOUSEKEYBOARD)
             this.end(`Keyboard.${key}`)
-            this.end(`Keyboard.${code}`)
+            if(code !== key) this.end(`Keyboard.${code}`)
         })
     }
 

@@ -1,156 +1,248 @@
-import { Group, Mesh, RingGeometry, MeshBasicMaterial } from 'three/webgpu'
+import { BoxGeometry, Group, Vector3 } from 'three/webgpu'
 import { CircuitArea } from '../Game/World/Areas/CircuitArea.js'
-import { PRESENTATION_SECTIONS } from './learning/PresentationContent.js'
+import { YardKit } from './cloud/YardKit.js'
 import './presentation-race.css'
 
-const MAIN_CHECKPOINTS = [
-    { chapter: 0, title: 'Pembukaan', position: [44, 41] },
-    { chapter: 4, title: 'Hasil', position: [42, 45] },
-    { chapter: 5, title: 'Paper', position: [48, 43] },
-    { chapter: 6, title: 'Finish', position: [54, 43] }
-]
-const CHAPTERS = [
-    { zone: 'main', title: 'Pembukaan' },
-    { zone: 'cloud', title: 'Cloud Compute Yard' },
-    { zone: 'aco', title: 'Ant Research Park' },
-    { zone: 'gwo', title: 'Wolf Field Research' },
-    { zone: 'main', title: 'Hasil' },
-    { zone: 'main', title: 'Paper dan kesimpulan' },
-    { zone: 'main', title: 'Finish' }
+// The stop is on the drivable verge. The display sits beyond it, away from the timed lane.
+const STOPS = [
+    { title: 'Pembukaan', stop: [-5, -13], sign: [1, -16] },
+    { title: 'Cloud Compute Yard', stop: [54, -62], sign: [48, -59], world: 'cloud', label: 'Cloud',
+      exhibit: [44, -63], origin: [-65, -35], scale: .62, deck: [10.8, 9.4] },
+    { title: 'Ant Research Park', stop: [-12, -64], sign: [-6.3, -59], world: 'aco', label: 'ACO',
+      exhibit: [-2.6, -64], origin: [4, -4], scale: .50, deck: [11, 6.6] },
+    { title: 'Wolf Field Research', stop: [-76, -55], sign: [-70, -64], world: 'gwo', label: 'GWO',
+      exhibit: [-64, -57], origin: [-61, 66], scale: .59, rotation: Math.PI / 2, deck: [13, 13] },
+    { title: 'Hasil', stop: [-75, 48], sign: [-69, 50] },
+    { title: 'Paper dan kesimpulan', stop: [-27, 55], sign: [-36, 54] }
 ]
 
-/** Ordered, on-footprint checkpoints. The native zone gates own all travel. */
-export class PresentationRace {
-    constructor(game, manager, learning) {
+export class PresentationRace
+{
+    constructor(game, manager, learning)
+    {
         this.game = game
         this.manager = manager
         this.learning = learning
+        this.circuit = game.world.areas.circuit
         this.active = false
-        this.chapter = 0
-        this.chapterOpen = false
-        this.checkpoints = new Map()
-
-        for(const checkpoint of MAIN_CHECKPOINTS) {
-            const safe = manager.findReturnCheckpoint({position:checkpoint.position,rotation:0})
-            if(!safe) throw new Error('Missing Presentation Race checkpoint: '+checkpoint.title)
-            const [x,z] = safe.position
-            const ground = manager.transitions.safeSpawn(safe).y-1.7
-            const station = manager.createStation({
-                zone:'main', label:checkpoint.title, position:[x,ground+1.5,z],
-                isAvailable:()=>this.active&&this.chapter===checkpoint.chapter,
-                onInteract:()=>this.openCheckpoint(checkpoint.chapter)
-            })
-            this.checkpoints.set(checkpoint.chapter,station.position)
-        }
-        this.checkpoints.set(1,game.world.areas.cloud.station.position)
-        this.checkpoints.set(2,game.world.areas.aco.researchPosition)
-        this.checkpoints.set(3,game.world.areas.gwo.station.position)
-
-        this.marker = new Group()
-        const ring = new Mesh(new RingGeometry(2,2.18,40),new MeshBasicMaterial({color:'#ffcb79'}))
-        ring.rotation.x = -Math.PI/2
-        this.marker.add(ring)
-        this.marker.visible = false
-        game.scene.add(this.marker)
-
-        this.button = document.createElement('button')
-        this.button.type = 'button'
-        this.button.className = 'campus-primary'
-        this.button.id = 'presentation-race-open'
-        this.button.textContent = 'PRESENTATION RACE'
-        this.button.onclick = () => this.start()
-        learning.button.after(this.button)
+        this.placing = false
+        this.ready = false
+        this.viewed = new Set()
+        this.root = new Group()
+        this.root.visible = false
+        game.scene.add(this.root)
 
         this.hud = document.createElement('aside')
         this.hud.className = 'presentation-race-hud'
         this.hud.hidden = true
-        this.hud.innerHTML = '<div class="race-arrow" aria-hidden="true">↑</div><div><strong class="race-progress"></strong><div class="race-target" aria-live="polite"></div><small class="race-hint">Arah relatif mobil</small></div><button type="button" class="race-stop">Akhiri</button>'
-        this.hud.querySelector('.race-stop').onclick = () => this.stop()
-        this.arrow = this.hud.querySelector('.race-arrow')
+        this.hud.innerHTML = '<div><strong class="race-progress"></strong><div class="race-target" aria-live="polite"></div></div><button type="button" class="race-stop">Akhiri</button>'
+        this.cancel = this.hud.querySelector('.race-stop')
+        this.cancel.onclick = () => this.stop()
         this.progress = this.hud.querySelector('.race-progress')
-        this.targetLabel = this.hud.querySelector('.race-target')
+        this.hint = this.hud.querySelector('.race-target')
         document.body.appendChild(this.hud)
 
-        game.modals.items.get('learning').events.on('closed',()=>this.onChapterClosed())
-        game.ticker.events.on('tick',()=>this.update(),15)
+        const kit = new YardKit({ game, objects: { hideable: [] } })
+        const padGeometry = new BoxGeometry(2.2, .025, .14)
+        game.modals.items.get('learning').events.on('closed', () => {
+            if(this.ready) this.showDrivingHint()
+        })
+        this.stops = STOPS.map((stop, index) => {
+            const [x,z] = stop.stop
+            const [signX,signZ] = stop.sign
+            const sign = new Group()
+            sign.position.set(signX, 0, signZ)
+            sign.rotation.y = Math.PI / 4
+            this.root.add(sign)
+            for(const side of [-1, 1])
+                kit.rounded(side * 2, 1.12, 0, .18, 2.25, .18, 'wood', sign)
+            kit.rounded(0, 2.1, 0, 5.2, 1.12, .22, 'wood', sign)
+            sign.add(kit.label(`POS ${index + 1} · ${stop.title.toUpperCase()}`, 0, 2.28, .13, 4.9, .45).mesh)
+            sign.add(kit.label('MENEPI · E / ENTER', 0, 1.88, .13, 3.6, .30).mesh)
+            for(const side of [-1, 1])
+                kit.mesh(padGeometry, 'cream', new Vector3(x, .075, z + side * 1.45), this.root)
+            const station = manager.createStation({
+                zone: 'main',
+                category: 'racing',
+                label: `Pos ${index + 1} · ${stop.label || stop.title}`,
+                position: [x, 1.35, z],
+                isAvailable: () => this.ready,
+                onInteract: () => this.openStop(index)
+            })
+            if(!stop.world) return { station }
+
+            const world = game.world.areas[stop.world]
+            const stand = new Group()
+            const display = new Group()
+            const [originX,originZ] = stop.origin
+            const [displayX,displayZ] = stop.exhibit
+            const [width,depth] = stop.deck
+            kit.rounded(displayX, .11, displayZ, width, .82, depth, 'wood', this.root)
+            stand.position.set(displayX, .52, displayZ)
+            stand.scale.setScalar(stop.scale)
+            stand.rotation.y = stop.rotation || 0
+            display.position.set(-originX, 0, -originZ)
+            stand.add(display)
+            this.root.add(stand)
+            return { station, world, display, focus: new Vector3(displayX, 0, displayZ) }
+        })
+        // Player updates tracking at 6; View consumes it at 7.
+        game.ticker.events.on('tick', () => this.frameParkedExhibit(), 6)
     }
 
-    start() {
-        if(this.active||this.manager.currentZone!=='main'||!this.manager.canInteract())return
-        if(this.game.world.areas.circuit.state!==CircuitArea.STATE_PENDING)return
-        this.chapter=0
-        this.active=true
-        this.chapterOpen=false
-        this.learning.button.disabled=true
+    frameParkedExhibit()
+    {
+        if(!this.ready || Math.abs(this.game.physicalVehicle.speed) > 2) return
+        const {position} = this.game.player
+        const stop = this.stops.find(({station,focus}) => focus &&
+            Math.hypot(position.x - station.position.x, position.z - station.position.z) < 2.5)
+        if(stop) this.game.view.focusPoint.trackedPosition.lerp(stop.focus, .4)
+    }
+
+    async start()
+    {
+        if(this.active || this.placing || this.circuit.state !== CircuitArea.STATE_PENDING ||
+            this.manager.currentZone !== 'main' || !this.manager.canInteract()) return
+        this.placing = true
+        this.learning.button.disabled = true
+        try
+        {
+            const start = this.circuit.startPosition
+            const prompt = this.circuit.interactivePoint.position
+            // Park on the start grid inside the native Start Race interaction radius.
+            await this.manager.transitions.travel({
+                position: [(start.position.x + prompt.x) / 2, (start.position.z + prompt.y) / 2],
+                rotation: start.rotation
+            }, () => {})
+            this.active = true
+            this.viewed.clear()
+            this.mountExhibits()
+            this.game.audio.raceMusic.load()
+            this.show('Tekan E untuk mulai. Temukan 6 pos materi di sisi lintasan.')
+            this.manager.refresh()
+        }
+        catch(error)
+        {
+            this.manager.refresh(`Garis start belum siap: ${error.message}`)
+        }
+        finally
+        {
+            this.placing = false
+            this.learning.button.disabled = this.active
+        }
+    }
+
+    mountExhibits()
+    {
+        for(const {world,display} of this.stops)
+        {
+            if(!world) continue
+            world.trackside = true
+            if(world.objects)
+            {
+                const exhibit = new Set(world.raceVisuals)
+                world.objects.hideable = world.objects.hideable.filter(node => !exhibit.has(node))
+            }
+            for(const node of world.raceVisuals)
+            {
+                display.add(node)
+                // Cloud/GWO area culling hides roots. Their dynamic children keep their own visibility.
+                if(world.objects) node.visible = true
+            }
+        }
+        this.game.world.areas.cloud.refreshExperimentVisibility()
+        this.game.world.areas.cloud.vms.forEach(vm => { vm.selection.visible = false })
+        this.root.visible = true
+    }
+
+    restoreExhibits()
+    {
+        this.root.visible = false
+        for(const {world} of this.stops)
+        {
+            if(!world) continue
+            world.trackside = false
+            for(const node of world.raceVisuals) (world.group || this.game.scene).add(node)
+            if(world.objects)
+            {
+                world.objects.hideable.push(...world.raceVisuals)
+                world.frustum.isIn = null
+                world.frustum.test()
+            }
+        }
+    }
+
+    show(hint)
+    {
+        this.hud.hidden = false
+        this.progress.textContent = `Presentation Race · ${this.viewed.size}/${STOPS.length} pos`
+        this.hint.textContent = hint
+    }
+
+    onCountdown()
+    {
+        if(!this.active) return
+        this.ready = false
+        this.cancel.disabled = true
+        this.game.audio.setRaceMusic(false)
         this.manager.refresh()
-        this.update()
+        this.show('Bersiap. Mulai mengemudi saat lampu hijau.')
     }
 
-    stop(finished=false) {
-        this.active=false
-        this.chapterOpen=false
-        this.learning.panel.setRaceChapter(false)
-        if(this.learning.panel.visible)this.learning.panel.close()
-        this.learning.button.disabled=false
-        this.marker.visible=false
-        this.hud.hidden=true
-        this.manager.refresh(finished?'Presentation Race selesai · 6/6 chapter':'Presentation Race diakhiri')
+    onGreen()
+    {
+        if(!this.active) return
+        this.ready = true
+        this.cancel.disabled = false
+        this.game.audio.setRaceMusic(true)
+        this.manager.refresh()
+        this.showDrivingHint()
     }
 
-    openCheckpoint(index) {
-        if(!this.active||index!==this.chapter||this.chapterOpen||
-            this.manager.currentZone!==CHAPTERS[index].zone||!this.manager.canInteract())return
-        const vehicle=this.game.physicalVehicle
-        if(vehicle.wheels.inContactCount<2||Math.abs(vehicle.speed)>3.5){
-            this.manager.refresh('Berhenti di lingkaran checkpoint, lalu tekan E.')
+    showDrivingHint()
+    {
+        this.show('Ikuti checkpoint balap. Menepi di marka pos, lalu tekan E.')
+    }
+
+    openStop(index)
+    {
+        if(!this.ready) return
+        const vehicle = this.game.physicalVehicle
+        if(vehicle.wheels.inContactCount < 2 || Math.abs(vehicle.speed) > 2)
+        {
+            this.show('Berhenti di marka pos, lalu tekan E.')
             return
         }
-        if(index===PRESENTATION_SECTIONS.length){
-            this.stop(true)
-            return
-        }
-        this.chapterOpen=true
+
         this.learning.panel.setRaceChapter(true)
-        this.learning.open(index)
-    }
-
-    onChapterClosed() {
-        if(!this.active||!this.chapterOpen)return
-        this.chapterOpen=false
-        this.chapter++
-        this.learning.panel.setRaceChapter(false)
-        this.manager.refresh()
-        this.update()
-    }
-
-    update() {
-        const zone=this.manager.currentZone
-        this.button.hidden=this.active||zone!=='main'
-        if(!this.active)return
-        this.hud.hidden=this.chapterOpen
-        const chapter=CHAPTERS[this.chapter]
-        const {areas}=this.game.world
-        const onChapter=zone===chapter.zone
-        let target=this.checkpoints.get(this.chapter)
-        let instruction=chapter.title+' · berhenti lalu E'
-        if(!onChapter&&zone==='main'){
-            const destination=areas[chapter.zone]
-            target=destination.entry.position
-            instruction='Gerbang '+chapter.title
-        }else if(!onChapter){
-            target=areas[zone]?.exit?.position
-            instruction='Gerbang kembali ke Main'
+        if(this.learning.open(index, 'racing'))
+        {
+            this.viewed.add(index)
+            this.show('Esc untuk kembali mengemudi. Timer balap terus berjalan.')
         }
-        this.marker.visible=onChapter&&!this.chapterOpen
-        if(this.marker.visible)
-            this.marker.position.set(target.x, target.y - (this.chapter === 2 ? .95 : 1.45), target.z)
-        const progress=this.chapter===6?'Finish · 6/6 chapter':`Chapter ${this.chapter+1}/6`
-        if(this.progress.textContent!==progress)this.progress.textContent=progress
-        if(this.targetLabel.textContent!==instruction)this.targetLabel.textContent=instruction
-        if(!target)return
-        const {position}=this.game.player,{forward}=this.game.physicalVehicle
-        const heading=Math.atan2(target.z-position.z,target.x-position.x)-Math.atan2(forward.z,forward.x)
-        const rotation=`rotate(${heading.toFixed(3)}rad)`
-        if(this.arrow.style.transform!==rotation)this.arrow.style.transform=rotation
+        else this.learning.panel.setRaceChapter(false)
+    }
+
+    stop()
+    {
+        if(this.ready) this.circuit.finish(true)
+        else if(this.circuit.state === CircuitArea.STATE_PENDING) this.onFinish(true)
+    }
+
+    onFinish(forced)
+    {
+        if(!this.active) return
+        this.active = false
+        this.ready = false
+        this.learning.panel.close()
+        this.learning.panel.pauseLesson()
+        this.learning.panel.setRaceChapter(false)
+        this.learning.button.disabled = false
+        this.cancel.disabled = false
+        this.hud.hidden = true
+        this.game.audio.setRaceMusic(false)
+        this.restoreExhibits()
+        this.manager.refresh(forced ? 'Presentation Race diakhiri' :
+            `Finis · ${this.viewed.size}/${STOPS.length} pos materi dikunjungi`)
     }
 }

@@ -75,9 +75,9 @@ export class ZoneManager
         return station
     }
 
-    canInteract()
+    canInteract(category = 'wandering')
     {
-        return this.state === 'DRIVING' && this.game.inputs.filters.has('wandering') && !this.transitions.busy
+        return this.state === 'DRIVING' && this.game.inputs.filters.has(category) && !this.transitions.busy
     }
 
     refresh(message = '')
@@ -172,13 +172,14 @@ export class ZoneManager
         })
     }
 
-    openPanel(name = 'cloud-ops-test')
+    openPanel(name = 'cloud-ops-test', category = 'wandering')
     {
-        if(!this.canInteract()) return
+        if(!this.canInteract(category)) return false
         this.registerPanel(name)
         this.state = 'LEARNING_UI'
         this.transitions.lock()
         this.refresh()
         this.game.modals.open(name)
+        return true
     }
 }
