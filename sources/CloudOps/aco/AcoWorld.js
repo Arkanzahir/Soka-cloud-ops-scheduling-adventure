@@ -209,39 +209,82 @@ export class AcoWorld {
  update(dt){
   if(!Number.isFinite(dt)||dt<0)return
   this.elapsed+=dt
-  const activeMotion=this.moving||this.returning
-  const completedReturn=this.returning&&this.elapsed>=1.15
+  const inTransit=this.moving||this.returning
+  const completedReturn=this.returning&&this.elapsed>=1.22
+  const completedChoice=this.moving&&this.elapsed>=1.22
   for(const [i,ant] of this.ants.entries()){
-   if(activeMotion){
-    const delay=Math.floor(i/4)*.07+(i%4)*.035
-    const progress=Math.max(0,Math.min(1,(this.elapsed-delay)*1.55))
-    // Between task decisions, return along the previous branch before taking
-    // the new VM route. This avoids teleporting ants between destinations.
-    const returningToNest=this.returning||(this.moving&&ant.fromVM!==null&&progress<.32)
-    const vm=this.returning?ant.vm:(returningToNest&&ant.fromVM!==null?ant.fromVM:ant.vm)
-    const t=this.returning?1-progress:
-     ant.fromVM!==null?(progress<.32?1-progress/.32:Math.min(1,(progress-.32)/.68)):progress
-    const curve=this.paths[vm]
-    const point=curve.getPoint(t,this.antPosition)
-    const tangent=curve.getTangent(t,this.antTangent)
-    // Small lateral offsets keep a real twelve-ant colony legible.
-    const lateral=((i%4)-1.5)*.24
-    ant.mesh.position.copy(point)
-    ant.mesh.position.x+=tangent.z*lateral
-    ant.mesh.position.z-=tangent.x*lateral
-    ant.mesh.rotation.y=Math.atan2(tangent.x,tangent.z)+(returningToNest?Math.PI:0)
-
-   }else{
-    // Idle movement at the anthill is ambient only; VM choices remain engine-driven.
-    ant.mesh.position.x+=Math.sin(this.elapsed*1.1+i)*.002
+   const mesh=ant.mesh
+   if(inTransit){
+    // Stagger departures naturally; each ant still follows its exact engine VM.
+    const delay=Math.floor(i/4)*.075+(i%4)*.043
+    const progress=Math.max(0,Math.min(1,(this.elapsed-delay)*1.38))
+    const position=this.antPosition,direction=this.antTangent
+    let onTrail=true
+    if(this.returning){
+     const route=this.paths[ant.vm]
+     if(progress<.82){
+      const t=1-progress/.82
+      route.getPoint(t,position)
+      route.getTangent(t,direction).multiplyScalar(-1)
+     }else{
+      route.getPoint(0,position)
+      direction.copy(ant.home).sub(position)
+      position.lerp(ant.home,(progress-.82)/.18)
+      onTrail=false
+     }
+    }else if(ant.fromVM!==null){
+     // Return to the fork and head towards the next assigned VM.
+     // No teleport back to the nest between consecutive task decisions.
+     const fork=.72
+     if(progress<.48){
+      const t=1-progress/.48*(1-fork)
+      this.paths[ant.fromVM].getPoint(t,position)
+      this.paths[ant.fromVM].getTangent(t,direction).multiplyScalar(-1)
+     }else{
+      const t=fork+(progress-.48)/.52*(1-fork)
+      this.paths[ant.vm].getPoint(t,position)
+      this.paths[ant.vm].getTangent(t,direction)
+     }
+    }else if(progress<.20){
+     // Depart from each ant's own resting place rather than snapping all
+     // twelve ants onto one world-space route origin.
+     this.paths[ant.vm].getPoint(0,position)
+     const tx=position.x,ty=position.y,tz=position.z
+     direction.set(tx-ant.home.x,ty-ant.home.y,tz-ant.home.z)
+     const t=progress/.20
+     position.set(ant.home.x+(tx-ant.home.x)*t,ant.home.y+(ty-ant.home.y)*t,ant.home.z+(tz-ant.home.z)*t)
+     onTrail=false
+    }else{
+     const t=(progress-.20)/.80
+     this.paths[ant.vm].getPoint(t,position)
+     this.paths[ant.vm].getTangent(t,direction)
+    }
+    if(onTrail){
+     const lane=((i%3)-1)*.20
+     const length=Math.hypot(direction.x,direction.z)||1
+     position.x+=direction.z/length*lane
+     position.z-=direction.x/length*lane
+    }
+    mesh.position.copy(position)
+    if(Math.hypot(direction.x,direction.z)>.001)
+     mesh.rotation.y=Math.atan2(direction.x,direction.z)
+   }else if(!this.event){
+    // Quiet foraging around the nest; only choices made during Step/Play
+    // represent real scheduler decisions.
+    mesh.position.set(ant.home.x+Math.sin(this.elapsed*.73+i*1.41)*.11,
+     ant.home.y,ant.home.z+Math.cos(this.elapsed*.67+i*1.89)*.075)
+    mesh.rotation.y=ant.homeHeading+Math.sin(this.elapsed*.4+i)*.18
    }
-   ant.mesh.userData.legs.forEach(l=>l.rotation.y=Math.sin(this.elapsed*27+l.userData.phase)*.2)
-   ant.mesh.userData.antennae.forEach((m,k)=>m.rotation.x=.6+Math.sin(this.elapsed*9+k+i)*.08)
+   const movement=inTransit?.19:(this.event?.015:.075)
+   const pace=inTransit?29:9
+   mesh.userData.legs.forEach(l=>l.rotation.y=Math.sin(this.elapsed*pace+l.userData.phase+i)*movement)
+   mesh.userData.antennae.forEach((m,k)=>m.rotation.x=.6+Math.sin(this.elapsed*8+k+i)*.065)
   }
   if(completedReturn){
    this.returning=false
    this.ants.forEach((a,j)=>this.placeAntAtNest(a,j))
   }
+  if(completedChoice)this.moving=false
  }
 
 }
