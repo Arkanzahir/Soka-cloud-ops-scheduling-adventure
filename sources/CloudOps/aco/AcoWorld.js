@@ -127,9 +127,13 @@ export class AcoWorld {
     choices.some(c=>!Number.isInteger(c.ant)||c.ant<1||c.ant>this.ants.length||!Number.isInteger(c.selectedVM)||c.selectedVM<0||c.selectedVM>=this.experiment.vmCount)))
    throw new RangeError('Colony choices must contain twelve real ant-to-VM decisions')
   this.currentTask=event.task
+  const previousDecision=!!this.event&&this.moving
   this.demo=false;this.event={...event};this.iteration=null;this.returning=false;this.moving=true;this.elapsed=0
   const destinations=new Map(choices.map(c=>[c.ant,c.selectedVM]))
-  this.ants.forEach((ant,i)=>ant.vm=destinations.get(i+1)??(i===0?event.selectedVM:0))
+  this.ants.forEach((ant,i)=>{
+   ant.fromVM=previousDecision?ant.vm:null
+   ant.vm=destinations.get(i+1)??(i===0?event.selectedVM:0)
+  })
   this.applyExperimentVisibility()
   const counts=Array.from({length:this.experiment.vmCount},(_,i)=>choices.filter(c=>c.selectedVM===i).length)
   this.pathMeshes.forEach((mesh,i)=>mesh.material=this.mat[i<counts.length&&counts[i]>0?'leaf':'soil'])
@@ -143,7 +147,7 @@ export class AcoWorld {
  resetVisualization(){
   this.demo=false;this.event=null;this.iteration=null;this.returning=false;this.moving=false;this.elapsed=0;this.currentTask=0
   this.applyExperimentLayout()
-  this.ants.forEach((a,i)=>{a.vm=0;this.placeAntAtNest(a,i);a.mesh.userData.legs.forEach(l=>l.rotation.y=0)})
+  this.ants.forEach((a,i)=>{a.vm=0;a.fromVM=null;this.placeAntAtNest(a,i);a.mesh.userData.legs.forEach(l=>l.rotation.y=0)})
   this.pathMeshes.forEach(m=>m.material=this.mat.leaf)
   this.setPheromone(Array(this.experiment.vmCount).fill(1))
   this.applyExperimentVisibility()
@@ -173,12 +177,16 @@ export class AcoWorld {
   const activeMotion=this.moving||this.returning
   const completedReturn=this.returning&&this.elapsed>=1.15
   for(const [i,ant] of this.ants.entries()){
-   if(!ant.mesh.visible)continue
    if(activeMotion){
     const delay=Math.floor(i/4)*.07+(i%4)*.035
     const progress=Math.max(0,Math.min(1,(this.elapsed-delay)*1.55))
-    const t=this.returning?1-progress:progress
-    const curve=this.paths[ant.vm]
+    // Between task decisions, return along the previous branch before taking
+    // the new VM route. This avoids teleporting ants between destinations.
+    const returningToNest=this.returning||(this.moving&&ant.fromVM!==null&&progress<.32)
+    const vm=returningToNest&&ant.fromVM!==null?ant.fromVM:ant.vm
+    const t=this.returning?1-progress:
+     ant.fromVM!==null?(progress<.32?1-progress/.32:Math.min(1,(progress-.32)/.68)):progress
+    const curve=this.paths[vm]
     const point=curve.getPoint(t,this.antPosition)
     const tangent=curve.getTangent(t,this.antTangent)
     // Small lateral offsets keep a real twelve-ant colony legible.
@@ -186,7 +194,7 @@ export class AcoWorld {
     ant.mesh.position.copy(point)
     ant.mesh.position.x+=tangent.z*lateral
     ant.mesh.position.z-=tangent.x*lateral
-    ant.mesh.rotation.y=Math.atan2(tangent.x,tangent.z)+(this.returning?Math.PI:0)
+    ant.mesh.rotation.y=Math.atan2(tangent.x,tangent.z)+(returningToNest?Math.PI:0)
 
    }else{
     // Idle movement at the anthill is ambient only; VM choices remain engine-driven.
