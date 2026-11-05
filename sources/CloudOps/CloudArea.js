@@ -104,7 +104,7 @@ export class CloudArea extends Area {
  applyAllocation(input){
   let event;try{event=allocationEvent(input,this.experiment)}catch(error){this.lastVisualizationError=error.message;return false}
   this.lastVisualizationError=null;this.lastAllocation=event
-  if(event.taskIndex>=this.experiment.taskCount||event.vmIndex>=this.experiment.vmCount)return false
+  if(event.taskIndex>=(this.experiment?.taskCount??8)||event.vmIndex>=(this.experiment?.vmCount??3))return false
   const task=this.tasks[event.taskIndex];task.vm=event.vmIndex
   task.motion={from:task.mesh.position.clone(),to:this.allocationTarget(event.taskIndex,event.vmIndex),elapsed:0,duration:1.4}
   this.tasks.forEach(t=>t.mesh.scale.setScalar(t===task?1.12:1));this.vms.forEach((vm,i)=>vm.selection.visible=i===event.vmIndex)
@@ -112,7 +112,7 @@ export class CloudArea extends Area {
  }
  displayLoads(loads,makespan){const max=Math.max(...loads,1);this.vms.forEach((vm,i)=>{vm.load=loads[i]??0;vm.loadLabel.write(`LOAD ${vm.load.toFixed(2)} s`);vm.bar.scale.x=35*vm.load/max+.01});this.makespanLabel.write(`${this.previewMode?'DEMO/PREVIEW | ':''}MAKESPAN ${makespan.toFixed(3)} s`)}
  positionTask(task,position){task.mesh.position.copy(position);task.label.mesh.position.copy(position).add(task.labelOffset)}
- applySchedule(input){let state;try{state=scheduleState(input,this.experiment)}catch(error){this.lastVisualizationError=error.message;return false}this.resetVisualization();this.tasks.forEach((task,i)=>{if(i>=this.experiment.taskCount)return;task.vm=state.assignments[i];this.positionTask(task,this.allocationTarget(i,task.vm))});this.displayLoads(state.vmLoads,state.makespan);return true}
+ applySchedule(input){let state;try{state=scheduleState(input,this.experiment)}catch(error){this.lastVisualizationError=error.message;return false}this.resetVisualization();this.tasks.forEach((task,i)=>{if(i>=(this.experiment?.taskCount??8))return;task.vm=state.assignments[i];this.positionTask(task,this.allocationTarget(i,task.vm))});this.displayLoads(state.vmLoads,state.makespan);return true}
  resetVisualization(){this.tasks.forEach(task=>{task.motion=null;task.vm=null;task.mesh.scale.setScalar(1);this.positionTask(task,task.home)});this.vms.forEach(vm=>vm.selection.visible=false);this.lastAllocation=null;this.lastVisualizationError=null;this.displayLoads([0,0,0],0)}
  setPreviewMode(enabled){this.previewMode=!!enabled;this.displayLoads(this.vms.map(vm=>vm.load),Math.max(...this.vms.map(vm=>vm.load)))}
  setExperimentConfig({taskCount,vmCount}){
