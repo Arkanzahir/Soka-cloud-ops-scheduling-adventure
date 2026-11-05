@@ -25,9 +25,10 @@ export class AcoWorld {
   for(let x=-17;x<=17;x+=3.4)for(const z of [-15,15]){this.box(x,.7,z,.2,1.4,.2);this.box(x,.9,z,3.4,.18,.15);this.box(x,.4,z,3.4,.18,.15)}
   for(let z=-13.5;z<15;z+=3)for(const x of [-17,17]){this.box(x,.7,z,.2,1.4,.2);this.box(x,.7,z,.15,.2,3)}
   for(const [x,z,w,d] of [[0,15,36,.3],[0,-15,36,.3],[-17,0,.3,30],[17,0,.3,30]])this.box(x,.6,z,w,1.2,d,'wood',true)
-  for(const x of [-5,5])this.box(x,2.3,11,.45,4.6,.45,'wood',true)
-  this.box(0,4.1,11,11,1.2,.4,'wood');this.label('ANT COLONY OPTIMIZATION',0,4.1,11.23,10.4)
-  this.label('ANT RESEARCH PARK',0,3.25,11.25,5)
+  // Keep the title on the courtyard verge, clear of the car and pheromone table.
+  for(const x of [-14.7,-9.3])this.box(x,1.4,11.5,.24,2.8,.24,'wood',true)
+  this.box(-12,2.65,11.5,6,1.65,.3,'wood');this.label('ANT RESEARCH PARK',-12,3.05,11.68,5.6)
+  this.label('ANT COLONY OPTIMIZATION',-12,2.25,11.68,5)
   // Faceted earthen mound with entrance and stone edging.
   this.mesh(new T.ConeGeometry(3.4,3.5,11,3), 'soil',-8,1.75,-5)
   this.mesh(new T.SphereGeometry(.8,12,8),'dark',-8,.55,-2.55,1,.7,.35)

@@ -1,9 +1,10 @@
 import {chromium} from 'playwright';import assert from 'node:assert/strict';import fs from 'node:fs';
 const browser=await chromium.launch({channel:'chrome',headless:true}),page=await browser.newPage({viewport:{width:1366,height:768}}),report={checks:[],errors:[],httpErrors:[]};
 const url=process.argv[2]||'http://127.0.0.1:4193/Soka-cloud-ops-scheduling-adventure/';
+const label=process.argv[3]||'group8-release';
 page.on('pageerror',e=>report.errors.push(e.message));page.on('response',r=>{if(r.status()>=400&&r.url().startsWith(new URL(url).origin))report.httpErrors.push(r.url())});
 const check=(name,value)=>{report.checks.push({name,passed:!!value});assert.ok(value,name);console.log('PASS '+name)};
-const shot=name=>page.screenshot({path:`docs/evidence/group8-release-${name}.png`});
+const shot=name=>page.screenshot({path:`docs/evidence/${label}-${name}.png`});
 const settled=()=>page.waitForFunction(()=>{const p=document.querySelector('.co-learning'),m=document.querySelector('.modals');return p&&!p.hidden&&!p.inert&&m.classList.contains('is-visible')&&m.getAnimations({subtree:true}).every(a=>a.playState!=='running')},null,{timeout:30000});
 try{
  await page.goto(url,{waitUntil:'networkidle'});
@@ -23,4 +24,4 @@ try{
  await page.locator('.co-learning [data-index="5"]').click();await settled();check('normal release has three scientific reference cards',await page.locator('.co-paper').count()===3);
  await page.locator('.co-learning [data-index="0"]').click();await settled();await page.keyboard.press('Escape');await page.locator('.co-learning').waitFor({state:'hidden'});check('normal release closes presentation with one canvas and panel',await page.locator('.js-canvas').count()===1&&await page.locator('.co-learning').count()===1);
  check('normal release has no JS or local HTTP errors',report.errors.length===0&&report.httpErrors.length===0);report.passed=true;
-}catch(error){report.passed=false;report.failure=error.stack;await shot('failure').catch(()=>{});throw error}finally{fs.writeFileSync('docs/evidence/group8-release.json',JSON.stringify(report,null,2));await browser.close()}
+}catch(error){report.passed=false;report.failure=error.stack;await shot('failure').catch(()=>{});throw error}finally{fs.writeFileSync(`docs/evidence/${label}.json`,JSON.stringify(report,null,2));await browser.close()}
