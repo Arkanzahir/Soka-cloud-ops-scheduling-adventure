@@ -4,11 +4,12 @@ import { MeshDefaultMaterial } from '../../Game/Materials/MeshDefaultMaterial.js
 import { Trees } from '../../Game/World/Trees.js'
 import { InteractivePoints } from '../../Game/InteractivePoints.js'
 import {createPheromoneGeometry,setPheromoneRadius} from './PheromoneGeometry.js'
+import { DEFAULT_PROBLEM } from '../scheduling/problem.js'
 
 // Procedural source assets: no Blender or external model dependencies.
 export class AcoWorld {
  constructor(game, origin = new T.Vector3(220, 0, 0)) {
-  this.game=game; this.origin=origin; this.ants=[]; this.paths=[]; this.pathMeshes=[]; this.pathBeds=[]; this.taskActors=[]; this.vmActors=[]; this.experiment={taskCount:8,vmCount:3}; this.nest={x:-2.5,z:-5}; this.dispatch={x:8.5,z:-3}; this.colonyMode='colony'; this.returning=false; this.moving=false; this.elapsed=0; this.demo=false;this.antPosition=new T.Vector3();this.antTangent=new T.Vector3()
+  this.game=game; this.origin=origin; this.ants=[]; this.paths=[]; this.pathMeshes=[]; this.pathBeds=[]; this.taskActors=[]; this.vmActors=[]; this.vmIndicators=[]; this.experiment={taskCount:8,vmCount:3}; this.nest={x:-2.5,z:-5}; this.dispatch={x:8.5,z:-3}; this.colonyMode='colony'; this.returning=false; this.moving=false; this.elapsed=0; this.demo=false;this.antPosition=new T.Vector3();this.antTangent=new T.Vector3()
   this.group=new T.Group(); this.group.position.copy(origin); game.scene.add(this.group)
   this.mat={}; for(const [n,c] of Object.entries({sand:'#ffcf8b',wood:'#a87762',soil:'#ac6942',trail:'#b98260',dark:'#382c38',leaf:'#b8b62e',cream:'#fff0bf',red:'#b85b47'})) this.mat[n]=new MeshDefaultMaterial({colorNode:color(c)})
   this.build(); this.decorate(); this.makeFeedback(); this.resetVisualization()
@@ -17,6 +18,24 @@ export class AcoWorld {
  mesh(geometry,mat,x,y,z,sx=1,sy=1,sz=1){const m=new T.Mesh(geometry,this.mat[mat]||mat);m.position.set(x,y,z);m.scale.set(sx,sy,sz);m.castShadow=true;m.receiveShadow=true;this.group.add(m);return m}
  box(x,y,z,w,h,d,mat='wood',solid=false){const m=this.mesh(new T.BoxGeometry(w,h,d),mat,x,y,z);if(solid)this.game.objects.add(null,{type:'fixed',position:{x:x+this.origin.x,y:y+this.origin.y,z:z+this.origin.z},colliders:[{shape:'cuboid',parameters:[w/2,h/2,d/2],category:'object'}]});return m}
  label(text,x,y,z,width=4){const c=document.createElement('canvas');c.width=1024;c.height=160;const ctx=c.getContext('2d');ctx.fillStyle='#fff0bf';ctx.fillRect(0,0,1024,160);ctx.fillStyle='#382c38';ctx.font='bold 64px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(text,512,80,980);const tex=new T.CanvasTexture(c);tex.colorSpace=T.SRGBColorSpace;return this.mesh(new T.PlaneGeometry(width,width/6.4),new MeshDefaultMaterial({colorNode:texture(tex)}),x,y,z)}
+ // A readable task badge on TOP of the crate, facing the elevated camera.
+ // Each task carries its real MI workload from the same scheduling dataset.
+ taskBadge(index,x,z){
+  const task=DEFAULT_PROBLEM.tasks[index]
+  const canvas=document.createElement('canvas')
+  canvas.width=512;canvas.height=512
+  const ctx=canvas.getContext('2d')
+  ctx.fillStyle='#fff0bf';ctx.fillRect(0,0,512,512)
+  ctx.strokeStyle='#654332';ctx.lineWidth=22;ctx.strokeRect(13,13,486,486)
+  ctx.fillStyle='#382c38';ctx.textAlign='center';ctx.textBaseline='middle'
+  ctx.font='bold 190px sans-serif';ctx.fillText(task.id,256,210,470)
+  ctx.font='bold 76px sans-serif';ctx.fillText(`${task.lengthMI} MI`,256,367,475)
+  const map=new T.CanvasTexture(canvas);map.colorSpace=T.SRGBColorSpace
+  const badge=this.mesh(new T.PlaneGeometry(.92,.88),new MeshDefaultMaterial({colorNode:texture(map)}),x,1.006,z)
+  badge.rotation.x=-Math.PI/2
+  badge.castShadow=false
+  return badge
+ }
  build(){
   const ground=new MeshDefaultMaterial({colorNode:mix(color('#a87762'),color('#ffcf8b'),texture(this.game.resources.floorSlabsTexture,uv().mul(8)).r)})
   this.mesh(new T.BoxGeometry(36,3,32),ground,0,-1.5,0)
@@ -38,7 +57,7 @@ export class AcoWorld {
   this.label('COLONY',nx,3.8,nz+.5,3)
   this.box(dx,.22,dz,12,.44,11,'wood',true)
   this.box(dx,.48,dz,11.7,.08,10.7,'sand')
-  for(let i=0;i<8;i++){const x=-1.8+i*1.35;const box=this.box(x,.75,1,1,.45,1,'red');const label=this.label('T'+(i+1),x,1.2,1.55,1);this.taskActors.push([box,label])}
+  for(let i=0;i<8;i++){const x=-1.8+i*1.35;const crate=this.box(x,.75,1,1,.45,1,'red');const badge=this.taskBadge(i,x,1);this.taskActors.push([crate,badge])}
   // A single low-profile trail leaves the nest. Only the branches split
   // toward VMs: overlapping three copies here looked like an enormous cable.
   this.trunkCurve=this.nestToFork()
@@ -50,6 +69,9 @@ export class AcoWorld {
    this.box(x,1,-7,2,1,1.8,'wood');this.box(x,1.65,-7,1.6,.3,1.4,'cream');this.label('VM'+(j+1),x,2,-6.1,2)
    // Save the original positions so switching 2 → 3 VMs cannot accumulate offsets.
    this.vmActors.push(this.group.children.slice(visualStart).map(mesh=>({mesh,homeX:mesh.position.x})))
+   const ring=this.mesh(new T.TorusGeometry(1.52,.065,6,32),'leaf',x,.59,-7)
+   ring.rotation.x=-Math.PI/2;ring.visible=false
+   this.vmIndicators.push(ring)
    this.paths.push(this.routeTo(x))
    const branch=this.branchTo(x)
    this.pathBeds.push(this.mesh(new T.TubeGeometry(branch,32,.085,6,false),'trail',0,0,0))
@@ -113,13 +135,14 @@ export class AcoWorld {
    const x=this.dispatch.x+(col-(columns-1)/2)*1.85
    const z=taskCount===4?1.05:1.15-row*1.5
    actors[0].position.set(x,.75,z)
-   actors[1].position.set(x,1.2,z+.55)
+   actors[1].position.set(x,1.006,z)
   }
   const vmCount=this.experiment.vmCount
   for(let j=0;j<3;j++){
    const x=this.dispatch.x+(j-(vmCount-1)/2)*4
    const originalX=this.dispatch.x+(j-1)*4,dx=x-originalX
    for(const {mesh,homeX} of this.vmActors[j])mesh.position.x=homeX+dx
+   this.vmIndicators[j].position.x=x
    const curve=this.routeTo(x)
    this.paths[j]=curve
    const branch=this.branchTo(x)
@@ -143,6 +166,7 @@ export class AcoWorld {
    for(const {mesh} of actors)mesh.visible=i<this.experiment.vmCount
   for(const [i,bed] of this.pathBeds.entries())bed.visible=i<this.experiment.vmCount
   for(const [i,signal] of this.pathMeshes.entries())signal.visible=i<this.experiment.vmCount
+  this.vmIndicators.forEach((ring,i)=>ring.visible=i<this.experiment.vmCount&&this.event?.selectedVM===i)
   this.ants.forEach((ant,i)=>ant.mesh.visible=this.colonyMode==='colony'||i===0)
  }
  placeAntAtNest(ant,i){
@@ -165,7 +189,9 @@ export class AcoWorld {
   if(choices.length&& (choices.length!==this.ants.length||new Set(choices.map(c=>c.ant)).size!==choices.length||
     choices.some(c=>!Number.isInteger(c.ant)||c.ant<1||c.ant>this.ants.length||!Number.isInteger(c.selectedVM)||c.selectedVM<0||c.selectedVM>=this.experiment.vmCount)))
    throw new RangeError('Colony choices must contain twelve real ant-to-VM decisions')
+  if(!Number.isInteger(event.task)||event.task<0||event.task>=this.experiment.taskCount)throw new RangeError('Task is not active')
   this.currentTask=event.task
+  this.taskActors.forEach((actors,i)=>{actors[0].material=this.mat[i===event.task?'leaf':'red']})
   const previousDecision=!!this.event
   this.demo=false;this.event={...event};this.iteration=null;this.returning=false;this.moving=true;this.elapsed=0
   const destinations=new Map(choices.map(c=>[c.ant,c.selectedVM]))
@@ -178,7 +204,7 @@ export class AcoWorld {
   this.pathMeshes.forEach((mesh,i)=>mesh.material=this.mat[i<counts.length&&counts[i]>0?'leaf':'soil'])
   const probability=(event.probabilities||[]).map(p=>(p*100).toFixed(1)+'%').join(' / ')
   this.writeFeedback([
-   `ITER ${event.iteration} | T${event.task+1} | ${choices.length||1} SEMUT`,
+   `ITER ${event.iteration} | T${event.task+1} (${DEFAULT_PROBLEM.tasks[event.task].lengthMI} MI) | ${choices.length||1} SEMUT`,
    `Fokus semut ${event.ant}: VM${event.selectedVM+1} | P: ${probability}`,
    choices.length?`Pilihan VM: ${counts.join(' / ')} semut | L: detail`:'Tekan L untuk melihat alokasi'
   ])
@@ -187,6 +213,7 @@ export class AcoWorld {
   this.demo=false;this.event=null;this.iteration=null;this.returning=false;this.moving=false;this.elapsed=0;this.currentTask=0
   this.applyExperimentLayout()
   this.ants.forEach((a,i)=>{a.vm=0;a.fromVM=null;this.placeAntAtNest(a,i);a.mesh.userData.legs.forEach(l=>l.rotation.y=0)})
+  this.taskActors.forEach(actors=>actors[0].material=this.mat.red)
   this.pathMeshes.forEach(m=>m.material=this.mat.leaf)
   this.setPheromone(Array(this.experiment.vmCount).fill(1))
   this.applyExperimentVisibility()
@@ -199,6 +226,7 @@ export class AcoWorld {
  }
  applyIteration(e){
   this.iteration=e;this.event=null;this.returning=true;this.moving=false;this.elapsed=0
+  this.applyExperimentVisibility()
   const row=e.pheromoneSnapshot[this.currentTask]
   this.setPheromone(row)
   this.pathMeshes.forEach((m,j)=>m.material=this.mat[j<row.length?'leaf':'soil'])
