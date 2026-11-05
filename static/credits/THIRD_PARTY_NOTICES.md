@@ -37,10 +37,11 @@ Paper digunakan sebagai **referensi ilmiah**, bukan sebagai sumber kode game. Ku
 
 Catat secara faktual tugas yang dikerjakan oleh setiap anggota melalui commit/PR atau tabel tugas. Kontribusi Kelompok 8 yang sudah diimplementasikan: integrasi world Cloud/ACO/GWO, simulator scheduling baseline, visualisasi trace, dokumentasi, mode presentasi, optimasi, dan rebranding kampus. Fondasi Bruno tetap dikreditkan terpisah.
 
-## 5. Gate publikasi — 5 November 2026
+## 5. Aset untuk paket Pages
 
-PR #12 (keterbacaan mini-world) dan #11 (branding) telah digabung ke branch release; main dan deployment menunggu keputusan akhir. Papan kandidat GWO adalah visualisasi original berbasis event, tanpa aset unduhan baru. Lisensi MIT dan copyright asli Bruno tidak diubah.
+- Font Pally dari checkpoint lama dikeluarkan. Penggantinya adalah Nunito dan Amatic SC dari [Google Fonts](https://github.com/google/fonts/tree/bbda7253fc363238b05d97515ca71f8ae49c4fa9/ofl). Copyright dan teks SIL OFL masing-masing ada di `static/fonts/Nunito-OFL.txt` dan `static/fonts/AmaticSC-OFL.txt`.
+- Semua rekaman efek nonmusik lama dikeluarkan. Tujuh WAV dibuat dari osilator dan noise oleh `scripts/generate-release-sfx.mjs`. Efek asli Cloud Ops ini tersedia di bawah lisensi MIT proyek. Musik Kounine tetap CC0 dengan lisensi di folder musik.
+- Gambar galeri lama di `static/projects/images`, `static/lab/images`, `static/career` dan gambar layar Time Machine lama di `static/timeMachine/` serta gambar berbagi portofolio di `static/social/share-image.png` dikeluarkan. Kedua GLB area mengeluarkan mesh merek sosial yang sudah dinonaktifkan dan memakai artwork teks original pada papan sirkuit. Model world milik Folio 2025 tetap dikreditkan kepada Bruno Simon.
+- [Draco](https://github.com/google/draco/blob/main/LICENSE) dan [Basis Universal](https://github.com/BinomialLLC/basis_universal/blob/master/LICENSE) menyertakan teks Apache 2.0 pada direktori masing-masing. Pemberitahuan lisensi MIT upstream tetap ada di game dan di paket Pages.
 
-Izin redistribusi per rekaman SFX dan font Pally belum memiliki ledger/bukti lengkap pada inventaris. Merek, gambar galeri, dan materi pihak ketiga yang masih tersimpan dalam static juga memerlukan review: menonaktifkan interaksi tidak menghapus berkas dari dist. Kredit CC0 musik Kounine tidak boleh diperluas ke semua audio. Tidak ada clearance baru yang diklaim.
-
-**Jangan lakukan deployment publik sebelum izin item yang belum jelas diselesaikan.** Status Pages, rencana setelah persetujuan, dan fallback localhost teruji dicatat di [`docs/DEPLOYMENT_READINESS.md`](docs/DEPLOYMENT_READINESS.md).
+Rincian izin dan uji paket: [DEPLOYMENT_READINESS.md](docs/DEPLOYMENT_READINESS.md).

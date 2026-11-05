@@ -37,7 +37,7 @@ export class MainHub {
   }
   this.bindUI();
   game.ticker.events.on('tick',()=>{this.root.visible=game.world.cloudOps.currentZone==='main'},10);
-  this.readyPromise=new TTFLoader().loadAsync('fonts/Pally-Bold.ttf').then(data=>{
+  this.readyPromise=new TTFLoader().loadAsync('fonts/Nunito.ttf').then(data=>{
    const geometry=new TextGeometry('CLOUD OPS',{font:new Font(data),size:.9,depth:.14,curveSegments:2,bevelEnabled:true,bevelThickness:.018,bevelSize:.015,bevelSegments:1});geometry.computeBoundingBox();geometry.translate(-(geometry.boundingBox.min.x+geometry.boundingBox.max.x)/2,0,0);
    const mesh=new T.Mesh(geometry,this.materials.cream);mesh.position.set(0,1.55,0);mesh.castShadow=true;this.landmark.add(mesh);this.title=mesh;this.freeze();this.ready=true;
   }).catch(error=>{this.lastError=error.message;this.label(this.landmark,'CLOUD OPS',0,1.95,0,6.3,.85);this.freeze();this.ready=true;});

@@ -153,7 +153,7 @@ Paper pertama membahas improved ACO/OACC; paper kedua membahas GWO_C/M dengan cr
 
 Fondasi teknis dan visual berasal dari **[Folio 2025 karya Bruno Simon](https://github.com/brunosimon/folio-2025)**: kendaraan, kamera, physics, terrain, renderer, aset dan interaksi. Copyright **© 2025 Bruno Simon** dan [lisensi MIT](license.md) dipertahankan. Proyek ini tidak menyatakan endorsement Bruno Simon.
 
-Musik dikreditkan kepada **Kounine** sesuai keterangan CC0 upstream. Lisensi kode tidak otomatis mencakup setiap aset: izin redistribusi **SFX, font Pally, dan materi pihak ketiga yang belum tuntas** tetap menjadi gate publikasi. [Third-party notices](THIRD_PARTY_NOTICES.md) · [Inventaris aset](docs/ASSET_CATALOG.md) · [Kesiapan deployment dan demo lokal](docs/DEPLOYMENT_READINESS.md). Credits tersedia melalui menu **Tentang Proyek** di game.
+Musik dikreditkan kepada **Kounine** sesuai keterangan CC0 upstream. Paket Pages memakai font Nunito dan Amatic SC (SIL OFL) serta efek sintetis original. Gambar galeri portofolio lama dikeluarkan. [Third-party notices](THIRD_PARTY_NOTICES.md) · [Inventaris aset](docs/ASSET_CATALOG.md) · [Kesiapan deployment dan demo lokal](docs/DEPLOYMENT_READINESS.md). Credits tersedia melalui menu **Tentang Proyek** di game.
 
 ## Dokumentasi lanjutan
 
