@@ -269,11 +269,15 @@ export class AcoWorld {
     if(Math.hypot(direction.x,direction.z)>.001)
      mesh.rotation.y=Math.atan2(direction.x,direction.z)
    }else if(!this.event){
-    // Quiet foraging around the nest; only choices made during Step/Play
-    // represent real scheduler decisions.
-    mesh.position.set(ant.home.x+Math.sin(this.elapsed*.73+i*1.41)*.11,
-     ant.home.y,ant.home.z+Math.cos(this.elapsed*.67+i*1.89)*.075)
-    mesh.rotation.y=ant.homeHeading+Math.sin(this.elapsed*.4+i)*.18
+    // A few workers roam in small loops around the mound; the others idle.
+    // Foraging is visual atmosphere, never used as a made-up ACO VM choice.
+    const worker=i%3===1
+    const angle=this.elapsed*(worker?.65:.28)+i*1.47
+    const rx=worker?.22:.065,rz=worker?.17:.05
+    mesh.position.set(ant.home.x+Math.sin(angle)*rx,ant.home.y,
+     ant.home.z+Math.cos(angle)*rz)
+    mesh.rotation.y=worker?Math.atan2(Math.cos(angle)*rx,-Math.sin(angle)*rz):
+     ant.homeHeading+Math.sin(this.elapsed*.4+i)*.18
    }
    const movement=inTransit?.19:(this.event?.015:.075)
    const pace=inTransit?29:9
