@@ -469,6 +469,12 @@ export class Audio
             volume: 0,
             onPlaying: (item) =>
             {
+                if(this.game.world.cloudOps?.currentZone === 'aco')
+                {
+                    const shore = this.game.world.areas.aco.distanceToShore(this.game.player.position)
+                    item.volume = remapClamp(shore, 0, 12, 0.23, 0.045)
+                    return
+                }
                 const distanceToSide = Math.min(
                     this.game.terrain.size / 2 - Math.abs(this.game.player.position.x),
                     this.game.terrain.size / 2 - Math.abs(this.game.player.position.z)

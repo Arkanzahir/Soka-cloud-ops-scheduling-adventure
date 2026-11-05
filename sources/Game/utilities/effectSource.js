@@ -5,6 +5,7 @@ export function effectSource(path, loop) {
     let clip = 'click'
     if(path.startsWith('sounds/vehicle/honk/')) clip = 'horn'
     else if(path.startsWith('sounds/vehicle/engine/')) clip = 'engine'
+    else if(path.startsWith('sounds/waves/')) clip = 'waves'
     else if(loop) clip = 'ambience'
     else if(/^sounds\/(birdTweets|owl|rooster|wolf)\//.test(path)) clip = 'chirp'
     else if(/^sounds\/(hits|explosions|anvil|vehicle)\//.test(path)) clip = 'impact'

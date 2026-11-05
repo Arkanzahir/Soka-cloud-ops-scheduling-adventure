@@ -153,6 +153,7 @@ export class LearningPanel
     {
         if(!this.visible) return
         this.player?.pause()
+        if(this.lesson?.algorithm==='aco')this.worlds.aco?.setPaused?.(true)
         this.visible = false
         this.root.hidden = true
         document.removeEventListener('keydown', this.escapeHandler, true)
@@ -418,8 +419,17 @@ export class LearningPanel
             try
             {
                 if(action === 'step') this.player.step()
-                if(action === 'play') this.player.play(this.delay)
-                if(action === 'pause') this.player.pause()
+                if(action === 'play')
+                {
+                    const aco=this.lesson?.algorithm==='aco'
+                    if(aco)this.worlds.aco?.setPaused?.(false)
+                    this.player.play(aco ? 1350 : this.delay)
+                }
+                if(action === 'pause')
+                {
+                    this.player.pause()
+                    if(this.lesson?.algorithm==='aco')this.worlds.aco?.setPaused?.(true)
+                }
                 if(action === 'reset') this.player.reset()
             }
             catch(error)

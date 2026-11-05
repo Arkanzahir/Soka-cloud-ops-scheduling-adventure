@@ -97,7 +97,7 @@ export function lessonDetail(step, problem = DEFAULT_PROBLEM)
         return { headline: `Iterasi ${e.iteration}: evaporasi + deposit`,
             lines: [`Hasil terbaik iterasi: ${fmt(e.iterationBest)} detik`,
                 `Terbaik sejauh ini: ${fmt(e.bestSoFar)} detik`,
-                'Seluruh semut dievaluasi; hanya semut contoh yang diperlihatkan langkah per langkah.'] }
+                'Seluruh semut dievaluasi. Mode Koloni menunjukkan keputusan semua semut; Mode Fokus menampilkan satu kandidat.'] }
     if(step.kind === 'wolf-iteration')
     {
         // Match the two-decimal labels on the 3D wolves and candidate board.
