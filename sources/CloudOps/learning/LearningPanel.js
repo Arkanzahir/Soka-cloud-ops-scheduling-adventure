@@ -293,6 +293,9 @@ export class LearningPanel
             else button.removeAttribute('aria-current')
         }
         $(this.root, '.co-simulation').hidden = !['problem', 'aco', 'gwo'].includes(section.id)
+        $(this.root, '.co-simulation .co-demo-label').textContent = section.id === 'gwo'
+            ? 'Demo singkat: 4 iterasi nyata. Perbandingan pada pos Hasil memakai 50 iterasi.'
+            : 'Demo pendek dengan hasil engine M4, bukan animasi acak.'
         $(this.root, '.co-comparison').hidden = section.id !== 'results'
         $(this.root, '.co-experiment').hidden = !['problem','aco'].includes(section.id)
         const standard=this.experiment.taskCount===8&&this.experiment.vmCount===3&&this.experiment.iterations===50
@@ -313,7 +316,8 @@ export class LearningPanel
     renderStep(snapshot)
     {
         const count = $(this.root, '.co-step-count')
-        count.textContent = `${snapshot.cursor} / ${snapshot.total}`
+        const unit = this.lesson?.algorithm === 'gwo' ? ' iterasi demo' : ''
+        count.textContent = `${snapshot.cursor} / ${snapshot.total}${unit}`
         const { headline, lines } = lessonDetail(snapshot.step, this.lesson?.problem)
         $(this.root, '.co-step-title').textContent = headline
         $(this.root, '.co-step-summary').textContent = snapshot.step?.explanation ?? 'Klik Langkah untuk memulai visualisasi. Setiap langkah menggunakan keputusan engine yang sebenarnya.'
@@ -437,9 +441,10 @@ export class LearningPanel
                 if(action === 'step') this.player.step()
                 if(action === 'play')
                 {
-                    const aco=this.lesson?.algorithm==='aco'
-                    if(aco)this.worlds.aco?.setPaused?.(false)
-                    this.player.play(aco ? 1350 : this.delay)
+                    const algorithm = this.lesson?.algorithm
+                    if(algorithm === 'aco') this.worlds.aco?.setPaused?.(false)
+                    const interval = { aco: 1350, gwo: 2200 }[algorithm] ?? this.delay
+                    this.player.play(interval)
                 }
                 if(action === 'pause')
                 {

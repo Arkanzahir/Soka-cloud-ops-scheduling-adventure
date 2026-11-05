@@ -17,7 +17,7 @@ export const PRESENTATION_SECTIONS = Object.freeze([
         takeaway: 'Pilihan bersifat probabilistik. Jalur feromon kuat lebih menarik, tetapi bukan kepastian terpilih.' },
     { id: 'gwo', label: 'GWO', zone: 'gwo', eyebrow: '04 / ALGORITMA', title: 'Mengikuti tiga solusi terbaik',
         question: 'Bagaimana Alpha, Beta, dan Delta memandu perubahan kandidat?',
-        explanation: 'Satu serigala adalah satu jadwal lengkap, bukan satu task. Tiga kandidat dengan fitness terbaik memandu pembaruan posisi kandidat lainnya, kemudian posisi didiskretisasi menjadi indeks VM.',
+        explanation: 'Satu serigala membawa satu jadwal lengkap untuk 8 task. Engine menilai 12 kandidat, dan arena menampilkan 5 terbaik. Alpha, Beta, dan Delta memandu pembaruan kandidat. Bingkai emas pada papan menandai task yang pindah VM.',
         takeaway: 'Gerak serigala adalah metafora kandidat solusi, bukan pencarian jarak fisik ke VM.' },
     { id: 'results', label: 'Hasil', zone: null, eyebrow: '05 / PERBANDINGAN', title: 'Jadwal mana yang lebih cepat?',
         question: 'Bagaimana hasil Round Robin, ACO, dan GWO pada data yang sama?',

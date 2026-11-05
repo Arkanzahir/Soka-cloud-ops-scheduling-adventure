@@ -10,8 +10,8 @@ const STOPS = [
       exhibit: [44, -63], origin: [-65, -35], scale: .62, deck: [10.8, 9.4] },
     { title: 'Ant Research Park', stop: [-12, -64], sign: [-6.3, -59], world: 'aco', label: 'ACO',
       exhibit: [-2.6, -64], origin: [4, -4], scale: .50, deck: [11, 6.6] },
-    { title: 'Wolf Field Research', stop: [-76, -55], sign: [-70, -64], world: 'gwo', label: 'GWO',
-      exhibit: [-64, -57], origin: [-61, 66], scale: .59, rotation: Math.PI / 2, deck: [13, 13] },
+    { title: 'Wolf Field Research', stop: [-76, -55], sign: [-70, -67], world: 'gwo', label: 'GWO',
+      exhibit: [-64, -57], origin: [-61, 66], scale: .59, rotation: Math.PI / 2, deck: [13, 13], elevation: .9 },
     { title: 'Hasil', stop: [-75, 48], sign: [-69, 50] },
     { title: 'Paper dan kesimpulan', stop: [-27, 55], sign: [-36, 54] }
 ]
@@ -78,8 +78,10 @@ export class PresentationRace
             const [originX,originZ] = stop.origin
             const [displayX,displayZ] = stop.exhibit
             const [width,depth] = stop.deck
-            kit.rounded(displayX, .11, displayZ, width, .82, depth, 'wood', this.root)
-            stand.position.set(displayX, .52, displayZ)
+            const elevation = stop.elevation ?? .52
+            const deckHeight = elevation + .3
+            kit.rounded(displayX, elevation - deckHeight / 2, displayZ, width, deckHeight, depth, 'wood', this.root)
+            stand.position.set(displayX, elevation, displayZ)
             stand.scale.setScalar(stop.scale)
             stand.rotation.y = stop.rotation || 0
             display.position.set(-originX, 0, -originZ)
@@ -140,6 +142,7 @@ export class PresentationRace
         {
             if(!world) continue
             world.trackside = true
+            world.setTracksideLayout?.(true)
             if(world.objects)
             {
                 const exhibit = new Set(world.raceVisuals)
@@ -164,6 +167,7 @@ export class PresentationRace
         {
             if(!world) continue
             world.trackside = false
+            world.setTracksideLayout?.(false)
             for(const node of world.raceVisuals) (world.group || this.game.scene).add(node)
             if(world.objects)
             {
@@ -190,7 +194,8 @@ export class PresentationRace
         if(this.playback.hidden) return
         const title = world === 'cloud' ? 'Cloud' : world.toUpperCase()
         const label = status === 'playing' ? 'berjalan' : 'selesai'
-        this.playback.textContent = `${title} ${label} · ${snapshot.cursor}/${snapshot.total}`
+        const unit = world === 'gwo' ? ' iterasi demo' : ''
+        this.playback.textContent = `${title} ${label} · ${snapshot.cursor}/${snapshot.total}${unit}`
     }
 
     onCountdown()

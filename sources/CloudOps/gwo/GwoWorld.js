@@ -21,8 +21,9 @@ export class GwoWorld extends Area {
    g.position.set(x,y+.04,z);this.game.scene.add(g);this.objects.hideable.push(g)
    const label=this.sign('',x,y+3.35,z,2.35,true)
    const pad=new T.Mesh(new T.CylinderGeometry(1.4,1.55,.12,9),this.materials.wood);pad.position.set(x,y+.03,z);this.game.scene.add(pad);this.objects.hideable.push(pad)
-   this.wolves.push({id:'wolf-'+(i+1),mesh:g,label,base:g.position.clone(),pad})
+   this.wolves.push({home:g.position.clone(),id:'wolf-'+(i+1),mesh:g,label,base:g.position.clone(),pad})
   }
+  const tracksideModels=this.objects.hideable.slice()
   // A small observation shelter replaces boards that previously cut across the driving view.
   this.sign('WOLF FIELD RESEARCH',-69,2.8,73.5,5.3)
   this.sign('GREY WOLF OPTIMIZER',-69,2.2,73.5,4.6)
@@ -30,7 +31,8 @@ export class GwoWorld extends Area {
   const roof=this.block(-69,3.3,73.5,5.7,.22,2.1,'dark');roof.rotation.z=.05
   this.board=this.sign('',-69,1.6,73.7,4.5)
   this.schedules=new CandidateBoard(this)
-  this.raceVisuals=this.objects.hideable.slice()
+  this.raceVisuals=[...tracksideModels,this.schedules.root]
+  this.boardHome=this.schedules.root.position.clone()
   this.sign('RESEARCH | E / ENTER',-69,.95,73.7,4)
   this.block(-69,.7,73.5,5,.14,1.8,'wood')
   // Observation binoculars: an environmental cue, not a second game camera.
@@ -43,6 +45,27 @@ export class GwoWorld extends Area {
   this.exit=manager.createStation({zone:'gwo',label:'Kembali ke Main',position:[-65,1.5,75],onInteract:()=>manager.enter('main')})
   this.station=manager.createStation({zone:'gwo',label:'GWO Research',position:[-65,1.5,70],onInteract:()=>this.onLearn?this.onLearn():manager.openPanel('gwo-research')})
   this.resetVisualization();manager.registerPanel('gwo-research');manager.presentation.sections.push('gwo');manager.refresh()
+ }
+ setTracksideLayout(active){
+  // Keep the original terrain and actors. The roadside formation is two clear rows near the rail.
+  const formation=[[-64,57],[-59,57],[-54,57],[-62,62],[-57,62]]
+  const facing=active?-Math.PI*.7:0
+  for(const [i,wolf] of this.wolves.entries()){
+   const [x,z]=active?formation[i]:[wolf.home.x,wolf.home.z]
+   wolf.base.set(x,wolf.home.y,z)
+   wolf.mesh.position.copy(wolf.base)
+   wolf.mesh.rotation.y+=facing-(wolf.facing||0)
+   wolf.facing=facing
+   wolf.pad.position.x=x;wolf.pad.position.z=z
+   wolf.label.mesh.position.x=x;wolf.label.mesh.position.z=z
+   wolf.label.mesh.rotation.set(active?-.24:0,active?-Math.PI/4:0,0,'YXZ')
+   wolf.label.mesh.scale.setScalar(active?1.22:1)
+  }
+  const board=this.schedules.root
+  board.position.copy(this.boardHome)
+  if(active)board.position.set(-69, this.boardHome.y, 65)
+  board.rotation.y=active?-Math.PI/4:0
+  board.updateMatrix()
  }
  mesh(geo,mat,parent,x,y,z,sx=1,sy=1,sz=1){const m=new T.Mesh(geo,this.materials[mat]);m.position.set(x,y,z);m.scale.set(sx,sy,sz);m.castShadow=true;m.receiveShadow=true;parent.add(m);return m}
  block(x,y,z,w,h,d,mat,solid=false){const g=new T.Group();this.mesh(new T.BoxGeometry(w,h,d),mat,g,0,0,0);g.position.set(x,y,z);this.game.objects.add({model:g,updateMaterials:false},solid?{type:'fixed',position:{x,y,z},colliders:[{shape:'cuboid',parameters:[w/2,h/2,d/2],category:'object'}]}:null);this.objects.hideable.push(g);return g}
@@ -72,6 +95,6 @@ export class GwoWorld extends Area {
   this.schedules.write(state,previous,{preview,guides})
   const detail=document.getElementById('gwo-state');if(detail)detail.textContent=`${preview?'DEMO / PREVIEW — synthetic values':'External engine event'}; iteration ${state.iteration}; best makespan ${state.bestMakespan} s. `+state.candidates.map(c=>`${c.id}: [${c.assignment.join(',')}] fitness ${c.fitness}`).join('; ')
  }
- resetVisualization(){this.schedules.reset();this.state=null;this.preview=false;this.board.write('5 of 12 candidates | waiting for engine');for(const [i,w] of this.wolves.entries()){w.mesh.position.copy(w.base);w.mesh.rotation.y=0;w.targetRotation=0;w.motion=0;w.targetScale=1;w.mesh.scale.setScalar(1);w.mesh.userData.body.rotation.z=0;w.role=null;w.label.mesh.visible=false;w.mesh.userData.accents.forEach(m=>m.material=this.materials.wood);w.pad.material=this.materials.wood;w.assignment=null;w.label.write(`CANDIDATE ${i+1} | waiting`)}this.time=0}
- update(){if(!this.wolves)return;if(this.manager.currentZone!=='gwo'&&!this.trackside) return;this.time+=this.game.ticker.delta;for(const w of this.wolves){w.motion=Math.max(0,(w.motion||0)-this.game.ticker.delta);w.mesh.position.y=w.base.y+Math.sin((1-w.motion)*Math.PI*4)*.05*w.motion;w.mesh.userData.body.scale.y=1+Math.sin(this.time*1.8+w.base.x)*.009;w.mesh.userData.head.rotation.z=Math.sin(this.time*1.1+w.base.x)*.025;w.mesh.userData.tail.rotation.x=Math.sin(this.time*1.6+w.base.x)*.12;w.mesh.scale.setScalar(w.mesh.scale.x+((w.targetScale||1)-w.mesh.scale.x)*Math.min(1,this.game.ticker.delta*4));w.mesh.rotation.y+=(w.targetRotation-w.mesh.rotation.y)*Math.min(1,this.game.ticker.delta*4);w.mesh.userData.body.rotation.z=Math.sin(this.time*1.4+w.base.x)*.012}}
+ resetVisualization(){this.schedules.reset();this.state=null;this.preview=false;this.board.write('5 of 12 candidates | waiting for engine');for(const [i,w] of this.wolves.entries()){w.mesh.position.copy(w.base);w.mesh.rotation.y=w.facing||0;w.targetRotation=0;w.motion=0;w.targetScale=1;w.mesh.scale.setScalar(1);w.mesh.userData.body.rotation.z=0;w.role=null;w.label.mesh.visible=false;w.mesh.userData.accents.forEach(m=>m.material=this.materials.wood);w.pad.material=this.materials.wood;w.assignment=null;w.label.write(`CANDIDATE ${i+1} | waiting`)}this.time=0}
+ update(){if(!this.wolves)return;if(this.manager.currentZone!=='gwo'&&!this.trackside) return;this.time+=this.game.ticker.delta;for(const w of this.wolves){w.motion=Math.max(0,(w.motion||0)-this.game.ticker.delta);w.mesh.position.y=w.base.y+Math.sin((1-w.motion)*Math.PI*4)*.05*w.motion;w.mesh.userData.body.scale.y=1+Math.sin(this.time*1.8+w.base.x)*.009;w.mesh.userData.head.rotation.z=Math.sin(this.time*1.1+w.base.x)*.025;w.mesh.userData.tail.rotation.x=Math.sin(this.time*1.6+w.base.x)*.12;w.mesh.scale.setScalar(w.mesh.scale.x+((w.targetScale||1)-w.mesh.scale.x)*Math.min(1,this.game.ticker.delta*4));w.mesh.rotation.y+=((w.facing||0)+w.targetRotation-w.mesh.rotation.y)*Math.min(1,this.game.ticker.delta*4);w.mesh.userData.body.rotation.z=Math.sin(this.time*1.4+w.base.x)*.012}}
 }
