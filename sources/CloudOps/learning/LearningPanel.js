@@ -55,6 +55,7 @@ export class LearningPanel
               <p class="co-config-scope" hidden>Mode eksperimen hanya berlaku untuk Cloud dan ACO. Demonstrasi GWO serta tab Hasil tetap memakai skenario standar 8 task / 3 VM / 50 iterasi agar perbandingan referensi konsisten.</p>
               <div class="co-experiment" hidden>
                 <div class="co-panel-heading">EKSPERIMEN PARAMETER ACO <button type="button" class="co-button co-experiment-toggle" data-action="experiment-toggle" aria-expanded="false">⚙ Atur</button></div>
+                <div class="co-experiment-current"></div>
                 <div class="co-experiment-body" hidden>
                 <p class="co-demo-label">Ubah jumlah task, jumlah VM, atau iterasi. Dunia Cloud/ACO dan engine menggunakan konfigurasi yang sama.</p>
                 <div class="co-experiment-fields">
@@ -211,6 +212,7 @@ export class LearningPanel
         for(const key of ['taskCount','vmCount','iterations']) $(this.root,`[data-experiment="${key}"]`).value=String(this.experiment[key])
         const {taskCount,vmCount,iterations}=this.experiment
         const {baseline,aco}=this.experimentRuns
+        $(this.root,'.co-experiment-current').textContent=`Aktif: ${taskCount} task · ${vmCount} VM · ${iterations} iterasi | ACO: ${fmt(aco.metrics.makespan)} s`
         $(this.root,'.co-experiment-result').textContent=`${taskCount} task · ${vmCount} VM · ${iterations} iterasi | Round Robin: ${fmt(baseline.metrics.makespan)} s | ACO: ${fmt(aco.metrics.makespan)} s | Alokasi terbaik: ${aco.bestAssignment.map((vm,i)=>`T${i+1}→VM${vm+1}`).join(', ')}`
     }
 
