@@ -1,7 +1,7 @@
 /** Moves only the native modal surface; simulation/player state is untouched. */
 export class FloatingDashboard {
  constructor(root){
-  this.surface=root.closest('.container')||root;this.header=root.querySelector('.co-header');this.position=null;
+  this.surface=root.closest('.container')||root;this.header=root.querySelector('.co-header');this.position=null;this.dock='right';
   this.reset=document.createElement('button');this.reset.type='button';this.reset.className='co-button co-position';this.reset.textContent='↺ Posisi';this.reset.title='Reset posisi dashboard';this.header.insertBefore(this.reset,this.header.lastElementChild);
   this.reset.onclick=()=>{this.position=null;this.fit()};
   this.down=e=>{if(e.button!==0||e.target.closest('button,a,input'))return;e.preventDefault();e.stopPropagation();const r=this.surface.getBoundingClientRect();this.drag={id:e.pointerId,dx:e.clientX-r.left,dy:e.clientY-r.top};this.header.setPointerCapture(e.pointerId)};
@@ -10,6 +10,17 @@ export class FloatingDashboard {
   this.resize=()=>this.fit();this.header.addEventListener('pointerdown',this.down);this.header.addEventListener('pointermove',this.move);this.header.addEventListener('pointerup',this.up);this.header.addEventListener('pointercancel',this.up);window.addEventListener('resize',this.resize);
   this.observer=new ResizeObserver(this.resize);this.observer.observe(this.surface);
  }
- fit(){const r=this.surface.getBoundingClientRect();if(!r.width||!r.height)return;const p=this.position||{x:innerWidth-r.width-16,y:(innerHeight-r.height)/2};this.position={x:Math.max(8,Math.min(p.x,innerWidth-r.width-8)),y:Math.max(8,Math.min(p.y,innerHeight-r.height-8))};Object.assign(this.surface.style,{left:this.position.x+'px',top:this.position.y+'px',right:'auto'})}
+ setDock(side){
+  if(side===this.dock)return;
+  this.dock=side;this.position=null;
+ }
+ fit(){
+  const r=this.surface.getBoundingClientRect();
+  if(!r.width||!r.height)return;
+  const p=this.position||{x:this.dock==='left'?16:innerWidth-r.width-16,y:(innerHeight-r.height)/2};
+  const x=Math.max(8,Math.min(p.x,innerWidth-r.width-8));
+  const y=Math.max(8,Math.min(p.y,innerHeight-r.height-8));
+  Object.assign(this.surface.style,{left:x+'px',top:y+'px',right:'auto'});
+ }
  dispose(){this.observer.disconnect();window.removeEventListener('resize',this.resize);this.header.removeEventListener('pointerdown',this.down);this.header.removeEventListener('pointermove',this.move);this.header.removeEventListener('pointerup',this.up);this.header.removeEventListener('pointercancel',this.up);this.reset.remove()}
 }

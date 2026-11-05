@@ -31,7 +31,7 @@ export class ClosingManager
                     this.game.world.areas.circuit.menu.inputFlag.close()
                 
                 // Modal open => Close
-                else if(this.game.modals.state === Modals.OPEN)
+                else if(this.game.modals.state === Modals.OPEN || this.game.modals.state === Modals.OPENING)
                     this.game.modals.close()
                 
                 // Menu open => Close

@@ -6,6 +6,11 @@ import gsap from 'gsap'
 import { Events } from './Events.js'
 import { effectSource } from './utilities/effectSource.js'
 
+const backgroundGains = {
+    'sounds/cloud-ops/ambience.wav': 0.25,
+    'sounds/cloud-ops/waves.wav': 0.3
+}
+
 export class Audio
 {
     constructor()
@@ -75,12 +80,13 @@ export class Audio
 
         const item = {}
         const source = effectSource(options.path, options.loop)
+        item.gain = backgroundGains[source] ?? 1
         item.howl = new Howl({
             src: [ source ],
             pool: 2,
             autoplay: (this.initiated && options.autoplay) ?? false,
             loop: options.loop ?? false,
-            volume: options.volume ?? 0.5,
+            volume: (options.volume ?? 0.5) * item.gain,
             preload: options.preload ?? true,
             onloaderror: () =>
             {
@@ -149,6 +155,12 @@ export class Audio
 
     setPlaylist()
     {
+        this.raceMusic = new Howl({
+            src: ['sounds/musics/Sky Blue Street.ogg'],
+            loop: true,
+            preload: false,
+            volume: 0
+        })
         this.playlist = {}
         this.playlist.songs = [
             {
@@ -220,6 +232,8 @@ export class Audio
                 this.playlist.switching = false
                 this.setMusicMix({})
 
+                if(this.raceMusicActive) return
+
                 // Notification
                 const html = /* html */`
                     <div class="top">
@@ -256,13 +270,35 @@ export class Audio
         this.setMusicMix({})
     }
 
+    setRaceMusic(active)
+    {
+        if(active === this.raceMusicActive) return
+        this.raceMusicActive = active
+        if(!active && this.raceSoundId != null)
+        {
+            this.raceMusic.stop(this.raceSoundId)
+            this.raceSoundId = null
+        }
+        this.setMusicMix({})
+    }
+
     setMusicMix({enabled=this.music.enabled, volume=this.music.volume, ducked=this.music.ducked})
     {
         this.music = { enabled: !!enabled, volume: clamp(volume, 0, 0.3), ducked: !!ducked }
         if(!this.playlist) return
-        for(const song of this.playlist.songs) song.sound.volume(this.music.volume * (this.music.ducked ? 0.25 : 1))
-        if(!this.music.enabled || this.mute.active || document.hidden) this.playlist.current?.sound.pause()
-        else if(!this.playlist.switching) this.playlist.play()
+        const mixVolume = this.music.volume * (this.music.ducked ? 0.25 : 1)
+        const audible = this.music.enabled && !this.mute.active && !document.hidden
+        for(const song of this.playlist.songs) song.sound.volume(mixVolume)
+        this.raceMusic.volume(mixVolume)
+        if(!audible || this.raceMusicActive) this.playlist.current?.sound.pause()
+        if(this.raceMusicActive)
+        {
+            if(audible && !this.raceMusic.playing(this.raceSoundId))
+                this.raceSoundId = this.raceMusic.play(this.raceSoundId ?? undefined)
+            else if(!audible && this.raceSoundId != null)
+                this.raceMusic.pause(this.raceSoundId)
+        }
+        else if(audible && !this.playlist.switching) this.playlist.play()
     }
 
     setAmbiants()
@@ -469,11 +505,19 @@ export class Audio
             volume: 0,
             onPlaying: (item) =>
             {
+                if(this.game.world.cloudOps?.currentZone === 'aco')
+                {
+                    const shore = this.game.world.areas.aco.distanceToShore(this.game.player.position)
+                    item.volume = remapClamp(shore, 0, 12, 0.23, 0.045)
+                    return
+                }
                 const distanceToSide = Math.min(
                     this.game.terrain.size / 2 - Math.abs(this.game.player.position.x),
                     this.game.terrain.size / 2 - Math.abs(this.game.player.position.z)
                 )
-                item.volume = Math.pow(remapClamp(distanceToSide, 0, 40, 1, 0.1), 2) * 0.7
+                const quieter = this.game.world.presentationRace?.active ||
+                    this.game.world.cloudOps?.currentZone === 'gwo'
+                item.volume = Math.pow(remapClamp(distanceToSide, 0, 40, 1, 0.1), 2) * (quieter ? 0.14 : 0.7)
             }
         })
 
@@ -670,6 +714,7 @@ export class Audio
             localStorage.setItem('soundToggle', '1')
             document.documentElement.classList.add('is-audio-muted')
             this.events.trigger('muteChange', [ true ])
+            this.setMusicMix({})
         }
 
         this.mute.deactivate = () =>
@@ -682,6 +727,7 @@ export class Audio
             localStorage.setItem('soundToggle', '0')
             document.documentElement.classList.remove('is-audio-muted')
             this.events.trigger('muteChange', [ false ])
+            this.setMusicMix({})
         }
 
         // From local storage
@@ -704,8 +750,8 @@ export class Audio
         {
             Howler.mute(true)
 
-            if(this.playlist?.current)
-                this.playlist.current.sound.pause()
+            this.playlist?.current?.sound.pause()
+            if(this.raceSoundId != null) this.raceMusic.pause(this.raceSoundId)
         })
 
         window.addEventListener('focus', () =>
@@ -714,7 +760,7 @@ export class Audio
             {
                 Howler.mute(false)
 
-                if(this.playlist?.current) this.setMusicMix({})
+                this.setMusicMix({})
             }
         })
 
@@ -769,8 +815,8 @@ export class Audio
                 item.howl.rate(clamp(item.rate * this.globalRate, 0.5, 4))
 
                 // Volume
-                const volume = item.volume * distanceFadeMultiplier
-                item.howl.volume(item.volume * distanceFadeMultiplier)
+                const volume = item.volume * item.gain * distanceFadeMultiplier
+                item.howl.volume(volume)
 
                 item.howl.mute(volume < 0.01)
             }

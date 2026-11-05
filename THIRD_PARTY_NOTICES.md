@@ -40,8 +40,18 @@ Catat secara faktual tugas yang dikerjakan oleh setiap anggota melalui commit/PR
 ## 5. Aset untuk paket Pages
 
 - Font Pally dari checkpoint lama dikeluarkan. Penggantinya adalah Nunito dan Amatic SC dari [Google Fonts](https://github.com/google/fonts/tree/bbda7253fc363238b05d97515ca71f8ae49c4fa9/ofl). Copyright dan teks SIL OFL masing-masing ada di `static/fonts/Nunito-OFL.txt` dan `static/fonts/AmaticSC-OFL.txt`.
-- Semua rekaman efek nonmusik lama dikeluarkan. Tujuh WAV dibuat dari osilator dan noise oleh `scripts/generate-release-sfx.mjs`. Efek asli Cloud Ops ini tersedia di bawah lisensi MIT proyek. Musik Kounine tetap CC0 dengan lisensi di folder musik.
+- Semua rekaman efek nonmusik lama dikeluarkan. Delapan WAV dibuat dari osilator dan noise oleh `scripts/generate-release-sfx.mjs`. Efek asli Cloud Ops ini tersedia di bawah lisensi MIT proyek. Musik Kounine tetap CC0 dengan lisensi di folder musik.
 - Gambar galeri lama di `static/projects/images`, `static/lab/images`, `static/career` dan gambar layar Time Machine lama di `static/timeMachine/` serta gambar berbagi portofolio di `static/social/share-image.png` dikeluarkan. Kedua GLB area mengeluarkan mesh merek sosial yang sudah dinonaktifkan dan memakai artwork teks original pada papan sirkuit. Model world milik Folio 2025 tetap dikreditkan kepada Bruno Simon.
 - [Draco](https://github.com/google/draco/blob/main/LICENSE) dan [Basis Universal](https://github.com/BinomialLLC/basis_universal/blob/master/LICENSE) menyertakan teks Apache 2.0 pada direktori masing-masing. Pemberitahuan lisensi MIT upstream tetap ada di game dan di paket Pages.
 
 Rincian izin dan uji paket: [DEPLOYMENT_READINESS.md](docs/DEPLOYMENT_READINESS.md).
+
+## Musik Presentation Race
+
+- Sky Blue Street (165 BPM), MintoDog. CC0 1.0. [Unggahan kreator](https://opengameart.org/node/170985). Aset: `static/sounds/musics/Sky Blue Street.ogg`.
+
+## Aset fauna Presentation Race
+
+- ANT, MAXDESIGN-3D. [Model sumber](https://sketchfab.com/3d-models/ant-dab7080251674ef98fc83b7604be2ffc), [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Mesh dan tekstur diringankan, warna disesuaikan, dan klip gerak dipotong untuk ACO.
+- Midium poly Wolf animal 3D model free, iRahulRajput. [Model sumber](https://sketchfab.com/3d-models/midium-poly-wolf-animal-3d-model-free-fdf0a7577fbf4d91b12f820b81f375ec), [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Mesh disederhanakan, tekstur diubah ke warna vertex, dan rig sederhana ditambahkan untuk GWO.
+- Adult and young wolves howling far away, Sacha.Julien. [Rekaman sumber](https://freesound.org/people/Sacha.Julien/sounds/753896/), [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/). Menggunakan pratinjau MP3 dengan volume disesuaikan di game.

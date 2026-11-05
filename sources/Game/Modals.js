@@ -23,9 +23,9 @@ export class Modals
         this.setItems()
         this.preopen()
         
-        this.element.addEventListener('transitionend', () =>
+        this.element.addEventListener('transitionend', event =>
         {
-            this.onTransitionEnded()
+            if(event.target === this.element && event.propertyName === 'opacity') this.onTransitionEnded()
         })
     }
 
@@ -147,6 +147,7 @@ export class Modals
             {
                 requestAnimationFrame(() =>
                 {
+                    if(this.state !== Modals.OPENING || this.current !== item) return
                     this.element.classList.add('is-visible')
 
                     // Tabs resize
@@ -180,12 +181,15 @@ export class Modals
         if(sound)
             sound.play(false)
 
+        // A close during the first opening frame may have no opacity transition to wait for.
+        const wasVisible = Number(getComputedStyle(this.element).opacity) > 0
         this.element.classList.remove('is-visible')
 
         this.state = Modals.CLOSING
         this.current.isOpen = false
         this.events.trigger('close')
         this.current.events.trigger('close')
+        if(!wasVisible) this.onTransitionEnded()
     }
 
     preopen()

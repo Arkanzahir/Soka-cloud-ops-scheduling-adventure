@@ -3,7 +3,15 @@
 - **Destination:** https://github.com/Arkanzahir/Soka-cloud-ops-scheduling-adventure
 - **Source foundation:** https://github.com/brunosimon/folio-2025
 - **Read first:** `README.md`, `AGENTS.md`, `docs/MASTER_PROMPT.md`, `docs/PAPER_REVIEW.md`.
-- **Status terbaru:** M0/M2 selesai; M3 tahap 1 selesai pada `feature/cloud-world`. Baca `M3_CLOUD_FOUNDATION.md` dan checkpoint terakhir. M1 belum dikerjakan; catatan jeda di bawah adalah riwayat.
+- **Checkpoint awal:** M0/M2 selesai; M3 tahap 1 selesai pada `feature/cloud-world`. Baca `M3_CLOUD_FOUNDATION.md` dan checkpoint terakhir. M1 belum dikerjakan; catatan jeda di bawah adalah riwayat.
+
+## Checkpoint Presentation Race untuk review
+
+- Branch `feature/presentation-race-phase2`, [draft PR #20](https://github.com/Arkanzahir/Soka-cloud-ops-scheduling-adventure/pull/20). Basis PR #19 bertumpu pada PR #18.
+- Mulai Presentasi memakai sirkuit Classic Race. Enam pos opsional tersedia di tepi lintasan. Dasbor dapat disembunyikan tanpa menghentikan Play. Pos ACO mempunyai VM terbuka dengan rute masuk dan keluar.
+- Aset ACO/GWO di `static/campus/animals/` sudah disederhanakan. Serigala memakai rig sederhana dan berpindah berdasarkan ID kandidat saat peringkat berubah. Cue GWO hanya dipicu oleh perubahan Alpha saat pemain dekat, dengan jeda antarlolongan. Atribusi dan perubahan tercatat di dua salinan `THIRD_PARTY_NOTICES.md`.
+- Cloud/GWO memakai tick pos saat arena asal berada di luar frustum. Cek regresi ini dengan `node scripts/test-presentation-race.mjs` pada server dev port 1263 dengan `VITE_GAME_PUBLIC=1`. Tes menempatkan mobil di dekat titik interaksi, lalu memakai keyboard untuk masuk zona dan membuka panel.
+- Uji build dengan `npm test`, `npm run build -- --base /Soka-cloud-ops-scheduling-adventure/`, dan `npm run test:build`. Kinerja di perangkat pengguna dan publikasi Pages perlu diverifikasi terpisah setelah review.
 
 # WORK HANDOFF — ringkasan untuk sesi baru
 
@@ -141,3 +149,9 @@ Owner reports Astra revisions still in progress: ACO/GWO/draggable and instant d
 Owner reports Astra local changes unavailable; do not wait for them. New dedicated feature/final-ux-aco-gwo-audio from a8890c0. Read URGENT_RELEASE.md and urgent-* evidence; no Bruno audit restart. Full-size native dashboard draggable/clamped/reset, L/current-world instant button/no teleport, former mute L moved M. Header drag leaves player untouched. Existing real ACO path plus event board/walking legs/antennae; existing GWO head/tail/breathing and event-triggered steps. Existing CC0 Kounine/Howler playlist controls/ducking. M4/M5/dataset/physics/camera unchanged. PASS40unit+33targetedChromeLow+7normalproduction,963assets;1screenshot. Vite warmup failure and two overlay-stacking attempts retained; final pass. Manual-only Pages workflow prepared but NOT executed.
 
 New user authorization permits main/Pages ONLY if tests and asset redistribution rights verified. Rights NOT verified for Pally/nonmusicSFX/other thirdparty static. No main merge/public deploy allowed until cleared; do not ask approval as a substitute for rights. README/main70b804a conflict may now be resolved explicitly, preserving tested release docs and main ancestry. Local fallback available4194 subpath.
+
+## Presentation Race audio mix — 2026-11-06
+
+On `feature/presentation-race-phase2` (draft PR #20), `Audio.js` applies background gain after asset resolution. Shared ambience (weather and road texture) plays at 25% of its previous level. Waves play at 30% of their previous level, with existing positional fades. The race test checks actual Howler gain during driving and at the GWO stop. The seed-42, four-iteration GWO demo ends with all 12 candidates sharing a 6.73 s schedule and retains the 6.50 s best-so-far.
+
+The west race bend shared space with the Cloud research podium and a collidable tree. The props and research interaction now sit inside the yard. Chrome regression drives through the former tree location and checks demo values against the world and Results UI. With 8 tasks, 3 VMs and seed 42, Results gives RR 11.83 s, ACO 6.00 s, and GWO 6.50 s. The four-iteration ACO demo reaches 6.20 s. An independent check of all 6,561 assignments confirms 6.00 s is optimal for the standard dataset.

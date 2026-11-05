@@ -1,0 +1,24 @@
+.presentation-race-hud {
+  position: fixed;
+  left: 16px;
+  bottom: 16px;
+  z-index: 12;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: max-content;
+  max-width: min(480px, 88vw);
+  padding: 10px 14px;
+  border: 2px solid #a87762;
+  border-radius: 12px;
+  background: #fff0bf;
+  color: #383039;
+  font: 700 15px Nunito, sans-serif;
+}
+.presentation-race-hud[hidden] { display: none; }
+body:has(.presentation-race-hud:not([hidden])) .js-cloud-ops-status { visibility: hidden; }
+.race-progress { color: #377e78; }
+.race-playback { color: #377e78; font-size: 13px; }
+.race-stop { background: transparent; border: 1px solid #a87762; border-radius: 6px; padding: 5px 9px; cursor: pointer; }
+.learning-host .container:has(.co-learning--race) { width: min(380px, calc(100vw - 32px)); }
+.co-learning--race .co-nav, .co-learning--race .co-footer { display: none; }

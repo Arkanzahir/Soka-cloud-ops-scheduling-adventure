@@ -10,12 +10,19 @@ const noise = () => {
     return seed / 2147483648 - 1
 }
 const attack = t => Math.min(t * 400, 1)
+// Fixed whole-cycle harmonics make a seamless, low-pass shore loop.
+const surf = t => (
+    0.022 * sine(43 * t) + 0.019 * sine(59 * t + 0.2) +
+    0.016 * sine(79 * t + 0.6) + 0.012 * sine(127 * t + 0.3) +
+    0.008 * sine(191 * t + 0.4) + 0.006 * sine(283 * t)
+) * (0.66 + 0.34 * sine(t / 4))
 const sounds = {
     click: [0.09, t => attack(t) * Math.exp(-55 * t) * (0.15 * sine(t * 720) + 0.08 * noise())],
     impact: [0.24, t => attack(t) * Math.exp(-19 * t) * (0.25 * sine(t * 85) + 0.14 * noise())],
     horn: [0.42, t => Math.min(t * 35, 1, (0.42 - t) * 20) * (0.17 * sine(t * 330) + 0.12 * sine(t * 415))],
     engine: [1, t => (0.7 + 0.3 * sine(12 * t)) * (0.15 * sine(45 * t) + 0.08 * sine(90 * t) + 0.035 * sine(135 * t))],
     ambience: [2, t => (0.6 + 0.4 * sine(t)) * (0.06 * noise() + 0.017 * sine(32 * t))],
+    waves: [4, surf],
     chirp: [0.32, t => attack(t) * (1 - t / 0.32) ** 2 * 0.18 * sine(560 * t + 860 * t * t)],
     chime: [0.65, t => attack(t) * Math.exp(-6 * t) * (0.16 * sine(t * 523) + 0.1 * sine(t * 784))]
 }

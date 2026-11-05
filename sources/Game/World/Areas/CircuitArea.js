@@ -1350,7 +1350,9 @@ export class CircuitArea extends Area
 
     restart()
     {
-        if(this.state === CircuitArea.STATE_STARTING)
+        if(this.state === CircuitArea.STATE_STARTING || this.state === CircuitArea.STATE_ENDING ||
+            this.game.world.presentationRace?.placing ||
+            this.game.world.cloudOps?.state === 'LEARNING_UI')
             return
 
         // Area frustum
@@ -1361,6 +1363,7 @@ export class CircuitArea extends Area
             
         // State
         this.state = CircuitArea.STATE_STARTING
+        this.game.world.presentationRace?.onCountdown()
 
         // Interactive point
         this.interactivePoint.hide()
@@ -1447,16 +1450,16 @@ export class CircuitArea extends Area
             // Overlay > Hide
             this.game.overlay.hide(() =>
             {
-                // State
-                this.state = CircuitArea.STATE_RUNNING
-
                 // Start animation
                 this.startAnimation.start(() =>
                 {
+                    this.state = CircuitArea.STATE_RUNNING
+
                     // Player > Unlock
                     this.game.player.state = Player.STATE_DEFAULT
 
                     this.timer.start()
+                    this.game.world.presentationRace?.onGreen()
                 })
 
             })
@@ -1518,6 +1521,7 @@ export class CircuitArea extends Area
         
         // Timer
         this.timer.end()
+        this.game.world.presentationRace?.onFinish(forced)
         if(forced)
             this.timer.hide()
 

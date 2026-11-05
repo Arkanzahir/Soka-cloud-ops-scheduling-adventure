@@ -79,7 +79,7 @@ export class Map
 
             element.addEventListener('click', async () =>
             {
-                if(this.navigating) return
+                if(this.navigating || this.game.world.presentationRace?.active) return
                 this.navigating = true
                 await new Promise(resolve => {
                     const done = () => { this.modal.events.off('closed', done); resolve() }

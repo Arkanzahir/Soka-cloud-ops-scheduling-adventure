@@ -1,4 +1,5 @@
 import { LearningHost } from '../../CloudOps/LearningHost.js'
+import { PresentationRace } from '../../CloudOps/PresentationRace.js'
 import {MainHub} from '../../CloudOps/campus/MainHub.js'
 import { registerAcoWorld } from '../../CloudOps/registerAcoWorld.js'
 import { GwoWorld } from '../../CloudOps/gwo/GwoWorld.js'
@@ -92,6 +93,7 @@ export class World
             this.areas.gwo = new GwoWorld(this.cloudOps)
             this.areas.aco = registerAcoWorld(this.game,this.cloudOps)
             this.learning = new LearningHost(this.game,this.cloudOps)
+            this.presentationRace = new PresentationRace(this.game,this.cloudOps,this.learning)
             this.campus.setWayfinding()
         }
     }

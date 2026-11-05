@@ -6,7 +6,7 @@ Jelajahi kampus dengan mobil 3D, kirim task ke virtual machine, dan amati bagaim
 
 ![Cloud Ops Campus dan kendaraan](docs/evidence/final-branding-main.png)
 
-**Status:** kandidat rilis di `release/m7-final`; PR #10 ke `main` belum merged. Revisi Astra tidak tersedia; pekerjaan dilanjutkan pada branch `feature/final-ux-aco-gwo-audio`. Status dan bukti terbaru: [urgent release](docs/URGENT_RELEASE.md). **Belum ada deployment publik; izin sebagian aset belum tuntas.** [Hasil QA dan batasan rilis](docs/FINAL_RELEASE.md).
+**Rilis ini** mencakup Classic Race dengan enam pos materi dan simulasi Cloud, ACO, serta GWO. Gunakan [langkah menjalankan game secara lokal](#instalasi-dan-menjalankan-lokal) untuk memainkan versi pada checkout ini. Deployment GitHub Pages dijalankan terpisah. [Checkpoint QA terbaru](docs/WORK_HANDOFF.md#presentation-race-audio-mix--2026-11-06) · [Lisensi aset](THIRD_PARTY_NOTICES.md)
 
 <details>
 <summary>Pratinjau world, presentasi, dan hasil</summary>
@@ -36,10 +36,10 @@ Game memperagakan pencarian jadwal dengan **makespan minimum**: waktu sampai sel
 - Mobil, kamera, terrain, pencahayaan, dan fisika dari fondasi Bruno Simon.
 - **Cloud Ops Campus:** identitas Kelompok 8, tiga tujuan pembelajaran, dan Credits transparan.
 - **Cloud Compute Yard:** delapan paket task, tiga VM, animasi alokasi nyata, beban VM, dan penanda antrean.
-- **Ant Research Park:** semut contoh mengikuti pilihan VM nyata; jalur feromon membaca pembaruan engine.
+- **Ant Research Park:** dua belas semut bergerak mengikuti pilihan VM dari engine, dengan mode fokus untuk mengamati satu kandidat dan jalur feromon yang mengikuti pembaruan simulasi.
 - **Wolf Field Research:** lima kandidat terpilih dari populasi 12, Alpha/Beta/Delta, fitness, serta papan pembagian task per kandidat.
 - **Step / Play / Pause / Reset**, tabel assignment, makespan, biaya simulasi, utilization proxy, dan grafik konvergensi.
-- Enam bagian presentasi dengan **Next/Previous**, perpindahan zona aman, dan kendaraan terkunci selama panel terbuka.
+- Enam pos presentasi di sisi lintasan **Classic Race**, dengan timer balap dan dashboard yang bisa disembunyikan sambil simulasi berjalan.
 - Grafis **Low/High** yang tersimpan. Low membatasi DPR ke 1; High mempertahankan batas DPR 2.
 
 ## Algoritma dan representasi solusi
@@ -91,15 +91,15 @@ Perbandingan memakai dataset sama, seed **42**, **50 iterasi** untuk metaheurist
 | **E / Enter** | Berinteraksi dengan gerbang atau stasiun terdekat. |
 | **Esc** | Menutup panel/menu dan kembali mengemudi. |
 | **R** | Reset kendaraan ke titik aman zona aktif. |
-| **M** | Membuka peta kampus. |
+| **L** | Membuka dashboard world aktif saat Free Drive. |
 
 Datangi gerbang Cloud, ACO, atau GWO, lalu tekan E/Enter. Di dalam zona, gunakan stasiun riset untuk membuka pelajaran. Gerbang **Kembali ke Main** membawa mobil pulang.
 
-Untuk demo kelas, klik **MULAI PRESENTASI**:
+Klik **MULAI PRESENTASI** untuk menuju garis start Classic Race. Tekan **E/Enter**, tunggu lampu hijau, lalu ikuti checkpoint asli sirkuit. Musik **Sky Blue Street** mulai saat timer berjalan.
 
-**Pembukaan → Cloud → ACO → GWO → Hasil → Paper**.
+Di sisi lintasan ada enam pos berurutan **Pembukaan → Cloud → ACO → GWO → Hasil → Paper**. Menepi dan berhenti di marka pos, lalu tekan **E/Enter**. Kamu bisa melewati pos dan tetap finis. **Akhiri** mengembalikan Free Drive.
 
-**Langkah** menjalankan satu event; **Play/Pause** menjalankan/menahan trace; **Reset** mengulang. Next/Previous mengatur zona dan panel yang sama. Tutup panel dengan Esc untuk melihat seluruh meja ACO dari stasiunnya; overlap pada sudut tersebut masih menjadi batas tampilan yang didokumentasikan.
+**Langkah** menjalankan satu event, **Play/Pause** menjalankan atau menahan simulasi, dan **Reset** mengulang. **Esc** menyembunyikan dashboard dan mengembalikan kontrol mobil. Timer balap dan simulasi yang sedang Play tetap berjalan. Buka pos yang sama untuk melanjutkan dari langkah terakhir.
 
 ## Instalasi dan menjalankan lokal
 

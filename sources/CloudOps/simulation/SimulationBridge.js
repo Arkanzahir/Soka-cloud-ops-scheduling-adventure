@@ -11,6 +11,18 @@ export function createLesson(algorithm, { problem = DEFAULT_PROBLEM, sampledAnt 
         runGWO(problem, { ...config, trace: true })
     if(algorithm === 'aco' && (!Number.isInteger(sampledAnt) || sampledAnt < 1 || sampledAnt > run.config.ants))
         throw new RangeError('sampledAnt must identify a real ant')
+    // All twelve ants participate in each task decision. The visible timeline remains
+    // compact (one task per step), but each step contains the real engine choices
+    // of every ant. No random visual-only paths are invented.
+    const colonyByDecision = new Map()
+    if(algorithm === 'aco')
+        for(const event of run.events)
+            if(event.type === 'aco-choice')
+            {
+                const key = `${event.iteration}:${event.taskIndex}`
+                if(!colonyByDecision.has(key)) colonyByDecision.set(key, [])
+                colonyByDecision.get(key).push({ant:event.ant,selectedVM:event.selectedVM})
+            }
     const timeline = []
     for(const event of run.events)
     {
@@ -23,6 +35,7 @@ export function createLesson(algorithm, { problem = DEFAULT_PROBLEM, sampledAnt 
         else if(algorithm === 'aco' && event.type === 'aco-choice' && event.ant === sampledAnt)
         {
             timeline.push({ algorithm, kind: 'ant-choice', source: event,
+                colonyChoices: colonyByDecision.get(`${event.iteration}:${event.taskIndex}`),
                 title: `Iterasi ${event.iteration}: ${event.taskId} → ${event.vmId}`,
                 explanation: `Semut ${event.ant} memilih ${event.vmId} berdasarkan probabilitas feromon dan estimasi beban. Ini satu keputusan dari jadwal lengkap.` })
         }
@@ -67,7 +80,8 @@ export function createWorldAdapter(algorithm, world)
                     iteration: e.iteration, ant: e.ant, task: e.taskIndex,
                     taskId: e.taskId, selectedVM: e.selectedVM,
                     probabilities: [...e.probabilities], pheromone: [...e.pheromone],
-                    partialAssignment: [...e.partialAssignment], bestFitness: e.bestFitness
+                    partialAssignment: [...e.partialAssignment], bestFitness: e.bestFitness,
+                    colonyChoices:step.colonyChoices?.map(choice=>({...choice})) ?? []
                 })
             else if(algorithm === 'aco' && step.kind === 'pheromone-update')
             {

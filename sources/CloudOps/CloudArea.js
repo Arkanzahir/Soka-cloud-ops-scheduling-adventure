@@ -6,18 +6,21 @@ import { Area } from '../Game/World/Areas/Area.js'
 import { YardKit } from './cloud/YardKit.js'
 import { Trees } from '../Game/World/Trees.js'
 
-export const CLOUD_LAYOUT={center:[-65,-35],radius:20,spawn:{position:[-65,-25],rotation:0},exit:[-55,1.5,-25],station:[-76,1.5,-30]}
+const researchPodium = [-56,-36.5]
+export const CLOUD_LAYOUT={center:[-65,-35],radius:20,spawn:{position:[-65,-25],rotation:0},exit:[-55,1.5,-25],station:[researchPodium[0],1.5,researchPodium[1]+2.5]}
 export const TASK_MI=[1200,2400,1800,3200,2100,1500,2700,3600]
 export class CloudArea extends Area {
  constructor(manager){
   const {center,radius,spawn}=CLOUD_LAYOUT
   const model=new THREE.Group();model.name='cloudArea'
   for(const name of ['refZoneBounding','refZoneFrustum']){const reference=new THREE.Object3D();reference.name=name;reference.position.set(center[0],0,center[1]);reference.scale.setScalar(radius);reference.userData.preventAutoAdd=true;model.add(reference)}
-  super(model);this.manager=manager;this.kit=new YardKit(this);this.tasks=[];this.previewMode=false;this.motionPosition=new THREE.Vector3()
+  super(model);this.manager=manager;this.kit=new YardKit(this);this.tasks=[];this.experiment={taskCount:8,vmCount:3};this.previewMode=false;this.motionPosition=new THREE.Vector3()
   // Probe before creating geometry, then validate again after the yard has colliders.
   manager.transitions.safeSpawn(spawn)
   this.vms=[-71,-65,-59].map((x,i)=>this.addVM(i,x,-40))
-  this.buildQueue();this.buildEnvironment()
+  this.buildQueue()
+  this.raceVisuals=this.objects.hideable.slice()
+  this.buildEnvironment()
   manager.transitions.safeSpawn(spawn)
   manager.register({id:'cloud',name:'Cloud Compute Yard',center,radius,spawn})
   this.entry=manager.createStation({zone:'main',label:'Cloud Compute Yard',position:[49,1.5,34.5],onInteract:()=>manager.enter('cloud')})
@@ -26,6 +29,7 @@ export class CloudArea extends Area {
   manager.registerPanel('cloud-foundation')
  }
  addVM(index,x,z){
+  const visualStart=this.objects.hideable.length;
   // Retain M3's original Bruno brick body, geometry and materials.
   const brick=this.game.world.bricks.instancedGroup.group.clone(true);brick.position.set(0,0,0);brick.quaternion.identity()
   const size=new THREE.Box3().setFromObject(brick).getSize(new THREE.Vector3());brick.scale.multiply(new THREE.Vector3(2.7/size.x,.3/size.y,2.4/size.z))
@@ -50,7 +54,7 @@ export class CloudArea extends Area {
   for(const dx of [-2,2])k.box(x+dx,.3,z+3.7,.12,.15,3,accent)
   const bar=k.box(x-1.05,.68,z+1.19,.05,.13,.07,accent);bar.geometry.translate(.025,0,0)
   const activity=k.mesh(new THREE.IcosahedronGeometry(.09,1),accent,new THREE.Vector3(x+.84,.68,z+1.2)); const selection=k.mesh(new THREE.TorusGeometry(1.9,.07,6,32),accent,new THREE.Vector3(x,.2,z));selection.rotation.x=Math.PI/2;selection.visible=false
-  return {object,visual:object.visual,physical:object.physical,x,z,loadLabel,bar,selection,badge,activity,load:0}
+  return {object,visual:object.visual,physical:object.physical,visualNodes:this.objects.hideable.slice(visualStart),x,z,loadLabel,bar,selection,badge,activity,load:0}
  }
  buildQueue(){const k=this.kit
   // Two staggered rows on a compact dispatch dock. Face labels travel with their modules.
@@ -58,12 +62,20 @@ export class CloudArea extends Area {
   // One static painted surface; these are parking outlines, never duplicate task actors.
   const canvas=document.createElement('canvas');canvas.width=1024;canvas.height=512
   const ctx=canvas.getContext('2d');ctx.fillStyle='#a87762';ctx.fillRect(0,0,1024,512)
-  ctx.strokeStyle='#fff0bf';ctx.lineWidth=5;ctx.fillStyle='#fff0bf';ctx.font='bold 38px sans-serif';ctx.textAlign='left'
-  for(let i=0;i<TASK_MI.length;i++){
-   const x=58+(i%4)*251,z=35+Math.floor(i/4)*256
-   ctx.strokeRect(x,z,155,202);ctx.fillText(`T${i+1}`,x+12,z+43)
-  }
   const paint=new THREE.CanvasTexture(canvas);paint.colorSpace=THREE.SRGBColorSpace
+  this.paintQueue=count=>{
+   ctx.fillStyle='#a87762';ctx.fillRect(0,0,1024,512)
+   ctx.strokeStyle='#fff0bf';ctx.lineWidth=5;ctx.fillStyle='#fff0bf';ctx.font='bold 38px sans-serif';ctx.textAlign='left'
+   const columns=count===6?3:4
+   const spacingX=225,cellWidth=155
+   const left=(1024-((columns-1)*spacingX+cellWidth))/2
+   for(let i=0;i<count;i++){
+    const x=left+(i%columns)*spacingX
+    const z=count===4?155:35+Math.floor(i/columns)*256
+    ctx.strokeRect(x,z,cellWidth,202);ctx.fillText(`T${i+1}`,x+12,z+43)
+   }
+   paint.needsUpdate=true
+  };this.paintQueue(TASK_MI.length)
   const markings=k.mesh(new THREE.PlaneGeometry(9.8,4),new MeshDefaultMaterial({colorNode:texture(paint),hasDropShadows:false,hasCoreShadows:false}),new THREE.Vector3(-65,.365,-31.5))
   markings.rotation.x=-Math.PI/2;markings.castShadow=false;markings.receiveShadow=false
   TASK_MI.forEach((mi,i)=>{
@@ -82,17 +94,18 @@ export class CloudArea extends Area {
   k.path(-65,-25,25,4);k.path(-77,-35,4,22);k.path(-53,-35,4,22);k.path(-65,-46,25,4)
   // Identity sits at the roadside rather than across the windscreen.
   k.sign('CLOUD COMPUTE YARD',-73,-23,5.2,2.5)
-  k.label('8 TASKS / 3 VMs',-73,1.85,-22.8,3.5,.4)
-  k.rounded(-78,1.15,-33,3.1,2.3,1.2,'wood')
-  k.rounded(-78,2.5,-33,3.7,.28,2,'coral')
-  k.label('RESEARCH / E',-78,2,-32.35,2.7,.45)
-  k.label('MI = work / MIPS = speed',-78,1.45,-32.35,2.8,.35)
-  this.makespanLabel=k.label('MAKESPAN: waiting for data',-78,.93,-32.35,2.8,.4)
+  this.statusLabel=k.label('8 TASKS / 3 VMs',-73,1.85,-22.8,3.5,.4)
+  const [x,z]=researchPodium
+  k.rounded(x,1.15,z,3.1,2.3,1.2,'wood')
+  k.rounded(x,2.5,z,3.7,.28,2,'coral')
+  k.label('RESEARCH / E',x,2,z+.65,2.7,.45)
+  k.label('MI = work / MIPS = speed',x,1.45,z+.65,2.8,.35)
+  this.makespanLabel=k.label('MAKESPAN: waiting for data',x,.93,z+.65,2.8,.4)
   // Small utility cabinet and cable reel frame the facility without blocking the drive.
-  k.rounded(-74,.55,-43,1.2,1.1,1,'dark')
-  k.mesh(new THREE.CylinderGeometry(.45,.45,.5,10),'wood',new THREE.Vector3(-75,.5,-43)).rotation.z=Math.PI/2  // Reuse the original bench template along the roadside, outside the safe stop.
+  k.rounded(-67,.55,-43,1.2,1.1,1,'dark')
+  k.mesh(new THREE.CylinderGeometry(.45,.45,.5,10),'wood',new THREE.Vector3(-68,.5,-43)).rotation.z=Math.PI/2  // Reuse the original bench template along the roadside, outside the safe stop.
   for(const [x,z]of [[-78,-26],[-52,-44]]){const model=this.game.world.benches.instancedGroup.group.clone(true);model.position.set(x,0,z);this.game.objects.add({model,updateMaterials:false});this.objects.hideable.push(model)}
-  const refs=[];for(const [x,z]of [[-79,-44],[-51,-28],[-51,-43],[-78,-22]]){const r=new THREE.Object3D();r.position.set(x,0,z);r.scale.setScalar(.65);r.updateMatrixWorld();refs.push(r)}
+  const refs=[];for(const [x,z]of [[-69,-44],[-51,-28],[-51,-43],[-78,-22]]){const r=new THREE.Object3D();r.position.set(x,0,z);r.scale.setScalar(.65);r.updateMatrixWorld();refs.push(r)}
   this.trees=new Trees('Cloud yard',this.game.resources.oakTreesVisualModel.scene.clone(true),refs,'#b4b536','#d8cf3b')
   // Low wooden boundaries frame the beds; all corners leave four-unit driving clearance.
   for(const x of [-73,-57])for(const z of [-46,-23]){k.box(x,.5,z,.16,1,.16,'wood');k.box(x+1,.65,z,2,.12,.12,'wood')}
@@ -100,17 +113,65 @@ export class CloudArea extends Area {
  // M5 supplies all numerical values. This layer only validates and displays them.
  allocationTarget(taskIndex,vmIndex){const vm=this.vms[vmIndex];return new THREE.Vector3(vm.x-1.3+(taskIndex%2)*1.3,.38,vm.z+2.7+Math.floor(taskIndex/2)*.7)}
  applyAllocation(input){
-  let event;try{event=allocationEvent(input)}catch(error){this.lastVisualizationError=error.message;return false}
+  let event;try{event=allocationEvent(input,this.experiment)}catch(error){this.lastVisualizationError=error.message;return false}
   this.lastVisualizationError=null;this.lastAllocation=event
+  if(event.taskIndex>=(this.experiment?.taskCount??8)||event.vmIndex>=(this.experiment?.vmCount??3))return false
+  this.paused=false
   const task=this.tasks[event.taskIndex];task.vm=event.vmIndex
   task.motion={from:task.mesh.position.clone(),to:this.allocationTarget(event.taskIndex,event.vmIndex),elapsed:0,duration:1.4}
   this.tasks.forEach(t=>t.mesh.scale.setScalar(t===task?1.12:1));this.vms.forEach((vm,i)=>vm.selection.visible=i===event.vmIndex)
   this.displayLoads(event.vmLoads,Math.max(...event.vmLoads));return true
  }
- displayLoads(loads,makespan){const max=Math.max(...loads,1);this.vms.forEach((vm,i)=>{vm.load=loads[i];vm.loadLabel.write(`LOAD ${loads[i].toFixed(2)} s`);vm.bar.scale.x=35*loads[i]/max+.01});this.makespanLabel.write(`${this.previewMode?'DEMO/PREVIEW | ':''}MAKESPAN ${makespan.toFixed(3)} s`)}
+ displayLoads(loads,makespan){const max=Math.max(...loads,1);this.vms.forEach((vm,i)=>{vm.load=loads[i]??0;vm.loadLabel.write(`LOAD ${vm.load.toFixed(2)} s`);vm.bar.scale.x=35*vm.load/max+.01});this.makespanLabel.write(`${this.previewMode?'DEMO/PREVIEW | ':''}MAKESPAN ${makespan.toFixed(3)} s`)}
  positionTask(task,position){task.mesh.position.copy(position);task.label.mesh.position.copy(position).add(task.labelOffset)}
- applySchedule(input){let state;try{state=scheduleState(input)}catch(error){this.lastVisualizationError=error.message;return false}this.resetVisualization();this.tasks.forEach((task,i)=>{task.vm=state.assignments[i];this.positionTask(task,this.allocationTarget(i,task.vm))});this.displayLoads(state.vmLoads,state.makespan);return true}
- resetVisualization(){this.tasks.forEach(task=>{task.motion=null;task.vm=null;task.mesh.scale.setScalar(1);this.positionTask(task,task.home)});this.vms.forEach(vm=>vm.selection.visible=false);this.lastAllocation=null;this.lastVisualizationError=null;this.displayLoads([0,0,0],0)}
+ applySchedule(input){let state;try{state=scheduleState(input,this.experiment)}catch(error){this.lastVisualizationError=error.message;return false}this.resetVisualization();this.tasks.forEach((task,i)=>{if(i>=(this.experiment?.taskCount??8))return;task.vm=state.assignments[i];this.positionTask(task,this.allocationTarget(i,task.vm))});this.displayLoads(state.vmLoads,state.makespan);return true}
+ setPaused(paused){this.paused=paused}
+ resetVisualization(){this.paused=false;this.tasks.forEach(task=>{task.motion=null;task.vm=null;task.mesh.scale.setScalar(1);this.positionTask(task,task.home)});this.vms.forEach(vm=>vm.selection.visible=false);this.lastAllocation=null;this.lastVisualizationError=null;this.displayLoads([0,0,0],0)}
  setPreviewMode(enabled){this.previewMode=!!enabled;this.displayLoads(this.vms.map(vm=>vm.load),Math.max(...this.vms.map(vm=>vm.load)))}
- update(){if(!this.tasks)return;const dt=this.game.ticker.delta;for(const vm of this.vms){vm.activity.scale.setScalar(vm.selection.visible?1.25+Math.sin(this.game.ticker.elapsed*4)*.2:1)}for(const task of this.tasks){if(!task.motion)continue;const m=task.motion;m.elapsed=Math.min(m.duration,m.elapsed+dt);const p=m.elapsed/m.duration,eased=p*p*(3-2*p),position=this.motionPosition;position.copy(m.from).lerp(m.to,eased);position.y+=Math.sin(p*Math.PI)*1.25;this.positionTask(task,position);if(p===1){task.motion=null;task.mesh.scale.setScalar(1)}}}
+ // Centers active task rows, keeping dispatch boxes, labels and parking guides aligned.
+ layoutQueue(count){
+  const columns=count===6?3:4
+  for(const [i,task] of this.tasks.entries()){
+   const col=i%columns,row=Math.floor(i/columns)
+   const x=-65+(col-(columns-1)/2)*2.4
+   const z=count===4?-31.5:-32.5+row*2
+   task.home.set(x,.4,z)
+  }
+ }
+ // Shifts Cloud VM buildings and their Rapier colliders together; never just
+ // move the decorative mesh and leave an invisible collision behind.
+ layoutVMs(count){
+  const destinations=count===2?[-68,-62,-59]:[-71,-65,-59]
+  this.vms.forEach((vm,i)=>{
+   const nextX=destinations[i],dx=nextX-vm.x
+   if(Math.abs(dx)<1e-6)return
+   for(const node of vm.visualNodes)node.position.x+=dx
+   if(vm.physical?.body){
+    const position=vm.physical.body.translation()
+    vm.physical.body.setTranslation({x:nextX,y:position.y,z:position.z},true)
+   }
+   vm.x=nextX
+  })
+ }
+ setExperimentConfig({taskCount,vmCount}){
+  if(![4,6,8].includes(taskCount)||![2,3].includes(vmCount))throw new RangeError('Unsupported Cloud world configuration')
+  this.experiment={taskCount,vmCount}
+  this.layoutQueue(taskCount)
+  this.layoutVMs(vmCount)
+  this.resetVisualization();this.paintQueue(taskCount)
+  this.statusLabel.write(`${taskCount} TASKS / ${vmCount} VMs`)
+  this.vms.forEach((vm,i)=>{if(i<vmCount)this.game.objects.enable(vm.object);else this.game.objects.disable(vm.object)})
+  this.refreshExperimentVisibility()
+ }
+ refreshExperimentVisibility(){
+  // Respect Area's frustum culling; inactive objects stay hidden even when re-entering.
+  const inView=this.trackside||this.frustum?.isIn!==false
+  this.tasks.forEach((task,i)=>{const visible=inView&&i<this.experiment.taskCount;task.mesh.visible=visible;task.label.mesh.visible=visible})
+  this.vms.forEach((vm,i)=>{
+   const visible=inView&&i<this.experiment.vmCount
+   for(const node of vm.visualNodes)
+    node.visible=visible&&(node!==vm.selection||this.lastAllocation?.vmIndex===i)
+  })
+ }
+ update(){if(!this.tasks)return;this.refreshExperimentVisibility();if(this.paused)return;const dt=this.game.ticker.delta;for(const vm of this.vms){vm.activity.scale.setScalar(vm.selection.visible?1.25+Math.sin(this.game.ticker.elapsed*4)*.2:1)}for(const task of this.tasks){if(!task.motion)continue;const m=task.motion;m.elapsed=Math.min(m.duration,m.elapsed+dt);const p=m.elapsed/m.duration,eased=p*p*(3-2*p),position=this.motionPosition;position.copy(m.from).lerp(m.to,eased);position.y+=Math.sin(p*Math.PI)*1.25;this.positionTask(task,position);if(p===1){task.motion=null;task.mesh.scale.setScalar(1)}}}
 }

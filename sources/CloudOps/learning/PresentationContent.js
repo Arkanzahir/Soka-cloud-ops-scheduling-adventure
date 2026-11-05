@@ -17,7 +17,7 @@ export const PRESENTATION_SECTIONS = Object.freeze([
         takeaway: 'Pilihan bersifat probabilistik. Jalur feromon kuat lebih menarik, tetapi bukan kepastian terpilih.' },
     { id: 'gwo', label: 'GWO', zone: 'gwo', eyebrow: '04 / ALGORITMA', title: 'Mengikuti tiga solusi terbaik',
         question: 'Bagaimana Alpha, Beta, dan Delta memandu perubahan kandidat?',
-        explanation: 'Satu serigala adalah satu jadwal lengkap, bukan satu task. Tiga kandidat dengan fitness terbaik memandu pembaruan posisi kandidat lainnya, kemudian posisi didiskretisasi menjadi indeks VM.',
+        explanation: 'Satu serigala membawa satu jadwal lengkap untuk 8 task. Engine menilai 12 kandidat, dan arena menampilkan 5 terbaik. Alpha, Beta, dan Delta memandu pembaruan kandidat. Bingkai emas pada papan menandai task yang pindah VM.',
         takeaway: 'Gerak serigala adalah metafora kandidat solusi, bukan pencarian jarak fisik ke VM.' },
     { id: 'results', label: 'Hasil', zone: null, eyebrow: '05 / PERBANDINGAN', title: 'Jadwal mana yang lebih cepat?',
         question: 'Bagaimana hasil Round Robin, ACO, dan GWO pada data yang sama?',
@@ -84,12 +84,12 @@ export function lessonDetail(step, problem = DEFAULT_PROBLEM)
     if(step.kind === 'allocation')
         return { headline: `${e.taskId} → ${e.vmId}`,
             lines: [`Durasi task di VM ini: ${fmt(e.executionTime)} detik`,
-                `Load VM1/VM2/VM3: ${e.vmLoads.map(x => fmt(x)).join(' / ')} detik`,
+                `Beban ${problem.vms.map(vm => vm.id).join('/')}: ${e.vmLoads.map(x => fmt(x)).join(' / ')} detik`,
                 'Round Robin bergiliran memilih VM; bukan mencari jadwal optimal.'] }
     if(step.kind === 'ant-choice')
         return { headline: `${e.taskId} → ${e.vmId} (semut ${e.ant})`,
             lines: [
-                `Probabilitas VM1/VM2/VM3: ${e.probabilities.map(p => fmt(p * 100, 1) + '%').join(' / ')}`,
+                `Probabilitas ${problem.vms.map(vm => vm.id).join('/')}: ${e.probabilities.map(p => fmt(p * 100, 1) + '%').join(' / ')}`,
                 `Feromon untuk task ini: ${e.pheromone.map(x => fmt(x, 3)).join(' / ')}`,
                 'Probabilitas dihitung dari feromon dan heuristik. Pemilihan menggunakan roulette seeded.'
             ] }
@@ -97,7 +97,7 @@ export function lessonDetail(step, problem = DEFAULT_PROBLEM)
         return { headline: `Iterasi ${e.iteration}: evaporasi + deposit`,
             lines: [`Hasil terbaik iterasi: ${fmt(e.iterationBest)} detik`,
                 `Terbaik sejauh ini: ${fmt(e.bestSoFar)} detik`,
-                'Seluruh semut dievaluasi; hanya semut contoh yang diperlihatkan langkah per langkah.'] }
+                'Seluruh semut dievaluasi. Mode Koloni menunjukkan keputusan semua semut; Mode Fokus menampilkan satu kandidat.'] }
     if(step.kind === 'wolf-iteration')
     {
         // Match the two-decimal labels on the 3D wolves and candidate board.
