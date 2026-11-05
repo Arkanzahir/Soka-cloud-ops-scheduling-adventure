@@ -6,6 +6,11 @@ import gsap from 'gsap'
 import { Events } from './Events.js'
 import { effectSource } from './utilities/effectSource.js'
 
+const backgroundGains = {
+    'sounds/cloud-ops/ambience.wav': 0.25,
+    'sounds/cloud-ops/waves.wav': 0.3
+}
+
 export class Audio
 {
     constructor()
@@ -75,12 +80,13 @@ export class Audio
 
         const item = {}
         const source = effectSource(options.path, options.loop)
+        item.gain = backgroundGains[source] ?? 1
         item.howl = new Howl({
             src: [ source ],
             pool: 2,
             autoplay: (this.initiated && options.autoplay) ?? false,
             loop: options.loop ?? false,
-            volume: options.volume ?? 0.5,
+            volume: (options.volume ?? 0.5) * item.gain,
             preload: options.preload ?? true,
             onloaderror: () =>
             {
@@ -809,8 +815,8 @@ export class Audio
                 item.howl.rate(clamp(item.rate * this.globalRate, 0.5, 4))
 
                 // Volume
-                const volume = item.volume * distanceFadeMultiplier
-                item.howl.volume(item.volume * distanceFadeMultiplier)
+                const volume = item.volume * item.gain * distanceFadeMultiplier
+                item.howl.volume(volume)
 
                 item.howl.mute(volume < 0.01)
             }
