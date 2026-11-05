@@ -10,6 +10,8 @@ import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.j
 const HALF_WIDTH = 18
 const HALF_DEPTH = 16
 const TABLE_TOP = .52
+const VM_ENTRANCE_Z = -6.08
+const VM_PAD_Z = -5.12
 const WALK_SECONDS = .97
 
 // Procedural source assets: no Blender or external model dependencies.
@@ -28,7 +30,7 @@ export class AcoWorld {
  }
  mesh(geometry,mat,x,y,z,sx=1,sy=1,sz=1){const m=new T.Mesh(geometry,this.mat[mat]||mat);m.position.set(x,y,z);m.scale.set(sx,sy,sz);m.castShadow=true;m.receiveShadow=true;this.group.add(m);return m}
  box(x,y,z,w,h,d,mat='wood',solid=false){const m=this.mesh(new T.BoxGeometry(w,h,d),mat,x,y,z);if(solid)this.game.objects.add(null,{type:'fixed',position:{x:x+this.origin.x,y:y+this.origin.y,z:z+this.origin.z},colliders:[{shape:'cuboid',parameters:[w/2,h/2,d/2],category:'object'}]});return m}
- label(text,x,y,z,width=4){const c=document.createElement('canvas');c.width=1024;c.height=160;const ctx=c.getContext('2d');ctx.fillStyle='#fff0bf';ctx.fillRect(0,0,1024,160);ctx.fillStyle='#382c38';ctx.font='bold 64px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(text,512,80,980);const tex=new T.CanvasTexture(c);tex.colorSpace=T.SRGBColorSpace;return this.mesh(new T.PlaneGeometry(width,width/6.4),new MeshDefaultMaterial({colorNode:texture(tex)}),x,y,z)}
+ label(text,x,y,z,width=4,fontSize=64){const c=document.createElement('canvas');c.width=1024;c.height=160;const ctx=c.getContext('2d');ctx.fillStyle='#fff0bf';ctx.fillRect(0,0,1024,160);ctx.fillStyle='#382c38';ctx.font=`bold ${fontSize}px sans-serif`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(text,512,80,980);const tex=new T.CanvasTexture(c);tex.colorSpace=T.SRGBColorSpace;return this.mesh(new T.PlaneGeometry(width,width/6.4),new MeshDefaultMaterial({colorNode:texture(tex)}),x,y,z)}
  // A readable task badge on TOP of the crate, facing the elevated camera.
  // Each task carries its real MI workload from the same scheduling dataset.
  taskBadge(index,x,z){
@@ -94,10 +96,10 @@ export class AcoWorld {
   for(let j=0;j<3;j++){
    const visualStart=this.group.children.length;
    const x=this.dispatch.x+(j-1)*4;
-   this.box(x,1,-7,2,1,1.8,'wood');this.box(x,1.65,-7,1.6,.3,1.4,'cream');this.label('VM'+(j+1),x,2,-6.1,2)
+   this.makeVmHousing(x, j)
    // Save the original positions so switching 2 → 3 VMs cannot accumulate offsets.
    this.vmActors.push(this.group.children.slice(visualStart).map(mesh=>({mesh,homeX:mesh.position.x})))
-   const pad=this.box(x,TABLE_TOP+.026,-5.12,2.05,.05,1.6,'teal')
+   const pad=this.box(x,TABLE_TOP+.026,VM_PAD_Z,2.05,.05,1.6,'teal')
    pad.visible=false
    this.vmIndicators.push(pad)
    this.paths.push(this.routeTo(x))
@@ -117,6 +119,18 @@ export class AcoWorld {
   this.box(-9,1.3,5,4.5,2.6,.35,'wood',true);this.label('ACO RESEARCH',-9,2,5.2,4);this.label('E / ENTER : INSPECT',-9,1.2,5.2,4)
   this.researchPosition=this.origin.clone().add(new T.Vector3(-9,1,7))
   this.point=this.game.interactivePoints.create(this.researchPosition,'Research',InteractivePoints.ALIGN_RIGHT,InteractivePoints.STATE_CONCEALED,()=>this.onResearch?.());this.point.show()
+ }
+ makeVmHousing(x, index){
+  // Side walls and a back panel leave the front open from the tabletop to the lintel.
+  const depth=2.2, z=VM_ENTRANCE_Z-depth/2
+  for(const side of [-1,1])this.box(x+side*.99,1.04,z,.24,1.04,depth,'wood')
+  this.box(x,1.04,VM_ENTRANCE_Z-depth+.11,1.74,1.04,.22,'dark')
+  this.box(x,TABLE_TOP+.018,z,1.74,.036,depth,'dark')
+  this.box(x,1.62,z,2.22,.24,depth,'cream')
+  this.box(x,1.42,VM_ENTRANCE_Z-.1,1.74,.19,.2,'trail')
+  const badge=this.label('VM'+(index+1),x,1.746,z,1.85,122)
+  badge.rotation.x=-Math.PI/2
+  badge.scale.y=1.5
  }
  makeAnt(){
   const group=new T.Group()
@@ -188,7 +202,7 @@ export class AcoWorld {
   return new T.CatmullRomCurve3([
    new T.Vector3(forkX,TABLE_TOP,this.nest.z+1.45),
    new T.Vector3(forkX+(x-forkX)*.52,TABLE_TOP,-4.44),
-   new T.Vector3(x,TABLE_TOP,-5.12)
+   new T.Vector3(x,TABLE_TOP,VM_PAD_Z)
   ])
  }
  routeTo(x){
@@ -249,7 +263,10 @@ export class AcoWorld {
    pad.visible=i<this.experiment.vmCount&&(selected||this.colonyMode==='colony'&&hasChoice)
    pad.material=this.mat[selected?'gold':'teal']
   })
-  this.ants.forEach(ant=>ant.mesh.visible=this.colonyMode==='colony'||ant.antId===focus)
+  this.ants.forEach(ant=>this.updateAntVisibility(ant,focus))
+ }
+ updateAntVisibility(ant, focus=this.event?.ant??1){
+  ant.mesh.visible=!ant.insideVm&&(this.colonyMode==='colony'||ant.antId===focus)
  }
  placeAntAtNest(ant,i){
   // Twelve deterministic, well-spaced positions in the sandy clearing.
@@ -258,6 +275,7 @@ export class AcoWorld {
   const x=this.nest.x-2.24+col*1.24+(row%2)*.21+.075*Math.sin(i*1.83)
   const z=this.nest.z+4.70+row*.92+.11*Math.sin(i*2.13)
   if(!ant.home)ant.home=new T.Vector3()
+  ant.insideVm=false
   ant.home.set(x,.055,z)
   ant.homeHeading=-.3+(i%5)*.27
   ant.mesh.position.copy(ant.home)
@@ -332,6 +350,12 @@ export class AcoWorld {
   const lane=((ant.antId-1)%4-1.5)*.26
   const shifted=point=>new T.Vector3(point.x,point.y,point.z+lane)
   const points=[start]
+  const previousVmX=this.vmIndicators[ant.vm].position.x
+  const leavingVm=start.z<VM_ENTRANCE_Z && Math.abs(start.x-previousVmX)<.87
+  if(leavingVm)points.push(
+   new T.Vector3(start.x,TABLE_TOP+.055,VM_ENTRANCE_Z+.18),
+   new T.Vector3(previousVmX,TABLE_TOP,VM_PAD_Z)
+  )
   if(parkingIndex===null){
    if(start.x>=this.dispatch.x-6)points.push(shifted(fork))
    points.push(...trunk.slice(0,-1).reverse().map(shifted),ant.home.clone())
@@ -339,8 +363,11 @@ export class AcoWorld {
    if(start.x<this.dispatch.x-6)points.push(...trunk.slice(start.z>this.nest.z+2.6?0:2,-1).map(shifted))
    const branch=this.paths[vm].points.slice(trunk.length-1)
    points.push(...branch.map(shifted))
-   const end=branch.at(-1)
-   points.push(new T.Vector3(end.x+(parkingIndex%4-1.5)*.45,TABLE_TOP+.055,end.z+(.8-Math.floor(parkingIndex/4)*.38)))
+   const x=branch.at(-1).x+(parkingIndex%4-1.5)*.34
+   points.push(
+    new T.Vector3(x,TABLE_TOP+.055,VM_ENTRANCE_Z+.17),
+    new T.Vector3(x,TABLE_TOP+.055,VM_ENTRANCE_Z-.78-Math.floor(parkingIndex/4)*.37)
+   )
   }
   ant.motion=new T.CatmullRomCurve3(points,false,'centripetal')
   ant.motion.arcLengthDivisions=36
@@ -367,6 +394,12 @@ export class AcoWorld {
      const heading=Math.atan2(this.antTangent.x,this.antTangent.z)
      const difference=heading-mesh.rotation.y
      mesh.rotation.y+=Math.atan2(Math.sin(difference),Math.cos(difference))*Math.min(1,dt*13)
+    }
+    // Keep the ant occluded after entering, and reveal it only as it exits the tunnel.
+    const insideVm=(!this.returning&&progress===1)||(ant.insideVm&&z<VM_ENTRANCE_Z)
+    if(insideVm!==ant.insideVm){
+     ant.insideVm=insideVm
+     this.updateAntVisibility(ant)
     }
     active ||= walking
    }
