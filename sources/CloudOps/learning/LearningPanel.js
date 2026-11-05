@@ -212,7 +212,7 @@ export class LearningPanel
     {
         const count = $(this.root, '.co-step-count')
         count.textContent = `${snapshot.cursor} / ${snapshot.total}`
-        const { headline, lines } = lessonDetail(snapshot.step)
+        const { headline, lines } = lessonDetail(snapshot.step, this.lesson?.problem)
         $(this.root, '.co-step-title').textContent = headline
         $(this.root, '.co-step-summary').textContent = snapshot.step?.explanation ?? 'Klik Langkah untuk memulai visualisasi. Setiap langkah menggunakan keputusan engine yang sebenarnya.'
         const container = $(this.root, '.co-step-details')
