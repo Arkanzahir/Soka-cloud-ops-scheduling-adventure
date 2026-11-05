@@ -1,6 +1,7 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { createLesson, LessonPlayer } from '../sources/CloudOps/simulation/SimulationBridge.js'
+import { createLesson, createWorldAdapter, LessonPlayer } from '../sources/CloudOps/simulation/SimulationBridge.js'
+import { optimizerState } from '../sources/CloudOps/gwo/state.js'
 import { DEFAULT_PROBLEM, evaluateAssignment } from '../sources/CloudOps/scheduling/index.js'
 import { PRESENTATION_SECTIONS, PAPERS, buildComparison, convergencePolyline, fmt, lessonDetail } from '../sources/CloudOps/learning/PresentationContent.js'
 
@@ -72,6 +73,27 @@ test('Reference titles and academic caveats explicitly distinguish baseline vs i
   }
   assert.match(PAPERS[1].note,/tidak menerapkan crossover\/mutation/)
   assert.equal(fmt(11.833333,2),'11,83')
+})
+
+test('GWO explains tied leaders and preserves the historical best across dashboard and 3D payload', () => {
+  const lesson = createLesson('gwo', { seed: 42, wolves: 12, iterations: 4 })
+  const step = lesson.timeline[3]
+  const detail = lessonDetail(step, lesson.problem).lines.join('\n')
+  let world
+  createWorldAdapter('gwo', { applyOptimizerState: input => { world = optimizerState(input) } }).apply(step)
+
+  assert.equal(world.bestMakespan, 6.5)
+  assert.match(detail, /Rekor sejauh ini: 6,50 detik/)
+  for(const [role, id] of Object.entries(world.leaders)) {
+    const candidate = world.candidates.find(wolf => wolf.id === id)
+    assert.equal(candidate.fitness.toFixed(2), '6.73')
+    assert.match(detail, new RegExp(`${role} \\(${id}\\) · Fitness saat ini: 6,73 detik`, 'i'))
+    assert.deepEqual(candidate.vmLoads, evaluateAssignment(lesson.problem, candidate.assignment).vmLoads)
+    assert.ok(detail.includes(candidate.assignment.map((vm, task) => `T${task + 1} → VM${vm + 1}`).join(' · ')))
+  }
+  assert.match(detail, /Beban: VM1 3,50 s · VM2 6,30 s · VM3 6,73 s/)
+  assert.match(detail, /menggunakan jadwal yang sama/)
+  assert.match(lessonDetail(lesson.timeline[0]).lines.join(' '), /dibulatkan ke dua desimal/)
 })
 
 test('M6 playback can be finished, reset, and replayed without fake 3D adapters',()=>{

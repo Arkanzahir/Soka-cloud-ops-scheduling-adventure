@@ -77,7 +77,7 @@ export function convergencePolyline(values, { width = 360, height = 126, min, ma
     }))
 }
 
-export function lessonDetail(step)
+export function lessonDetail(step, problem = DEFAULT_PROBLEM)
 {
     if(!step) return { headline: 'Pilih Step untuk melihat satu keputusan.', lines: [] }
     const e = step.source
@@ -99,11 +99,27 @@ export function lessonDetail(step)
                 `Terbaik sejauh ini: ${fmt(e.bestSoFar)} detik`,
                 'Seluruh semut dievaluasi; hanya semut contoh yang diperlihatkan langkah per langkah.'] }
     if(step.kind === 'wolf-iteration')
-        return { headline: `Iterasi ${e.iteration}: kandidat diperbarui`,
-            lines: [
-                `Alpha ${fmt(e.leaders.alpha.fitness)} s · Beta ${fmt(e.leaders.beta.fitness)} s · Delta ${fmt(e.leaders.delta.fitness)} s`,
-                `Terbaik sejauh ini: ${fmt(e.bestSoFar)} detik`,
-                'Leader sebelum update (guides) memandu kandidat; ranking yang ditampilkan adalah sesudah update.'
-            ] }
+    {
+        // Match the two-decimal labels on the 3D wolves and candidate board.
+        const seconds = value => value.toFixed(2).replace('.', ',')
+        const leaders = [['Alpha', e.leaders.alpha], ['Beta', e.leaders.beta], ['Delta', e.leaders.delta]]
+        const lines = leaders.flatMap(([role, candidate]) => [
+            `${role} (${candidate.id}) · Fitness saat ini: ${seconds(candidate.fitness)} detik`,
+            candidate.assignment.map((vm, task) => `${problem.tasks[task].id} → ${problem.vms[vm].id}`).join(' · '),
+            `Beban: ${candidate.vmLoads.map((load, vm) => `${problem.vms[vm].id} ${seconds(load)} s`).join(' · ')}`
+        ])
+        const fitness = leaders.map(([, candidate]) => candidate.fitness)
+        if(new Set(fitness).size < fitness.length)
+            lines.push('Fitness yang sama berarti beban VM terlama sama. Pembagian task dan beban VM lain bisa berbeda.')
+        if(leaders.every(([, candidate]) => candidate.assignment.every((vm, task) => vm === e.leaders.alpha.assignment[task])))
+            lines.push('Ketiga pemimpin memiliki ID berbeda, tetapi menggunakan jadwal yang sama pada iterasi ini.')
+        if(new Set(fitness.map(seconds)).size < new Set(fitness).size)
+            lines.push('Sebagian fitness tampak sama karena dibulatkan ke dua desimal.')
+        lines.push(
+            `Rekor sejauh ini: ${seconds(e.bestSoFar)} detik. Rekor menyimpan jadwal tercepat yang pernah ditemukan, termasuk sebelum iterasi pertama. Pemimpin di atas berasal dari populasi iterasi ini.`,
+            'Tiga pemimpin sebelum pembaruan memandu iterasi ini. Peringkat di atas dihitung setelah pembaruan.'
+        )
+        return { headline: `Iterasi ${e.iteration}: kandidat diperbarui`, lines }
+    }
     return { headline: step.title, lines: [step.explanation] }
 }
