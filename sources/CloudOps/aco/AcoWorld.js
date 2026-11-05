@@ -8,7 +8,7 @@ import {createPheromoneGeometry,setPheromoneRadius} from './PheromoneGeometry.js
 // Procedural source assets: no Blender or external model dependencies.
 export class AcoWorld {
  constructor(game, origin = new T.Vector3(220, 0, 0)) {
-  this.game=game; this.origin=origin; this.ants=[]; this.paths=[]; this.pathMeshes=[]; this.pathBeds=[]; this.taskActors=[]; this.vmActors=[]; this.experiment={taskCount:8,vmCount:3}; this.colonyMode='colony'; this.returning=false; this.moving=false; this.elapsed=0; this.demo=false;this.antPosition=new T.Vector3();this.antTangent=new T.Vector3()
+  this.game=game; this.origin=origin; this.ants=[]; this.paths=[]; this.pathMeshes=[]; this.pathBeds=[]; this.taskActors=[]; this.vmActors=[]; this.experiment={taskCount:8,vmCount:3}; this.nest={x:-2.5,z:-5}; this.dispatch={x:8.5,z:-3}; this.colonyMode='colony'; this.returning=false; this.moving=false; this.elapsed=0; this.demo=false;this.antPosition=new T.Vector3();this.antTangent=new T.Vector3()
   this.group=new T.Group(); this.group.position.copy(origin); game.scene.add(this.group)
   this.mat={}; for(const [n,c] of Object.entries({sand:'#ffcf8b',wood:'#a87762',soil:'#ac6942',trail:'#b98260',dark:'#382c38',leaf:'#b8b62e',cream:'#fff0bf',red:'#b85b47'})) this.mat[n]=new MeshDefaultMaterial({colorNode:color(c)})
   this.build(); this.decorate(); this.makeFeedback(); this.resetVisualization()
@@ -29,13 +29,15 @@ export class AcoWorld {
   for(const x of [-14.7,-9.3])this.box(x,1.4,11.5,.24,2.8,.24,'wood',true)
   this.box(-12,2.65,11.5,6,1.65,.3,'wood');this.label('ANT RESEARCH PARK',-12,3.05,11.68,5.6)
   this.label('ANT COLONY OPTIMIZATION',-12,2.25,11.68,5)
-  // Faceted earthen mound with entrance and stone edging.
-  this.mesh(new T.ConeGeometry(3.4,3.5,11,3), 'soil',-8,1.75,-5)
-  this.mesh(new T.SphereGeometry(.8,12,8),'dark',-8,.55,-2.55,1,.7,.35)
-  this.game.objects.add(null,{type:'fixed',position:this.origin.clone().add(new T.Vector3(-8,1,-5)),colliders:[{shape:'cylinder',parameters:[1,2.3],category:'object'}]})
-  this.label('COLONY',-8,3.8,-4.5,3)
-  this.box(3,.22,-3,12,.44,11,'wood',true)
-  this.box(3,.48,-3,11.7,.08,10.7,'sand')
+  // Give the anthill the visual center of the park, with the scheduling
+  // platform moved right so the mound, stones and ants have breathing room.
+  const {x:nx,z:nz}=this.nest,{x:dx,z:dz}=this.dispatch
+  this.mesh(new T.ConeGeometry(3.4,3.5,11,3), 'soil',nx,1.75,nz)
+  this.mesh(new T.SphereGeometry(.8,12,8),'dark',nx,.55,nz+2.45,1,.7,.35)
+  this.game.objects.add(null,{type:'fixed',position:this.origin.clone().add(new T.Vector3(nx,1,nz)),colliders:[{shape:'cylinder',parameters:[1,2.3],category:'object'}]})
+  this.label('COLONY',nx,3.8,nz+.5,3)
+  this.box(dx,.22,dz,12,.44,11,'wood',true)
+  this.box(dx,.48,dz,11.7,.08,10.7,'sand')
   for(let i=0;i<8;i++){const x=-1.8+i*1.35;const box=this.box(x,.75,1,1,.45,1,'red');const label=this.label('T'+(i+1),x,1.2,1.55,1);this.taskActors.push([box,label])}
   // A single low-profile trail leaves the nest. Only the branches split
   // toward VMs: overlapping three copies here looked like an enormous cable.
@@ -44,7 +46,7 @@ export class AcoWorld {
   this.trunkSignal=this.mesh(new T.TubeGeometry(this.raiseCurve(this.trunkCurve,.09),48,.027,5,false),'leaf',0,0,0)
   for(let j=0;j<3;j++){
    const visualStart=this.group.children.length;
-   const x=j*4-1;
+   const x=this.dispatch.x+(j-1)*4;
    this.box(x,1,-7,2,1,1.8,'wood');this.box(x,1.65,-7,1.6,.3,1.4,'cream');this.label('VM'+(j+1),x,2,-6.1,2)
    // Save the original positions so switching 2 → 3 VMs cannot accumulate offsets.
    this.vmActors.push(this.group.children.slice(visualStart).map(mesh=>({mesh,homeX:mesh.position.x})))
@@ -64,30 +66,32 @@ export class AcoWorld {
   this.point=this.game.interactivePoints.create(this.origin.clone().add(new T.Vector3(-9,1,7)),'Research',InteractivePoints.ALIGN_RIGHT,InteractivePoints.STATE_CONCEALED,()=>this.onResearch?.());this.point.show()
  }
  makeAnt(){const g=new T.Group();g.userData.legs=[];g.userData.antennae=[];for(const [z,r]of [[-.3,.29],[0,.18],[.3,.23]]){const m=new T.Mesh(new T.SphereGeometry(r,8,6),this.mat.dark);m.position.set(0,.24,z);m.scale.x=.8;g.add(m)}for(let i=0;i<3;i++)for(const side of [-1,1]){const p=[new T.Vector3(0,.2,(i-1)*.18),new T.Vector3(side*.28,.22,(i-1)*.27),new T.Vector3(side*.4,0,(i-1)*.34)];const leg=new T.Mesh(new T.TubeGeometry(new T.CatmullRomCurve3(p),4,.025,4),this.mat.dark);leg.userData.phase=i*Math.PI+side;g.add(leg);g.userData.legs.push(leg)}for(const s of [-1,1]){const m=new T.Mesh(new T.CylinderGeometry(.018,.018,.32,4),this.mat.dark);m.position.set(s*.12,.43,.43);m.rotation.x=.6;m.rotation.z=s*-.5;g.add(m);g.userData.antennae.push(m)}g.scale.setScalar(1.15);return g}
- makeFeedback(){const c=document.createElement('canvas');c.width=1024;c.height=256;const ctx=c.getContext('2d'),tex=new T.CanvasTexture(c);tex.colorSpace=T.SRGBColorSpace;this.mesh(new T.PlaneGeometry(9,2.25),new MeshDefaultMaterial({colorNode:texture(tex)}),3,3.4,-8.4);this.writeFeedback=lines=>{ctx.fillStyle='#fff0bf';ctx.fillRect(0,0,c.width,c.height);ctx.fillStyle='#382c38';ctx.textAlign='center';ctx.font='bold 38px sans-serif';lines.forEach((line,i)=>ctx.fillText(line,512,55+i*65,980));tex.needsUpdate=true}}
+ makeFeedback(){const c=document.createElement('canvas');c.width=1024;c.height=256;const ctx=c.getContext('2d'),tex=new T.CanvasTexture(c);tex.colorSpace=T.SRGBColorSpace;this.mesh(new T.PlaneGeometry(9,2.25),new MeshDefaultMaterial({colorNode:texture(tex)}),this.dispatch.x,3.4,-8.4);this.writeFeedback=lines=>{ctx.fillStyle='#fff0bf';ctx.fillRect(0,0,c.width,c.height);ctx.fillStyle='#382c38';ctx.textAlign='center';ctx.font='bold 38px sans-serif';lines.forEach((line,i)=>ctx.fillText(line,512,55+i*65,980));tex.needsUpdate=true}}
  decorate(){
-  const refs=[];for(const [x,z]of [[-13,-10],[-3,-12],[10,-12],[14,-5],[-14,1],[13,9]]){const r=new T.Object3D();r.position.copy(this.origin).add(new T.Vector3(x,0,z));r.scale.setScalar(.7);r.updateMatrixWorld();refs.push(r)}
+  const refs=[];for(const [x,z]of [[-13,-10],[-3,-12],[10,-12],[15,-11],[-14,1],[13,9]]){const r=new T.Object3D();r.position.copy(this.origin).add(new T.Vector3(x,0,z));r.scale.setScalar(.7);r.updateMatrixWorld();refs.push(r)}
   this.trees=new Trees('ACO trees',this.game.resources.oakTreesVisualModel.scene.clone(true),refs,'#b4b536','#d8cf3b')
-  for(let i=0;i<35;i++){const a=i*2.399;const x=-8+Math.cos(a)*(3.6+(i%3)*.3),z=-5+Math.sin(a)*(3.6+(i%3)*.3);this.mesh(new T.DodecahedronGeometry(.2+(i%3)*.08,0),'cream',x,.16,z,1,.7,1)}
-  for(let i=0;i<220;i++){const x=-15+(i*7.31%30),z=-13+(i*3.17%26);if(Math.abs(x)<12&&z>-10&&z<11)continue;const m=this.mesh(new T.ConeGeometry(.12,.55,3),'leaf',x,.275,z);m.rotation.y=i}
+  for(let i=0;i<35;i++){const a=i*2.399;const x=this.nest.x+Math.cos(a)*(3.6+(i%3)*.3),z=this.nest.z+Math.sin(a)*(3.6+(i%3)*.3);this.mesh(new T.DodecahedronGeometry(.2+(i%3)*.08,0),'cream',x,.16,z,1,.7,1)}
+  for(let i=0;i<220;i++){const x=-15+(i*7.31%30),z=-13+(i*3.17%26);if((x>1.7&&x<15.4&&z>-9.5&&z<3.6)||Math.hypot(x-this.nest.x,z-this.nest.z)<6.7||(Math.abs(x)<12&&z>-10&&z<11))continue;const m=this.mesh(new T.ConeGeometry(.12,.55,3),'leaf',x,.275,z);m.rotation.y=i}
  }
 
  // The nest is on the courtyard floor (y≈0); the VM platform is raised.
  // Shared trunk + independent branches avoids stacking three thick pipes.
  nestToFork(){
+  const nx=this.nest.x,nz=this.nest.z
   return new T.CatmullRomCurve3([
-   new T.Vector3(-7.25,.13,-1.90),
-   new T.Vector3(-6.20,.12,-1.80),
-   new T.Vector3(-4.90,.13,-2.12),
-   new T.Vector3(-3.70,.18,-2.45),
-   new T.Vector3(-2.73,.63,-2.75),
-   new T.Vector3(-1.50,.64,-3.55)
+   new T.Vector3(nx+.70,.13,nz+3.10),
+   new T.Vector3(nx+1.75,.12,nz+3.18),
+   new T.Vector3(nx+3.20,.13,nz+2.87),
+   new T.Vector3(nx+4.15,.18,nz+2.55),
+   new T.Vector3(this.dispatch.x-5.95,.63,nz+2.25),
+   new T.Vector3(this.dispatch.x-4.70,.64,nz+1.45)
   ])
  }
  branchTo(x){
+  const forkX=this.dispatch.x-4.70
   return new T.CatmullRomCurve3([
-   new T.Vector3(-1.50,.64,-3.55),
-   new T.Vector3(-.3+(x+1)*.17,.64,-4.44),
+   new T.Vector3(forkX,.64,this.nest.z+1.45),
+   new T.Vector3(forkX+(x-forkX)*.52,.64,-4.44),
    new T.Vector3(x,.64,-5.90)
   ])
  }
@@ -106,15 +110,15 @@ export class AcoWorld {
   const columns=taskCount===6?3:4
   for(const [i,actors] of this.taskActors.entries()){
    const row=Math.floor(i/columns),col=i%columns
-   const x=3+(col-(columns-1)/2)*1.85
+   const x=this.dispatch.x+(col-(columns-1)/2)*1.85
    const z=taskCount===4?1.05:1.15-row*1.5
    actors[0].position.set(x,.75,z)
    actors[1].position.set(x,1.2,z+.55)
   }
   const vmCount=this.experiment.vmCount
   for(let j=0;j<3;j++){
-   const x=3+(j-(vmCount-1)/2)*4
-   const originalX=j*4-1,dx=x-originalX
+   const x=this.dispatch.x+(j-(vmCount-1)/2)*4
+   const originalX=this.dispatch.x+(j-1)*4,dx=x-originalX
    for(const {mesh,homeX} of this.vmActors[j])mesh.position.x=homeX+dx
    const curve=this.routeTo(x)
    this.paths[j]=curve
@@ -145,8 +149,8 @@ export class AcoWorld {
   // Twelve deterministic, well-spaced positions in the sandy clearing.
   // Keep every ant outside the solid anthill and away from the dispatch table.
   const row=Math.floor(i/4),col=i%4
-  const x=-8.25+col*1.08+(row%2)*.30
-  const z=-1.87+row*.93+.09*Math.sin(i*2.13)
+  const x=this.nest.x-2.24+col*1.24+(row%2)*.21+.075*Math.sin(i*1.83)
+  const z=this.nest.z+4.70+row*.92+.11*Math.sin(i*2.13)
   if(!ant.home)ant.home=new T.Vector3()
   ant.home.set(x,.055,z)
   ant.homeHeading=-.3+(i%5)*.27
