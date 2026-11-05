@@ -1,0 +1,23 @@
+{
+  "checks": [
+    {
+      "name": "High quality retains original DPR 2 on HiDPI",
+      "passed": true
+    },
+    {
+      "name": "native Low toggle halves both canvas dimensions",
+      "passed": true
+    },
+    {
+      "name": "Low quality keeps vehicle and follow camera working",
+      "passed": true
+    },
+    {
+      "name": "Low R reset remains grounded",
+      "passed": false
+    }
+  ],
+  "errors": [],
+  "passed": false,
+  "failure": "AssertionError [ERR_ASSERTION]: Low R reset remains grounded\n    at check (file:///D:/Download/Soka-cloud-ops-scheduling-adventure-main/cloud-ops/scripts/test-release-ui.mjs:4:77)\n    at file:///D:/Download/Soka-cloud-ops-scheduling-adventure-main/cloud-ops/scripts/test-release-ui.mjs:13:505"
+}

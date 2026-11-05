@@ -1,0 +1,11 @@
+{
+  "checks": [],
+  "errors": [
+    "Failed to fetch dynamically imported module: http://127.0.0.1:1256/@fs/D:/Download/Soka-cloud-ops-scheduling-adventure-main/mini-world-polish/.cache/vite/deps/@dimforge_rapier3d.js?v=db2f71bf"
+  ],
+  "httpErrors": [
+    "http://127.0.0.1:1256/@fs/D:/Download/Soka-cloud-ops-scheduling-adventure-main/mini-world-polish/.cache/vite/deps/@dimforge_rapier3d.js?v=db2f71bf"
+  ],
+  "passed": false,
+  "failure": "page.waitForFunction: Timeout 90000ms exceeded.\n    at D:\\Download\\Soka-cloud-ops-scheduling-adventure-main\\mini-world-polish\\scripts\\test-final-ux.mjs:8:108"
+}

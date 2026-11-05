@@ -8,7 +8,7 @@ Demo Week 10 meminta dua metaheuristik, sumber penelitian, cara kerja, studi kas
 
 ## 2. GWO — paper kelompok (terverifikasi)
 
-- **Wang, H. et al. (2025)** — *An improved grey wolf optimizer with flexible crossover and mutation for cluster task scheduling*. *Information Sciences*, 704, 121943.
+- **Wang, H., Zhang, J., Fan, J., Zhang, C., Deng, B., & Zhao, W. (2025)** — *An improved grey wolf optimizer with flexible crossover and mutation for cluster task scheduling*. *Information Sciences*, 704, 121943. Daftar penulis diverifikasi melalui metadata registrasi DOI Crossref pada 5 November 2026; full-text publisher tetap memiliki keterbatasan akses.
 - DOI: https://doi.org/10.1016/j.ins.2025.121943
 - Publisher: https://www.sciencedirect.com/science/article/pii/S0020025525000751
 
@@ -50,5 +50,5 @@ Digunakan untuk menjelaskan konsep GWO standar. Paper 2025 digunakan untuk topik
 
 - [ ] Validasi full-text paper ACO kelompok (DBpia) atau sepakati menggunakan paper alternatif terverifikasi.
 - [ ] Tetapkan apakah dosen meminta mereplikasi algoritma *improved* paper secara tepat atau cukup menjelaskan paper dan mengimplementasikan baseline.
-- [ ] Pastikan seluruh grafik berasal dari kode aplikasi dan label algoritma sesuai implementasi.
-- [ ] Uji evaluator dan seed sebelum membuat animasi, serta tampilkan tautan/DOI dalam Research Station.
+- [x] Grafik berasal dari engine dan label menyatakan baseline edukatif; verified M4/M5/M6 dan regresi integrasi.
+- [x] Evaluator/seed diuji; tiga DOI tersedia pada bagian Paper M6. Bukti pengujian final ada pada FINAL_RELEASE.md.

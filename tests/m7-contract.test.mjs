@@ -1,0 +1,4 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createLesson,createWorldAdapter} from '../sources/CloudOps/simulation/SimulationBridge.js';import {validateState,optimizerState} from '../sources/CloudOps/gwo/state.js';
+test('real M5 twelve-wolf events reach five-wolf world',()=>{const adapter=createWorldAdapter('gwo',{applyState:validateState,applyOptimizerState:e=>validateState(optimizerState(e))});for(const step of createLesson('gwo',{iterations:4}).timeline)assert.doesNotThrow(()=>adapter.apply(step))});
+import {LessonPlayer} from '../sources/CloudOps/simulation/SimulationBridge.js';
+test('rejected Cloud visualization pauses before advancing cursor',()=>{const player=new LessonPlayer(createLesson('cloud'),{adapter:createWorldAdapter('cloud',{applyAllocation:()=>false})});assert.throws(()=>player.step(),/rejected/);assert.equal(player.cursor,0)});

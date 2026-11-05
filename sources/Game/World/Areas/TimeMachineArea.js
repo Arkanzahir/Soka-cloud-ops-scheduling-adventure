@@ -1,0 +1,118 @@
+import * as THREE from 'three/webgpu'
+import { InteractivePoints } from '../../InteractivePoints.js'
+import { Area } from './Area.js'
+import { Fn, texture, uv, vec2, vec3, vec4 } from 'three/tsl'
+import gsap from 'gsap'
+
+export class TimeMachineArea extends Area
+{
+    constructor(model)
+    {
+        super(model)
+
+        this.setInteractivePoint()
+        this.setTV()
+        this.setAchievement()
+    }
+
+    setInteractivePoint()
+    {
+        this.interactivePoint = this.game.interactivePoints.create(
+            this.references.items.get('interactivePoint')[0].position,
+            'Tentang Proyek',
+            InteractivePoints.ALIGN_RIGHT,
+            InteractivePoints.STATE_CONCEALED,
+            () =>
+            {
+                this.game.menu.open('behindTheScene')
+            },
+            () =>
+            {
+                this.game.inputs.interactiveButtons.addItems(['interact'])
+            },
+            () =>
+            {
+                this.game.inputs.interactiveButtons.removeItems(['interact'])
+            },
+            () =>
+            {
+                this.game.inputs.interactiveButtons.removeItems(['interact'])
+            }
+        )
+    }
+
+    setTV()
+    {
+        let canCollide = true
+        let collideIndex = 0
+
+        const canvas=document.createElement('canvas');canvas.width=512;canvas.height=256
+        const context=canvas.getContext('2d');context.fillStyle='#fff0bf';context.fillRect(0,0,512,256);context.fillStyle='#383039';context.textAlign='center';context.font='bold 52px sans-serif';context.fillText('CLOUD OPS',256,90);context.font='bold 28px sans-serif';context.fillText('TASK  →  VM',256,150);context.fillText('KELOMPOK 8 / SOKA',256,205)
+        const campusTexture=new THREE.CanvasTexture(canvas);campusTexture.colorSpace=THREE.SRGBColorSpace
+        const screenTextures = [campusTexture]
+
+        const alertSound = this.game.audio.register({
+            path: 'sounds/tv/alert.mp3',
+            autoplay: false,
+            loop: false,
+            volume: 0.3,
+            preload: true
+        })
+    
+
+        const tv = this.references.items.get('tv')[0]
+        tv.userData.object.physical.onCollision = (force, position) =>
+        {
+            if(canCollide)
+            {
+                canCollide = false
+                collideIndex++
+                material.outputNode = screenOutputNode()
+                material.needsUpdate = true
+
+                const clickSound = this.game.audio.groups.get('click')
+                if(clickSound)
+                    clickSound.play(true)
+
+                if(collideIndex === 1)
+                    alertSound.play()
+
+                gsap.delayedCall(1, () =>
+                {
+                    canCollide = true
+                })
+            }
+        }
+
+        const screenMesh = this.references.items.get('screen')[0]
+
+        const material = new THREE.MeshBasicNodeMaterial()
+        const screenOutputNode = Fn(() =>
+        {
+            const baseUv = vec2(uv().x, uv().y)
+            
+            const textureColor = texture(screenTextures[collideIndex % screenTextures.length], baseUv)
+
+            const stripes = texture(
+                this.game.noises.perlin,
+                vec2(
+                    baseUv.y.add(this.game.ticker.elapsedScaledUniform.mul(0.1)),
+                    0
+                )
+            ).r.smoothstep(0, 1)
+
+            return vec4(textureColor.rgb.mul(stripes.mul(collideIndex % screenTextures.length === 0 ? 1 : 3).add(1)), 1)
+        })
+        material.outputNode = screenOutputNode()
+
+        screenMesh.material = material
+    }
+
+    setAchievement()
+    {
+        this.events.on('boundingIn', () =>
+        {
+            this.game.achievements.setProgress('areas', 'timeMachine')
+        })
+    }
+}

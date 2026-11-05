@@ -1,0 +1,238 @@
+{
+  "checkedAt": "2026-11-05T04:43:43.931Z",
+  "checks": [
+    {
+      "name": "README.md: docs/evidence/final-branding-main.png",
+      "passed": true
+    },
+    {
+      "name": "README.md: docs/FINAL_RELEASE.md",
+      "passed": true
+    },
+    {
+      "name": "README.md: docs/evidence/final-gameplay-cloud-yard.png",
+      "passed": true
+    },
+    {
+      "name": "README.md: docs/evidence/final-readability-aco-live.png",
+      "passed": true
+    },
+    {
+      "name": "README.md: docs/evidence/final-gameplay-gwo-leaders.png",
+      "passed": true
+    },
+    {
+      "name": "README.md: docs/evidence/final-gameplay-panel.png",
+      "passed": true
+    },
+    {
+      "name": "README.md: docs/evidence/final-normal-ui-results.png",
+      "passed": true
+    },
+    {
+      "name": "README.md: docs/GWO_SCHEDULE_EXPLAINER.md",
+      "passed": true
+    },
+    {
+      "name": "README.md: docs/ALGORITHM_SPEC.md",
+      "passed": true
+    },
+    {
+      "name": "README.md: docs/FINAL_RELEASE.md",
+      "passed": true
+    },
+    {
+      "name": "README.md: docs/PAPER_REVIEW.md",
+      "passed": true
+    },
+    {
+      "name": "README.md: license.md",
+      "passed": true
+    },
+    {
+      "name": "README.md: THIRD_PARTY_NOTICES.md",
+      "passed": true
+    },
+    {
+      "name": "README.md: docs/ASSET_CATALOG.md",
+      "passed": true
+    },
+    {
+      "name": "README.md: docs/DEPLOYMENT_READINESS.md",
+      "passed": true
+    },
+    {
+      "name": "README.md: docs/FINAL_RELEASE.md",
+      "passed": true
+    },
+    {
+      "name": "README.md: docs/PRESENTATION_GUIDE.md",
+      "passed": true
+    },
+    {
+      "name": "README.md: docs/ALGORITHM_SPEC.md",
+      "passed": true
+    },
+    {
+      "name": "README.md: docs/ARCHITECTURE_AUDIT.md",
+      "passed": true
+    },
+    {
+      "name": "README.md: CONTRIBUTING.md",
+      "passed": true
+    },
+    {
+      "name": "README.md: docs/history/README_BEFORE_FINAL_RELEASE.md",
+      "passed": true
+    },
+    {
+      "name": "docs/FINAL_RELEASE.md: evidence/post-merge-branding-unit.log",
+      "passed": true
+    },
+    {
+      "name": "docs/FINAL_RELEASE.md: evidence/post-merge-branding-build.log",
+      "passed": true
+    },
+    {
+      "name": "docs/FINAL_RELEASE.md: evidence/post-merge-branding.json",
+      "passed": true
+    },
+    {
+      "name": "docs/FINAL_RELEASE.md: GWO_SCHEDULE_EXPLAINER.md",
+      "passed": true
+    },
+    {
+      "name": "docs/FINAL_RELEASE.md: history/README_BEFORE_FINAL_RELEASE.md",
+      "passed": true
+    },
+    {
+      "name": "docs/FINAL_RELEASE.md: evidence/final-install-online.log",
+      "passed": true
+    },
+    {
+      "name": "docs/FINAL_RELEASE.md: evidence/final-install-projectrc.log",
+      "passed": true
+    },
+    {
+      "name": "docs/FINAL_RELEASE.md: evidence/final-unit.log",
+      "passed": true
+    },
+    {
+      "name": "docs/FINAL_RELEASE.md: evidence/final-branding-branding.json",
+      "passed": true
+    },
+    {
+      "name": "docs/FINAL_RELEASE.md: evidence/final-readability.json",
+      "passed": true
+    },
+    {
+      "name": "docs/FINAL_RELEASE.md: evidence/final-gameplay.json",
+      "passed": true
+    },
+    {
+      "name": "docs/FINAL_RELEASE.md: evidence/final-gwo.json",
+      "passed": true
+    },
+    {
+      "name": "docs/FINAL_RELEASE.md: evidence/final-ui.json",
+      "passed": true
+    },
+    {
+      "name": "docs/FINAL_RELEASE.md: evidence/final-listeners.json",
+      "passed": true
+    },
+    {
+      "name": "docs/FINAL_RELEASE.md: evidence/final-aco-motion.json",
+      "passed": true
+    },
+    {
+      "name": "docs/FINAL_RELEASE.md: evidence/final-release-build.log",
+      "passed": true
+    },
+    {
+      "name": "docs/FINAL_RELEASE.md: evidence/final-assets.log",
+      "passed": true
+    },
+    {
+      "name": "docs/FINAL_RELEASE.md: evidence/final-normal-browser.json",
+      "passed": true
+    },
+    {
+      "name": "docs/FINAL_RELEASE.md: evidence/final-normal-ui.json",
+      "passed": true
+    },
+    {
+      "name": "docs/FINAL_RELEASE.md: evidence/final-local-offline.json",
+      "passed": true
+    },
+    {
+      "name": "docs/FINAL_RELEASE.md: evidence/final-model-example.json",
+      "passed": true
+    },
+    {
+      "name": "docs/FINAL_RELEASE.md: evidence/final-branding-main.png",
+      "passed": true
+    },
+    {
+      "name": "docs/FINAL_RELEASE.md: evidence/final-gameplay-cloud-yard.png",
+      "passed": true
+    },
+    {
+      "name": "docs/FINAL_RELEASE.md: evidence/final-readability-aco-live.png",
+      "passed": true
+    },
+    {
+      "name": "docs/FINAL_RELEASE.md: evidence/final-gameplay-gwo-leaders.png",
+      "passed": true
+    },
+    {
+      "name": "docs/FINAL_RELEASE.md: evidence/final-gameplay-panel.png",
+      "passed": true
+    },
+    {
+      "name": "docs/FINAL_RELEASE.md: evidence/final-normal-ui-results.png",
+      "passed": true
+    },
+    {
+      "name": "docs/FINAL_RELEASE.md: evidence/final-branding-credits.png",
+      "passed": true
+    },
+    {
+      "name": "docs/FINAL_RELEASE.md: evidence/final-gwo-changed-panel.png",
+      "passed": true
+    },
+    {
+      "name": "docs/FINAL_RELEASE.md: evidence/final-profile.json",
+      "passed": true
+    },
+    {
+      "name": "docs/FINAL_RELEASE.md: DEPLOYMENT_READINESS.md",
+      "passed": true
+    },
+    {
+      "name": "docs/DEPLOYMENT_READINESS.md: ASSET_CATALOG.md",
+      "passed": true
+    },
+    {
+      "name": "docs/DEPLOYMENT_READINESS.md: evidence/asset-inventory.json",
+      "passed": true
+    },
+    {
+      "name": "docs/DEPLOYMENT_READINESS.md: ../THIRD_PARTY_NOTICES.md",
+      "passed": true
+    },
+    {
+      "name": "notices are byte-identical",
+      "passed": true
+    },
+    {
+      "name": "MIT/dependency versions unchanged",
+      "passed": true
+    },
+    {
+      "name": "scheduling/M5/M6 unchanged from tested release",
+      "passed": true
+    }
+  ],
+  "passed": true
+}

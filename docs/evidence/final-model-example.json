@@ -1,0 +1,106 @@
+{
+  "problem": {
+    "tasks": [
+      {
+        "id": "T1",
+        "lengthMI": 1200
+      },
+      {
+        "id": "T2",
+        "lengthMI": 2400
+      },
+      {
+        "id": "T3",
+        "lengthMI": 1800
+      },
+      {
+        "id": "T4",
+        "lengthMI": 3200
+      },
+      {
+        "id": "T5",
+        "lengthMI": 2100
+      },
+      {
+        "id": "T6",
+        "lengthMI": 1500
+      },
+      {
+        "id": "T7",
+        "lengthMI": 2700
+      },
+      {
+        "id": "T8",
+        "lengthMI": 3600
+      }
+    ],
+    "vms": [
+      {
+        "id": "VM1",
+        "mips": 600,
+        "costPerSecond": 0.001
+      },
+      {
+        "id": "VM2",
+        "mips": 1000,
+        "costPerSecond": 0.0015
+      },
+      {
+        "id": "VM3",
+        "mips": 1500,
+        "costPerSecond": 0.0025
+      }
+    ]
+  },
+  "roundRobin": {
+    "assignment": [
+      0,
+      1,
+      2,
+      0,
+      1,
+      2,
+      0,
+      1
+    ],
+    "vmLoads": [
+      11.833333333333332,
+      8.1,
+      2.2
+    ],
+    "vmTaskIds": [
+      [
+        "T1",
+        "T4",
+        "T7"
+      ],
+      [
+        "T2",
+        "T5",
+        "T8"
+      ],
+      [
+        "T3",
+        "T6"
+      ]
+    ],
+    "taskDurations": [
+      2,
+      2.4,
+      1.2,
+      5.333333333333333,
+      2.1,
+      1,
+      4.5,
+      3.6
+    ],
+    "makespan": 11.833333333333332,
+    "cost": 0.029483333333333334,
+    "utilizationProxy": [
+      1,
+      0.6845070422535212,
+      0.1859154929577465
+    ],
+    "meanUtilizationProxy": 0.6234741784037559
+  }
+}

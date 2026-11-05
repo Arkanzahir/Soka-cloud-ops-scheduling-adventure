@@ -1,0 +1,75 @@
+{
+  "checks": [
+    {
+      "name": "High quality retains original DPR 2 on HiDPI",
+      "passed": true
+    },
+    {
+      "name": "native Low toggle halves both canvas dimensions",
+      "passed": true
+    },
+    {
+      "name": "Low quality keeps vehicle and follow camera working",
+      "passed": true
+    },
+    {
+      "name": "Low R reset remains grounded",
+      "passed": true
+    },
+    {
+      "name": "Low DPR cap survives viewport resize",
+      "passed": true
+    },
+    {
+      "name": "Low preference persists across reload before renderer creation",
+      "passed": true
+    },
+    {
+      "name": "High can be restored through native menu",
+      "passed": true
+    },
+    {
+      "name": "1366x768 section 1: panel/footer fit and content scrolls without horizontal clipping",
+      "passed": true
+    },
+    {
+      "name": "1366x768 section 2: panel/footer fit and content scrolls without horizontal clipping",
+      "passed": true
+    },
+    {
+      "name": "1366 section 2: Step is reachable",
+      "passed": true
+    },
+    {
+      "name": "1366x768 section 3: panel/footer fit and content scrolls without horizontal clipping",
+      "passed": true
+    },
+    {
+      "name": "1366 section 3: Step is reachable",
+      "passed": true
+    },
+    {
+      "name": "1366x768 section 4: panel/footer fit and content scrolls without horizontal clipping",
+      "passed": true
+    },
+    {
+      "name": "1366 section 4: Step is reachable",
+      "passed": true
+    },
+    {
+      "name": "1366x768 section 5: panel/footer fit and content scrolls without horizontal clipping",
+      "passed": true
+    },
+    {
+      "name": "1366: actual metrics, assignments and convergence present",
+      "passed": true
+    },
+    {
+      "name": "1366x768 section 6: panel/footer fit and content scrolls without horizontal clipping",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "passed": false,
+  "failure": "page.waitForFunction: Timeout 30000ms exceeded.\n    at panel (D:\\Download\\Soka-cloud-ops-scheduling-adventure-main\\cloud-ops\\scripts\\test-release-ui.mjs:6:22)\n    at D:\\Download\\Soka-cloud-ops-scheduling-adventure-main\\cloud-ops\\scripts\\test-release-ui.mjs:18:133"
+}

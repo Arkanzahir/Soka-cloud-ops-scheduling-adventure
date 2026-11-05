@@ -1,0 +1,228 @@
+{
+  "url": "http://127.0.0.1:1236/",
+  "label": "foundation-no-env",
+  "browser": "156.0.8078.74",
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "checks": [
+    {
+      "name": "whispers buffer count is finite",
+      "passed": true,
+      "detail": 30
+    },
+    {
+      "name": "world renders visible geometry",
+      "passed": true,
+      "detail": {
+        "meanChannelDeviation": 52.68149459479003
+      }
+    },
+    {
+      "name": "vehicle moves with keyboard",
+      "passed": true,
+      "detail": {
+        "before": {
+          "position": [
+            39.52898025512695,
+            1.0701889991760254,
+            37.82522964477539
+          ],
+          "camera": [
+            57.658843017500345,
+            17.42458471341604,
+            55.95509240714879
+          ],
+          "rotation": [
+            0,
+            -0.11500809341669083,
+            0,
+            0.9933645725250244
+          ],
+          "speed": 0.0512205864772164,
+          "contacts": 4,
+          "filters": [
+            "wandering"
+          ]
+        },
+        "after": {
+          "position": [
+            46.839717864990234,
+            4.176654815673828,
+            41.62275695800781
+          ],
+          "camera": [
+            64.90694131961159,
+            17.424727091045092,
+            59.60558693154623
+          ],
+          "rotation": [
+            0.594502329826355,
+            -0.00014599088171962649,
+            0.5055770874023438,
+            0.6252669095993042
+          ],
+          "speed": 4.176623561363715,
+          "contacts": 0,
+          "filters": [
+            "wandering"
+          ]
+        }
+      }
+    },
+    {
+      "name": "camera follows vehicle",
+      "passed": true
+    },
+    {
+      "name": "steering changes orientation",
+      "passed": true,
+      "detail": {
+        "position": [
+          47.810646057128906,
+          4.323237419128418,
+          42.84425354003906
+        ],
+        "camera": [
+          65.84461008699765,
+          17.424584715982107,
+          60.88205599059919
+        ],
+        "rotation": [
+          0.8525854349136353,
+          0.10237279534339905,
+          0.5123223662376404,
+          0.01197878923267126
+        ],
+        "speed": 2.9229672843601273,
+        "contacts": 0,
+        "filters": [
+          "wandering"
+        ]
+      }
+    },
+    {
+      "name": "brake leaves finite physics",
+      "passed": true,
+      "detail": {
+        "position": [
+          48.446372985839844,
+          1.4558384418487549,
+          45.09236526489258
+        ],
+        "camera": [
+          66.63357571886482,
+          17.424584713416056,
+          62.99698026137233
+        ],
+        "rotation": [
+          0.33917850255966187,
+          0.3043835461139679,
+          0.1088809072971344,
+          -0.8834327459335327
+        ],
+        "speed": 2.163778847017737,
+        "contacts": 2,
+        "filters": [
+          "wandering"
+        ]
+      }
+    },
+    {
+      "name": "respawn settles on terrain",
+      "passed": true,
+      "detail": {
+        "position": [
+          55.07324981689453,
+          1.032923698425293,
+          44.036865234375
+        ],
+        "camera": [
+          73.20298102663892,
+          17.42458471576533,
+          62.16696881072281
+        ],
+        "rotation": [
+          -0.00429911632090807,
+          -0.8919705152511597,
+          0.003661215305328369,
+          0.45205819606781006
+        ],
+        "speed": 0.020011679314582122,
+        "contacts": 4,
+        "filters": [
+          "wandering"
+        ]
+      }
+    },
+    {
+      "name": "e: moveTo resets velocity",
+      "passed": true
+    },
+    {
+      "name": "e: map interaction",
+      "passed": true
+    },
+    {
+      "name": "e: Escape restores driving",
+      "passed": true
+    },
+    {
+      "name": "Enter: moveTo resets velocity",
+      "passed": true
+    },
+    {
+      "name": "Enter: map interaction",
+      "passed": true
+    },
+    {
+      "name": "Enter: Escape restores driving",
+      "passed": true
+    },
+    {
+      "name": "no JavaScript page errors",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "no failed local HTTP responses",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "no failed local requests",
+      "passed": true,
+      "detail": [
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Amatic+SC:wght@700&family=Nunito:wght@400;700;900&display=block",
+          "error": "net::ERR_NETWORK_ACCESS_DENIED"
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "httpErrors": [],
+  "requestFailures": [
+    {
+      "url": "https://fonts.googleapis.com/css2?family=Amatic+SC:wght@700&family=Nunito:wght@400;700;900&display=block",
+      "error": "net::ERR_NETWORK_ACCESS_DENIED"
+    }
+  ],
+  "environment": {
+    "backend": "WebGPUBackend",
+    "quality": 0,
+    "day": 0.1,
+    "year": 0.25,
+    "whispersCount": 30,
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.0.0 Safari/537.36",
+    "hardwareConcurrency": 16
+  },
+  "frameSample": {
+    "frames": 89,
+    "medianFrameMs": 6.099999999998545,
+    "p95FrameMs": 12,
+    "averageFps": 156.2499999999984
+  },
+  "passed": true
+}

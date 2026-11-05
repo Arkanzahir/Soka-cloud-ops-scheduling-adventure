@@ -1,6 +1,6 @@
 # Task Tracker — Cloud Ops
 
-**Dokumentasi disiapkan; game belum dikembangkan atau diuji.** Perbarui status hanya dengan bukti source/build/test nyata.
+**M0 dan M2 selesai:** bukti di [BASELINE_TEST_REPORT.md](BASELINE_TEST_REPORT.md) dan [M2_SHARED_GAME_EXTENSION.md](M2_SHARED_GAME_EXTENSION.md). M1 belum dikerjakan; M2 diminta langsung oleh pemilik.
 
 ## Persiapan
 
@@ -14,10 +14,10 @@
 
 ## Milestone implementasi
 
-- [ ] **M0:** audit dan run original Bruno, screenshot baseline, lisensi/aset.
+- [x] **M0:** audit dan run original Bruno, screenshot baseline, inventaris lisensi/aset; clearance SFX/font tetap gate sebelum publikasi.
 - [ ] **M1:** verifikasi akademik final dan keputusan baseline vs improved.
-- [ ] **M2:** implementasi reusable zone/interaction/vehicle transition.
-- [ ] **M3:** Cloud Mini-World proof of concept, render style check.
+- [x] **M2:** reusable zone/interaction/vehicle transition; Main↔satu zona uji, panel, E/Enter/Esc/R, browser/physics/production tests.
+- [ ] **M3:** Cloud Mini-World proof of concept, render style check. Tahap 1 selesai: CloudArea + 1 stasiun + 3 VM placeholder; lihat M3_CLOUD_FOUNDATION.md.
 - [ ] **M4:** scheduling engine ACO/GWO, seeded RNG, unit tests.
 - [ ] **M5:** ACO & GWO mini-world dan animasi dari trace.
 - [ ] **M6:** Results, paper, Presentation Mode, latihan demo.
@@ -35,3 +35,7 @@
 ## Urutan terdekat untuk Work
 
 Baca `docs/MASTER_PROMPT.md`, lakukan **M0 saja** lebih dulu, dokumentasikan temuannya, dan jangan langsung membangun seluruh mini-world sebelum baseline game terbukti dapat dijalankan.
+
+## Hasil M0 yang berlaku (2026-11-04)
+
+M0 selesai dengan [laporan pengujian](BASELINE_TEST_REPORT.md). Checkpoint jeda di atas adalah riwayat. Lanjut milestone berikutnya hanya saat diminta; sesi ini berhenti setelah M0.

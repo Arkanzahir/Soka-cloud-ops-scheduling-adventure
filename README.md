@@ -1,249 +1,166 @@
-# CLOUD OPS — Scheduling Adventure
+# Cloud Ops: Scheduling Adventure
 
-> **Tugas Kelompok Strategi Optimasi Komputasi Awan (SOKA) | Demo Week 10**  
-> **Status proyek: Perencanaan dan dokumentasi — game belum diimplementasikan.**  
-> **Repository:** https://github.com/Arkanzahir/Soka-cloud-ops-scheduling-adventure
+**Kelompok 8 — Strategi Optimasi Komputasi Awan (SOKA)**
 
-## 1. Tentang proyek
+Jelajahi kampus dengan mobil 3D, kirim task ke virtual machine, dan amati bagaimana **Round Robin, Ant Colony Optimization, serta Grey Wolf Optimizer** menyusun jadwal. Alokasi, nilai, dan grafik berasal dari engine JavaScript nyata yang dapat diuji.
 
-**CLOUD OPS** adalah rancangan presentasi HTML interaktif dalam bentuk game mobil 3D. Pemain mengendarai mobil, mengeksplorasi lingkungan, memasuki area pembelajaran, lalu mempelajari dan menjalankan **Ant Colony Optimization (ACO)** serta **Grey Wolf Optimizer (GWO)** untuk menyelesaikan kasus **Cloud Task Scheduling**.
+![Cloud Ops Campus dan kendaraan](docs/evidence/final-branding-main.png)
 
-Berbeda dengan PowerPoint konvensional, penjelasan algoritma tidak berhenti pada definisi dan gambar. Pemain dapat mengubah jumlah task, kemampuan Virtual Machine (VM), parameter algoritma, kemudian menjalankan kode JavaScript dan melihat bagaimana jadwal serta metrik evaluasinya berubah.
+**Status:** kandidat rilis di `release/m7-final`; PR #10 ke `main` belum merged. Revisi Astra tidak tersedia; pekerjaan dilanjutkan pada branch `feature/final-ux-aco-gwo-audio`. Status dan bukti terbaru: [urgent release](docs/URGENT_RELEASE.md). **Belum ada deployment publik; izin sebagian aset belum tuntas.** [Hasil QA dan batasan rilis](docs/FINAL_RELEASE.md).
 
-**Prinsip proyek:** game 3D adalah cara *menyampaikan* materi. Nilai akademik utamanya tetap terletak pada paper, penjelasan algoritma, studi kasus task→algoritma→solusi, dan visualisasi hasil perhitungan yang benar
+<details>
+<summary>Pratinjau world, presentasi, dan hasil</summary>
 
-### Istilah penting:
+| Cloud Compute Yard | Ant Research Park |
+| --- | --- |
+| ![Delapan task dan tiga VM](docs/evidence/final-gameplay-cloud-yard.png) | ![Semut dan jalur feromon](docs/evidence/final-readability-aco-live.png) |
 
-| Istilah | Penjelasan singkat |
-|---|---|
-| Task | Pekerjaan komputasi yang perlu dieksekusi. |
-| VM / Virtual Machine | Sumber daya komputasi yang menjalankan task. |
-| Cloud Task Scheduling (CTS) | Menentukan VM yang digunakan untuk mengerjakan tiap task. |
-| Makespan | Waktu penyelesaian seluruh task; pada model ini sama dengan beban waktu VM paling akhir selesai. |
-| ACO | Metaheuristik terinspirasi semut dan feromon untuk membangun solusi. |
-| GWO | Metaheuristik terinspirasi hierarki dan perilaku kawanan serigala untuk memperbaiki solusi. |
-| Visualization by code | Visualisasi dibuat dari data yang dihitung oleh kode algoritma, bukan animasi palsu atau gambar statis. |
+| Wolf Field Research | Presentation Mode |
+| --- | --- |
+| ![Lima kandidat serigala](docs/evidence/final-gameplay-gwo-leaders.png) | ![Panel pembelajaran](docs/evidence/final-gameplay-panel.png) |
 
-## 2. Instruksi Demo Week 10 yang menjadi dasar
+![Perbandingan hasil dan konvergensi](docs/evidence/final-normal-ui-results.png)
 
-Berdasarkan foto papan tulis dan catatan tugas dari kelompok:
+Screenshot browser asli dari game terintegrasi, bukan mockup. Bukti lengkap tersedia pada laporan QA.
 
-1. Gunakan **dua algoritma metaheuristik**: kelompok memilih ACO dan GWO.
-2. Sertakan **referensi/riset paper ilmiah** yang relevan.
-3. Jelaskan **cara kerja** dan tahapan umum masing-masing algoritma.
-4. Buat **studi kasus Cloud Task Scheduling** dengan alur *task → algoritma → solusi*.
-5. Bahas metrik **makespan, cost, resource utilization** dengan asumsi dan rumus jelas.
-6. Presentasikan melalui **HTML interaktif**, dengan visualisasi yang membantu audiens memahami proses algoritma.
-7. Gunakan **visualisasi berbasis kode** dan targetkan publikasi melalui GitHub Pages.
+</details>
 
-**Catatan:** mobil, tiga mini-world, portal `E`, dan mode presentasi seperti slide merupakan keputusan desain kelompok — **bukan** instruksi eksplisit dosen.
+## Tentang proyek
 
-## 3. Ide gameplay dan isi world
+Cloud Task Scheduling menentukan **task mana dijalankan pada VM mana**. Task memiliki beban kerja berbeda; VM memiliki kecepatan berbeda. Pembagian jumlah task yang merata belum tentu memberi waktu selesai tercepat.
 
-Ada **satu game** dengan **mobil yang sama**. Main World menjadi tempat eksplorasi dan tiga mini-world menjadi area pembelajaran, bukan tiga permainan terpisah.
+Game memperagakan pencarian jadwal dengan **makespan minimum**: waktu sampai seluruh task selesai. ACO membangun solusi melalui pilihan probabilistik dan feromon; GWO memperbarui populasi solusi dengan panduan tiga pemimpin. Keduanya dibandingkan dengan Round Robin pada data yang sama.
 
-```text
-                   MAIN WORLD
-            (mobil + jalan + objek 3D)
-                  /    |    \
-             [CLOUD] [ACO] [GWO]
-                  \    |    /
-              RESULTS & RESEARCH
-```
+## Fitur utama
 
-| Lokasi | Desain dunia | Yang dilakukan pemain | Pembelajaran |
-|---|---|---|---|
-| **Main World** | Lingkungan mobil 3D low-poly yang dipertahankan dari basis proyek | Mengemudi, menjelajah, memilih checkpoint | Navigasi dan pembukaan |
-| **Cloud World / Compute Yard** | Jalan dan vegetasi konsisten dengan Main World, ditambah server, podium VM, dan kotak task | Melihat task masuk ke VM dan menjalankan baseline scheduling | Task, VM, MI/MIPS, beban VM, makespan |
-| **ACO World / Ant Research Park** | Sarang semut dan jalur bercabang dalam lingkungan yang sama gayanya | Menjalankan semut virtual, melihat probabilitas pemilihan VM dan pembaruan feromon | Konstruksi solusi ACO dan iterasi |
-| **GWO World / Wolf Field** | Pepohonan dan batuan konsisten, dengan figur kawanan serigala | Mengamati kandidat solusi, alpha/beta/delta, serta perubahan fitness | Update kandidat dan diskretisasi solusi GWO |
-| **Results & Research Station** | Papan/podium penelitian dalam world yang sama | Membandingkan grafik dan membaca paper | Analisis metrik, temuan, batasan, dan kesimpulan |
+- Mobil, kamera, terrain, pencahayaan, dan fisika dari fondasi Bruno Simon.
+- **Cloud Ops Campus:** identitas Kelompok 8, tiga tujuan pembelajaran, dan Credits transparan.
+- **Cloud Compute Yard:** delapan paket task, tiga VM, animasi alokasi nyata, beban VM, dan penanda antrean.
+- **Ant Research Park:** semut contoh mengikuti pilihan VM nyata; jalur feromon membaca pembaruan engine.
+- **Wolf Field Research:** lima kandidat terpilih dari populasi 12, Alpha/Beta/Delta, fitness, serta papan pembagian task per kandidat.
+- **Step / Play / Pause / Reset**, tabel assignment, makespan, biaya simulasi, utilization proxy, dan grafik konvergensi.
+- Enam bagian presentasi dengan **Next/Previous**, perpindahan zona aman, dan kendaraan terkunci selama panel terbuka.
+- Grafis **Low/High** yang tersimpan. Low membatasi DPR ke 1; High mempertahankan batas DPR 2.
 
-### Mengapa desain antarworld harus konsisten?
+## Algoritma dan representasi solusi
 
-Mini-world **tidak boleh** menggunakan gaya baru seperti cyberpunk, floating islands, portal sci-fi/neon, atau aset 3D dari paket yang warna/materialnya bertabrakan. Semua area dibuat sebagai *perpanjangan Main World* melalui **reuse → kitbash → model baru** setelah audit model, material, pencahayaan, vegetasi, jalan, skala, dan pipeline Blender dari basis game.
+| Metode | Alur inti | Visualisasi |
+| --- | --- | --- |
+| **Round Robin** | Membagi task bergiliran ke VM1 → VM2 → VM3. | Paket berpindah ke VM dan beban terakumulasi. |
+| **ACO baseline** | Tiap semut menyusun jadwal dengan feromon dan heuristik beban; evaluasi diikuti evaporasi/deposit. | Satu semut contoh, keputusan task→VM, probabilitas, dan pembaruan feromon nyata. |
+| **GWO baseline** | Alpha/Beta/Delta memandu pembaruan vektor kandidat; koordinat didiskretisasi menjadi indeks VM lalu dievaluasi. | Lima jadwal, ID/peran/fitness, VM tujuan setiap task, dan perubahan assignment per ID. |
 
-Lihat [`docs/WORLD_DESIGN_SPEC.md`](docs/WORLD_DESIGN_SPEC.md) untuk aturan visual dan quality gate.
+Satu kandidat adalah delapan pilihan VM, misalnya `[0,1,2,0,1,2,0,1]` pada engine; tampilan memakai VM1–VM3. **Satu serigala mewakili satu jadwal lengkap, bukan satu task.** Pencarian terjadi pada solusi pembagian task, bukan jarak berjalan menuju VM. [Cara membaca papan GWO](docs/GWO_SCHEDULE_EXPLAINER.md).
 
-## 4. Bagaimana cara memainkan game?
+Implementasi adalah **baseline edukatif**, bukan reproduksi identik OACC atau GWO_C/M dari paper. Objektif utamanya makespan; biaya dan utilization proxy adalah metrik sekunder. Satu seed/dataset tidak membuktikan algoritma selalu unggul.
 
-### Mengemudi dan berpindah area
+## Dataset dan model matematis
 
-1. Pemain membuka halaman game dan mobil berada di **Main World**.
-2. Pemain mengemudi menuju salah satu **gerbang pembelajaran** (Cloud, ACO, GWO).
-3. Muncul petunjuk `Press E to Enter` setelah kendaraan berada pada radius yang aman.
-4. Tekan **E**: input kendaraan dibekukan sementara, transisi kamera/fade berjalan, mobil dipindah ke titik awal mini-world, lalu kontrol aktif lagi.
-5. Pemain **tetap mengendarai mobil** di mini-world tersebut untuk mencapai objek pelajaran.
-6. Di dekat objek/stasiun simulasi, tekan **E** lagi untuk membuka panel/animasi penjelasan. Kendaraan berhenti sementara.
-7. Tekan **Esc** untuk menutup panel dan kembali mengemudi. Untuk keluar mini-world, menuju gerbang keluar lalu tekan **E**.
+Demo memakai **8 task independen, non-preemptive** dan **3 VM heterogen**. Setiap task mendapat tepat satu VM, dengan eksekusi berurutan pada VM tersebut. Model tidak memasukkan transfer jaringan, kedatangan dinamis, kegagalan, atau overhead virtualisasi. Dataset UI tetap; konfigurasi tambahan tersedia melalui API pengembang.
 
-> Catatan teknis: pada proyek Bruno, tombol interaksi asli menggunakan **Enter**. Rancangan `E` harus dibuat sebagai alias atau dikonfigurasi setelah memeriksa apakah ada konflik; jangan menghapus kontrol aslinya secara sembarangan.
+| Task | T1 | T2 | T3 | T4 | T5 | T6 | T7 | T8 |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Beban (MI) | 1200 | 2400 | 1800 | 3200 | 2100 | 1500 | 2700 | 3600 |
 
-### Dua mode bermain
+| VM | Kecepatan (MIPS) | Biaya simulasi / detik |
+| --- | ---: | ---: |
+| VM1 | 600 | 0,0010 |
+| VM2 | 1000 | 0,0015 |
+| VM3 | 1500 | 0,0025 |
 
-- **Explore Mode:** bebas mengendarai mobil dan mengunjungi area mana pun. Tidak perlu menyelesaikan semua misi secara berurutan.
-- **Presentation Mode:** seperti PPT. Ada `Previous`, `Next`, progres section, teleport ke checkpoint aman dan kamera terarah. Presenter **tidak perlu menyetir jauh** jika waktunya terbatas atau mobil tersangkut.
-
-### Urutan presentasi yang dirancang
-
-| Bagian | World/stasiun | Isi saat presentasi |
-|---|---|---|
-| 1. Opening | Main World | Tujuan proyek, masalah CTS, pengenalan game |
-| 2. Problem Definition | Cloud World | Task, VM, baseline, makespan |
-| 3. ACO Concept + Demo | ACO World | Probabilitas, feromon, konstruksi jadwal, iterasi |
-| 4. GWO Concept + Demo | GWO World | Kandidat, alpha/beta/delta, diskretisasi, iterasi |
-| 5. Comparison | Results Station | Jadwal tiap VM, makespan, cost, utilization proxy, grafik konvergensi |
-| 6. Papers & Conclusion | Research Station | Referensi ilmiah, hubungan paper dan implementasi, temuan dan keterbatasan |
-
-Mode presentasi bukan fitur wajib dosen, tetapi dirancang sebagai pengaman ketika demonstrasi di depan kelas. Lihat [`docs/PRESENTATION_GUIDE.md`](docs/PRESENTATION_GUIDE.md).
-
-## 5. Studi kasus Cloud Task Scheduling
-
-Untuk versi pendidikan awal, kita menggunakan **task independen, non-preemptive, dan VM heterogen**. Contoh input awal: **8 task dan 3 VM** (bisa diubah pengguna). Setiap task mendapat tepat satu VM.
-
-**Model evaluasi:**
-
-- `executionTime(task i, VM j) = lengthMI[i] / mips[j]`.
-- `load[j] = jumlah executionTime task yang ditempatkan di VM j`.
-- `makespan = max(load[0], ..., load[m-1])`.
-- `computeCost = jumlah load[j] × biaya-per-detik[j]` *(harga simulasi, bukan tagihan cloud nyata)*.
-- `meanUtilizationProxy = jumlah load[j] / (jumlah VM × makespan)` *(proksi penggunaan relatif pada model sederhana, bukan CPU utilization nyata)*.
-
-**Objektif utama MVP:** meminimalkan **makespan**. Cost dan utilization ditampilkan sebagai metrik sekunder; tidak boleh diklaim ikut dioptimalkan bila tidak ada fungsi objektif yang melakukannya.
-
-### Contoh keluaran yang diharapkan
-
-Pengguna memasukkan task dan VM → memilih ACO atau GWO → menekan `Run` atau `Step` → engine JavaScript menghasilkan alokasi task → visualisasi 3D membaca jejak iterasi dari engine → tabel/grafik menampilkan solusi dan makespan. Semua angka dihasilkan dari kode yang dapat diuji, **bukan nilai hardcoded**.
-
-### Bedanya ACO dan GWO dalam visualisasi
-
-- **ACO:** setiap semut membangun kandidat assignment. Panel menunjukkan probabilitas task→VM berdasarkan feromon dan heuristik, kemudian proses evaporasi/deposit serta best-so-far.
-- **GWO:** setiap serigala mewakili satu kandidat jadwal, bukan satu task. Kandidat terbaik menjadi alpha, beta, delta. Posisi kandidat diperbarui, dipetakan ke VM diskret, lalu dievaluasi kembali.
-
-Baca [`docs/ALGORITHM_SPEC.md`](docs/ALGORITHM_SPEC.md) untuk pseudocode, parameter, trace events, asumsi, serta unit test.
-
-## 6. Paper ilmiah dan kejujuran metodologi
-
-### Paper ACO cadangan yang **sudah terverifikasi**
-
-**Hongtao Wang (2024).** *Research on Task Scheduling Model of Ant Colony Optimization Cloud Computing Platform for Online Practical Customer-training Application*. **IEIE Transactions on Smart Processing & Computing**, 13(3), 243–253. DOI: https://doi.org/10.5573/IEIESPC.2024.13.3.243
-
-Paper ACO yang semula dikirim anggota melalui DBpia (`NODE11826229`) **belum dapat diverifikasi** judul dan metode lengkapnya. Jika paper asli dapat diakses kemudian dan memang relevan, dokumentasi perlu diperbarui.
-
-### Paper GWO pilihan kelompok yang **sudah terverifikasi**
-
-**Hongbo Wang et al. (2025).** *An improved grey wolf optimizer with flexible crossover and mutation for cluster task scheduling*. **Information Sciences**, 704, 121943. DOI: https://doi.org/10.1016/j.ins.2025.121943
-
-**PENTING:** kedua penelitian membahas bentuk *improved* ACO/GWO. Implementasi awal aplikasi dirancang sebagai **baseline ACO diskret dan baseline GWO yang didiskretisasi**, **bukan** klaim reproduksi persis algoritma OACC atau GWO_C/M. Replikasi varian paper hanya boleh diklaim setelah persamaan/prosedur diperiksa dan diuji.
-
-Baca [`docs/PAPER_REVIEW.md`](docs/PAPER_REVIEW.md) untuk status bukti, isi ilmiah dan keterbatasan sumber.
-
-## 7. Teknologi dan sumber dasar game
-
-- **Three.js** — rendering 3D di browser.
-- **Rapier** — fisika kendaraan/tumbukan (mengikuti stack proyek awal).
-- **JavaScript/TypeScript sesuai repo dasar** — engine ACO, GWO, state machine dan interaksi.
-- **HTML/CSS** — panel materi, HUD dan mode presentasi.
-- **Blender/GLB** — modifikasi/pembuatan aset 3D sesuai pipeline basis.
-- **Vite dan GitHub Actions** — bundling dan deployment statis ke GitHub Pages.
-
-Game menggunakan **basis open-source Bruno Simon Folio 2025** sebagai fondasi 3D dan kendaraan. Komponen tersebut bukan diklaim dibuat seluruhnya dari nol oleh kelompok. Kontribusi kelompok diarahkan pada integrasi akademik, zona baru, aset edukasi, visualisasi dan engine ACO/GWO. Lisensi dan atribusi harus dipertahankan. Rincian: [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md).
-
-## 8. Struktur repository (target; belum semua ada)
+MI = *million instructions*; MIPS = *million instructions per second*.
 
 ```text
-Soka-cloud-ops-scheduling-adventure/
-├── README.md                    # Panduan utama untuk kelompok
-├── CONTRIBUTING.md              # Aturan kerja dan kolaborasi
-├── THIRD_PARTY_NOTICES.md       # Atribusi & pemeriksaan lisensi
-├── AGENTS.md                    # Petunjuk coding agent / AI
-├── docs/
-│   ├── PRD.md                   # Kebutuhan produk
-│   ├── GDD.md                   # Desain gameplay dan zona
-│   ├── ALGORITHM_SPEC.md        # Model CTS, ACO, GWO, metrik
-│   ├── PAPER_REVIEW.md          # Status dan ringkasan paper
-│   ├── WORLD_DESIGN_SPEC.md     # Pedoman visual dan aset
-│   ├── IMPLEMENTATION_PLAN.md   # Milestones dan pengujian
-│   ├── PRESENTATION_GUIDE.md    # Script demo untuk kelompok
-│   ├── MASTER_PROMPT.md         # Prompt eksekusi di Work
-│   └── WORK_HANDOFF.md          # Status dan tugas sesi berikutnya
-├── sources/                     # AKAN mengikuti struktur repo dasar setelah audit
-├── static/                      # AKAN mengikuti pipeline aset repo dasar
-└── package.json                 # BELUM tersedia di repo tujuan
+durasi(i,j)       = MI[i] / MIPS[j]
+load[j]          = jumlah durasi task pada VM j
+makespan         = max(load[j])
+cost             = jumlah load[j] × costPerSecond[j]
+utilizationProxy = jumlah load[j] / (jumlah VM × makespan)
 ```
 
-**Jangan membuat folder `src/public` secara asal** sebelum memeriksa struktur aktual repositori dasar; source resmi memakai `sources/`, `static/`, `resources/`, `scripts/`.
+Contoh terverifikasi: T1 pada VM1 membutuhkan **1200/600 = 2 detik**. Round Robin menghasilkan beban **[11,833333; 8,1; 2,2] detik**, makespan **11,833333 detik**, biaya **0,029483333 unit simulasi**, dan mean utilization proxy **62,35%**. Biaya bukan tarif cloud nyata; proxy bukan pengukuran CPU utilization.
 
-## 9. Cara menjalankan proyek
+Perbandingan memakai dataset sama, seed **42**, **50 iterasi** untuk metaheuristik, dan populasi **12**. Demo Step menggunakan trace pelajaran singkat. Anggaran evaluasi antaralgoritma berbeda. [Spesifikasi model dan pengujian](docs/ALGORITHM_SPEC.md).
 
-**Belum bisa dijalankan dari repository ini** karena tahap saat ini adalah dokumentasi dan belum ada source code game yang diintegrasikan.
+## Cara bermain dan presentasi
 
-Setelah kode dasar ditambahkan dan lolos audit, prosedur yang akan diverifikasi mencakup:
+| Kontrol | Fungsi |
+| --- | --- |
+| **WASD / tombol panah** | Mengemudi dan membelokkan mobil. |
+| **B / Shift** | Rem / boost. |
+| **E / Enter** | Berinteraksi dengan gerbang atau stasiun terdekat. |
+| **Esc** | Menutup panel/menu dan kembali mengemudi. |
+| **R** | Reset kendaraan ke titik aman zona aktif. |
+| **M** | Membuka peta kampus. |
+
+Datangi gerbang Cloud, ACO, atau GWO, lalu tekan E/Enter. Di dalam zona, gunakan stasiun riset untuk membuka pelajaran. Gerbang **Kembali ke Main** membawa mobil pulang.
+
+Untuk demo kelas, klik **MULAI PRESENTASI**:
+
+**Pembukaan → Cloud → ACO → GWO → Hasil → Paper**.
+
+**Langkah** menjalankan satu event; **Play/Pause** menjalankan/menahan trace; **Reset** mengulang. Next/Previous mengatur zona dan panel yang sama. Tutup panel dengan Esc untuk melihat seluruh meja ACO dari stasiunnya; overlap pada sudut tersebut masih menjadi batas tampilan yang didokumentasikan.
+
+## Instalasi dan menjalankan lokal
+
+Gunakan **Node.js 22.17.0** seperti lingkungan uji. Vite mensyaratkan Node 20.19+ atau 22.12+. Browser yang diuji adalah Google Chrome desktop dengan WebGPU. WebGPU membutuhkan HTTPS atau localhost. Fallback WebGL tersedia dari fondasi renderer, tetapi belum termasuk penerimaan perangkat proyek.
 
 ```bash
+git clone --branch release/m7-final https://github.com/Arkanzahir/Soka-cloud-ops-scheduling-adventure.git
+cd Soka-cloud-ops-scheduling-adventure
 npm install
 npm run dev
-npm run build
 ```
 
-Catatan: README asli Bruno menggunakan `npm install --force` untuk setup. Ikuti petunjuk dan dependency yang benar-benar ada pada commit dasar yang diaudit; jangan mengasumsikan perintah di atas pasti berhasil sebelum diuji.
+Buka URL localhost dari Vite. `.env` tidak wajib untuk demo lokal dan backend tidak diperlukan. Untuk pengaturan opsional, salin `.env.example` menjadi `.env`; pertahankan `VITE_SERVER_URL` dan `VITE_GAME_PUBLIC` kosong pada rilis normal. Jangan memasukkan credential ke repository.
 
-## 10. Roadmap status
+`.npmrc` menggunakan `legacy-peer-deps=true` untuk plugin upstream lama yang peer range-nya belum mencakup Vite 7. Versi dependency tidak di-upgrade pada finalisasi ini. Di PowerShell, gunakan `npm.cmd` bila diperlukan.
 
-| Milestone | Fokus | Status saat dokumen dibuat |
-|---|---|---|
-| M0 | Audit source Bruno, lisensi, aset, build dan visual baseline | BELUM DIMULAI |
-| M1 | Finalisasi detail paper dan spesifikasi algoritma | DRAFT / paper GWO terverifikasi, ACO DBpia belum |
-| M2 | Sistem zona, tombol E/Enter, kamera, respawn | BELUM DIMULAI |
-| M3 | Cloud Mini-World sebagai vertical slice | BELUM DIMULAI |
-| M4 | Engine ACO & GWO, seeded RNG, unit tests | BELUM DIMULAI |
-| M5 | ACO/GWO worlds dan animasi dari trace nyata | BELUM DIMULAI |
-| M6 | Results, paper station, Presentation Mode | BELUM DIMULAI |
-| M7 | Production QA dan deployment GitHub Pages | BELUM DIMULAI |
+Verifikasi dan preview produksi:
 
-Silakan lihat [`docs/IMPLEMENTATION_PLAN.md`](docs/IMPLEMENTATION_PLAN.md). Jangan mengubah status menjadi **Completed** tanpa bukti test/build.
+```bash
+npm test
+npm run build
+npm run test:build
+npm run preview
+```
 
-## 11. Pembagian kerja kelompok (disarankan; belum ditetapkan per orang)
+Output berada di `dist/`. Vite `base: './'` menjaga aset relatif. Pemeriksaan subpath repository:
 
-| Role | Tanggung jawab | Bukti penyelesaian |
-|---|---|---|
-| Project Lead / Integrator | PRD, jadwal, review dan penyatuan fitur | Milestone, PR review, integrasi berhasil |
-| 3D World & Vehicle | Audit world, asset pipeline, terrain, mini-world, physics | Screenshot perbandingan dan gameplay test |
-| Algorithm Engineer | Model scheduling, ACO/GWO, RNG, tests | Unit tests, trace event, hasil terverifikasi |
-| UI & Visualization | Panel edukasi, chart, presentasi, ilustrasi data | Grafik sinkron dengan engine |
-| Research & Presenter | Paper, sitasi, narasi, uji demo di kelas | Paper matrix, script dan latihan presentasi |
+```bash
+npm run preview -- --host 127.0.0.1 --port 4173 --base /Soka-cloud-ops-scheduling-adventure/
+```
 
-Satu orang boleh menangani lebih dari satu role. Nama anggota dan pembagian final ditetapkan bersama; **jangan mengarang nama atau kontribusi**.
+Buka `http://127.0.0.1:4173/Soka-cloud-ops-scheduling-adventure/`. Tes browser otomatis memerlukan Chrome dan Playwright; perintah serta hasilnya ada di [laporan QA final](docs/FINAL_RELEASE.md).
 
-## 12. Aturan kerja bersama
+Untuk presentasi, mulai dari **Menu → Options → Quality: Low** dan muat game sebelum giliran demo. Startup sebelumnya sekitar **21 detik** pada lingkungan uji; hasil headless RTX 3050 bukan jaminan performa semua laptop. Uji foreground pada perangkat presentasi dan siapkan localhost sebagai fallback.
 
-- Kerjakan fitur di branch masing-masing, jangan push langsung ke `main` tanpa review.
-- Tulis commit yang jelas, sertakan screenshot/video untuk perubahan world.
-- Untuk algoritma, sertakan pengujian yang memperlihatkan hubungan input→output.
-- Pisahkan klaim **sudah diuji** vs **baru direncanakan**.
-- Baca [`CONTRIBUTING.md`](CONTRIBUTING.md) sebelum mengubah repository.
-- Jangan mempublikasikan repo atau mengaktifkan Pages tanpa pemeriksaan lisensi dan keputusan kelompok.
+## Teknologi
 
-## 13. GitHub Pages
+**JavaScript, HTML/CSS, Three.js/TSL, WebGPURenderer, Rapier 3D, Vite, GLB/Blender**, CanvasTexture dan SVG. Evaluator/algoritma terpisah dari renderer; M5 meneruskan trace ke world dan M6 menyajikan pembelajaran serta perbandingan.
 
-Saat produk siap, Vite akan membangun output statis (`dist`), kemudian GitHub Actions dapat menerbitkan ke GitHub Pages. Karena target repo adalah `Soka-cloud-ops-scheduling-adventure`, path konfigurasi Vite perlu diuji untuk subpath `/Soka-cloud-ops-scheduling-adventure/` dan semua GLB, texture, WASM, serta asset fetch diperiksa agar tidak `404`.
+## Referensi ilmiah
 
-Repository saat penulisan masih **Private**; perubahan ke Public direncanakan oleh pemilik repository setelah produk selesai dan lisensi diperiksa. **Belum ada URL game live.**
+1. **Wang, H. (2024).** Research on Task Scheduling Model of Ant Colony Optimization Cloud Computing Platform for Online Practical Customer-training Application. *IEIE Transactions on Smart Processing & Computing*, **13**(3), 243–253. [DOI: 10.5573/IEIESPC.2024.13.3.243](https://doi.org/10.5573/IEIESPC.2024.13.3.243).
+2. **Wang, H., Zhang, J., Fan, J., Zhang, C., Deng, B., & Zhao, W. (2025).** An improved grey wolf optimizer with flexible crossover and mutation for cluster task scheduling. *Information Sciences*, **704**, 121943. [DOI: 10.1016/j.ins.2025.121943](https://doi.org/10.1016/j.ins.2025.121943).
+3. **Mirjalili, S., Mirjalili, S. M., & Lewis, A. (2014).** Grey Wolf Optimizer. *Advances in Engineering Software*, **69**, 46–61. [DOI: 10.1016/j.advengsoft.2013.12.007](https://doi.org/10.1016/j.advengsoft.2013.12.007).
 
-## 14. Dokumentasi yang perlu dibaca anggota
+Paper pertama membahas improved ACO/OACC; paper kedua membahas GWO_C/M dengan crossover/mutation; paper ketiga menjelaskan GWO standar. Game **tidak mengklaim mereplikasi hasil eksperimen paper**. Paper ACO DBpia semula belum terverifikasi; referensi ACO di atas adalah alternatif terverifikasi. [Kajian dan batas akademik](docs/PAPER_REVIEW.md).
 
-| Dokumen | Kapan dibaca? |
-|---|---|
-| [`docs/PRD.md`](docs/PRD.md) | Sebelum menyepakati fitur |
-| [`docs/GDD.md`](docs/GDD.md) | Sebelum mengerjakan mobil, world, dan interaksi |
-| [`docs/ALGORITHM_SPEC.md`](docs/ALGORITHM_SPEC.md) | Sebelum menulis ACO/GWO atau grafik |
-| [`docs/PAPER_REVIEW.md`](docs/PAPER_REVIEW.md) | Saat menyusun materi akademik dan sitasi |
-| [`docs/WORLD_DESIGN_SPEC.md`](docs/WORLD_DESIGN_SPEC.md) | Sebelum membuat atau mengunduh aset 3D |
-| [`docs/PRESENTATION_GUIDE.md`](docs/PRESENTATION_GUIDE.md) | Saat latihan demo dan membagi narasi |
-| [`docs/MASTER_PROMPT.md`](docs/MASTER_PROMPT.md) | Ketika memulai implementasi di ChatGPT Work/Codex |
+## Kontributor, kredit, dan lisensi
 
-## 15. Catatan lisensi & kontribusi
+**Kelompok 8** mengadaptasi world Cloud/ACO/GWO, engine scheduling, bridge simulasi, panel pembelajaran/presentasi, perbandingan, branding kampus, dokumentasi, dan integrasi. Nama/pembagian individu tidak dicantumkan karena belum tersedia catatan terverifikasi.
 
-Proyek ini mengadaptasi fondasi open-source **Bruno Simon — Folio 2025** (MIT). Lisensi sumber dan pemberitahuan hak cipta wajib dipertahankan ketika kode/asetnya dimasukkan. Pihak ketiga dapat memiliki lisensi berbeda sehingga harus diperiksa sebelum redistribusi. Kontribusi karya kelompok harus dicatat dengan jelas, termasuk bagian yang dibangun sendiri dan yang merupakan adaptasi.
+Fondasi teknis dan visual berasal dari **[Folio 2025 karya Bruno Simon](https://github.com/brunosimon/folio-2025)**: kendaraan, kamera, physics, terrain, renderer, aset dan interaksi. Copyright **© 2025 Bruno Simon** dan [lisensi MIT](license.md) dipertahankan. Proyek ini tidak menyatakan endorsement Bruno Simon.
 
-**Status klaim:** halaman ini adalah **rencana pengembangan**, bukan pernyataan bahwa game, algoritma atau mini-world sudah selesai.
+Musik dikreditkan kepada **Kounine** sesuai keterangan CC0 upstream. Paket Pages memakai font Nunito dan Amatic SC (SIL OFL) serta efek sintetis original. Gambar galeri portofolio lama dikeluarkan. [Third-party notices](THIRD_PARTY_NOTICES.md) · [Inventaris aset](docs/ASSET_CATALOG.md) · [Kesiapan deployment dan demo lokal](docs/DEPLOYMENT_READINESS.md). Credits tersedia melalui menu **Tentang Proyek** di game.
+
+## Dokumentasi lanjutan
+
+[QA final](docs/FINAL_RELEASE.md) · [Panduan presentasi](docs/PRESENTATION_GUIDE.md) · [Model algoritma](docs/ALGORITHM_SPEC.md) · [Arsitektur fondasi](docs/ARCHITECTURE_AUDIT.md) · [Aturan kontribusi](CONTRIBUTING.md) · [Riwayat README/milestone](docs/history/README_BEFORE_FINAL_RELEASE.md).
+
+### Dashboard dan musik
+
+Di Cloud/ACO/GWO tekan **L** atau **Buka Dashboard** tanpa mendekati stasiun; posisi mobil dipertahankan. **Esc/L** menutup dan mengembalikan kontrol mobil. E/Enter di stasiun tetap tersedia. Seret header dashboard untuk memindah panel penuh; **↺ Posisi** mengembalikan posisi awal. Posisi bertahan saat berganti materi dan dibatasi viewport.
+
+Settings menyediakan Musik latar On/Off dan volume; **M** mute seluruh audio. Musik Kounine yang sudah tersedia diputar setelah interaksi, mengecil menjadi25% saat dashboard terbuka, lalu kembali ke volume pilihan. ACO menampilkan ant/Task/VM/probabilitas/feromon dari event nyata; GWO mempertahankan papan assignment5 kandidat dari12 dengan animasi ringan ketika kandidat berubah. Gerak dekoratif tidak menentukan makespan.

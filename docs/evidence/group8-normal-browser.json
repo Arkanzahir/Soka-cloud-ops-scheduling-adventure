@@ -1,0 +1,55 @@
+{
+  "url": "http://127.0.0.1:4193/Soka-cloud-ops-scheduling-adventure/",
+  "label": "group8-normal",
+  "browser": "156.0.8078.74",
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "checks": [
+    {
+      "name": "release does not expose debug Game",
+      "passed": true
+    },
+    {
+      "name": "world renders visible geometry",
+      "passed": true,
+      "detail": {
+        "meanChannelDeviation": 37.60556277086982
+      }
+    },
+    {
+      "name": "production menu opens",
+      "passed": true
+    },
+    {
+      "name": "no JavaScript page errors",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "no failed local HTTP responses",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "no failed local requests",
+      "passed": true,
+      "detail": [
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Amatic+SC:wght@700&family=Nunito:wght@400;700;900&display=block",
+          "error": "net::ERR_NETWORK_ACCESS_DENIED"
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "httpErrors": [],
+  "requestFailures": [
+    {
+      "url": "https://fonts.googleapis.com/css2?family=Amatic+SC:wght@700&family=Nunito:wght@400;700;900&display=block",
+      "error": "net::ERR_NETWORK_ACCESS_DENIED"
+    }
+  ],
+  "passed": true
+}

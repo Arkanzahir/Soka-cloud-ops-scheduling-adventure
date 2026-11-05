@@ -1,0 +1,8 @@
+# Preserve audited upstream bytes across Windows/Linux checkouts.
+sources/** -text
+static/** -text
+resources/** -text
+license.md -text
+# Keep the project-authored mirror identical on Windows and Linux.
+/THIRD_PARTY_NOTICES.md text eol=lf
+/static/credits/THIRD_PARTY_NOTICES.md text eol=lf

@@ -1,0 +1,65 @@
+{
+  "checks": [
+    {
+      "name": "one schedule board, five wolves and original four zones",
+      "passed": true
+    },
+    {
+      "name": "neutral board has no invented schedule",
+      "passed": true
+    },
+    {
+      "name": "all five rows show real event assignments, roles, fitness and guides",
+      "passed": true
+    },
+    {
+      "name": "full board fits native station camera",
+      "passed": true
+    },
+    {
+      "name": "original follow camera and actual Low DPR1",
+      "passed": true
+    },
+    {
+      "name": "changed task borders compare the same candidate IDs",
+      "passed": true
+    },
+    {
+      "name": "paused rendering does not redraw canvas each frame",
+      "passed": true
+    },
+    {
+      "name": "Play updates actual iterations and Pause holds board",
+      "passed": true
+    },
+    {
+      "name": "20 seek/reset cycles reuse board texture/geometry and actors",
+      "passed": true
+    },
+    {
+      "name": "Reset clears assignment rows and leader labels",
+      "passed": true
+    },
+    {
+      "name": "R keeps vehicle grounded in GWO",
+      "passed": true
+    },
+    {
+      "name": "GWO re-entry keeps one neutral schedule board",
+      "passed": true
+    },
+    {
+      "name": "no JS/local resource errors",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "httpErrors": [],
+  "boardBounds": {
+    "left": 141.7372850507053,
+    "right": 441.77356047319546,
+    "top": 108.84115189346497,
+    "bottom": 482.66815108717435
+  },
+  "passed": true
+}

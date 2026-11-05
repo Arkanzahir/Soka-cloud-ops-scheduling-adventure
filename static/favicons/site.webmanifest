@@ -1,0 +1,15 @@
+{
+  "name": "Cloud Ops: Scheduling Adventure — Kelompok 8",
+  "short_name": "Cloud Ops",
+  "icons": [
+    {
+      "src": "../campus/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "theme_color": "#5b9a92",
+  "background_color": "#fff0bf",
+  "display": "standalone"
+}
