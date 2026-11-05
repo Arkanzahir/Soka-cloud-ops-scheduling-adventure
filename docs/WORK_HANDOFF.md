@@ -3,7 +3,15 @@
 - **Destination:** https://github.com/Arkanzahir/Soka-cloud-ops-scheduling-adventure
 - **Source foundation:** https://github.com/brunosimon/folio-2025
 - **Read first:** `README.md`, `AGENTS.md`, `docs/MASTER_PROMPT.md`, `docs/PAPER_REVIEW.md`.
-- **Status terbaru:** M0/M2 selesai; M3 tahap 1 selesai pada `feature/cloud-world`. Baca `M3_CLOUD_FOUNDATION.md` dan checkpoint terakhir. M1 belum dikerjakan; catatan jeda di bawah adalah riwayat.
+- **Checkpoint awal:** M0/M2 selesai; M3 tahap 1 selesai pada `feature/cloud-world`. Baca `M3_CLOUD_FOUNDATION.md` dan checkpoint terakhir. M1 belum dikerjakan; catatan jeda di bawah adalah riwayat.
+
+## Checkpoint Presentation Race untuk review
+
+- Branch `feature/presentation-race-phase2`, [draft PR #20](https://github.com/Arkanzahir/Soka-cloud-ops-scheduling-adventure/pull/20). Basis PR #19 bertumpu pada PR #18.
+- Mulai Presentasi memakai sirkuit Classic Race. Enam pos opsional tersedia di tepi lintasan. Dasbor dapat disembunyikan tanpa menghentikan Play. Pos ACO mempunyai VM terbuka dengan rute masuk dan keluar.
+- Aset ACO/GWO di `static/campus/animals/` sudah disederhanakan. Serigala memakai rig sederhana dan berpindah berdasarkan ID kandidat saat peringkat berubah. Cue GWO hanya dipicu oleh perubahan Alpha saat pemain dekat, dengan jeda antarlolongan. Atribusi dan perubahan tercatat di dua salinan `THIRD_PARTY_NOTICES.md`.
+- Cloud/GWO memakai tick pos saat arena asal berada di luar frustum. Cek regresi ini dengan `node scripts/test-presentation-race.mjs` pada server dev port 1263 dengan `VITE_GAME_PUBLIC=1`. Tes menempatkan mobil di dekat titik interaksi, lalu memakai keyboard untuk masuk zona dan membuka panel.
+- Uji build dengan `npm test`, `npm run build -- --base /Soka-cloud-ops-scheduling-adventure/`, dan `npm run test:build`. Kinerja di perangkat pengguna dan publikasi Pages perlu diverifikasi terpisah setelah review.
 
 # WORK HANDOFF — ringkasan untuk sesi baru
 

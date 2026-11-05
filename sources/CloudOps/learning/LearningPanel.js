@@ -162,7 +162,7 @@ export class LearningPanel
     pauseLesson()
     {
         this.player?.pause()
-        if(this.lesson?.algorithm === 'aco') this.worlds.aco?.setPaused?.(true)
+        this.worlds[this.lesson?.algorithm]?.setPaused?.(true)
     }
 
     dispose()
@@ -442,14 +442,13 @@ export class LearningPanel
                 if(action === 'play')
                 {
                     const algorithm = this.lesson?.algorithm
-                    if(algorithm === 'aco') this.worlds.aco?.setPaused?.(false)
+                    this.worlds[algorithm]?.setPaused?.(false)
                     const interval = { aco: 1350, gwo: 2200 }[algorithm] ?? this.delay
                     this.player.play(interval)
                 }
                 if(action === 'pause')
                 {
-                    this.player.pause()
-                    if(this.lesson?.algorithm==='aco')this.worlds.aco?.setPaused?.(true)
+                    this.pauseLesson()
                 }
                 if(action === 'reset') this.player.reset()
             }

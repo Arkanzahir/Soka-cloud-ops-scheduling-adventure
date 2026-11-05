@@ -91,6 +91,12 @@ export class PresentationRace
         })
         // Player updates tracking at 6; View consumes it at 7.
         game.ticker.events.on('tick', () => this.frameParkedExhibit(), 6)
+        // Native Area ticks at 10 and skips worlds outside their original frustum.
+        game.ticker.events.on('tick', () => {
+            if(!this.active) return
+            for(const {world} of this.stops)
+                if(world?.frustum?.isIn === false) world.update()
+        }, 11)
     }
 
     frameParkedExhibit()

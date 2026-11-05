@@ -4,6 +4,7 @@ import { MeshDefaultMaterial } from '../../Game/Materials/MeshDefaultMaterial.js
 import { Trees } from '../../Game/World/Trees.js'
 import { InteractivePoints } from '../../Game/InteractivePoints.js'
 import {createPheromoneGeometry,setPheromoneRadius} from './PheromoneGeometry.js'
+import { mountAntModels } from './AntModel.js'
 import { DEFAULT_PROBLEM } from '../scheduling/problem.js'
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js'
 
@@ -23,6 +24,9 @@ export class AcoWorld {
   this.build(); this.decorate()
   this.raceVisuals.push(this.makeFeedback())
   this.resetVisualization()
+  game.resourcesLoader.load([['ant','campus/animals/ant.glb','gltf']])
+   .then(({ant})=>mountAntModels(this.ants,ant))
+   .catch(error=>console.warn('ACO model fallback',error))
   this.tick=()=>{const active=!this.isActive||this.isActive();this.group.visible=active;if(active||this.trackside)this.update(game.ticker.delta)}; game.ticker.events.on('tick',this.tick,10)
  }
  distanceToShore(position){
@@ -313,7 +317,7 @@ export class AcoWorld {
  resetVisualization(){
   this.demo=false;this.event=null;this.iteration=null;this.returning=false;this.moving=false;this.elapsed=0;this.currentTask=0;this.paused=false
   this.applyExperimentLayout()
-  this.ants.forEach((a,i)=>{a.vm=0;a.motion=null;this.placeAntAtNest(a,i);a.mesh.userData.legs.forEach(l=>l.rotation.y=0)})
+  this.ants.forEach((a,i)=>{a.vm=0;a.motion=null;this.placeAntAtNest(a,i);a.walkMixer?.setTime(.08);a.mesh.userData.legs.forEach(l=>l.rotation.y=0)})
   this.taskActors.forEach(actors=>actors[0].material=this.mat.red)
   this.pathMeshes.forEach(m=>m.material=this.mat.leaf)
   this.setPheromone(Array(this.experiment.vmCount).fill(1))
@@ -403,9 +407,13 @@ export class AcoWorld {
     }
     active ||= walking
    }
-   const stride=walking ? .18 : 0
-   mesh.userData.legs.forEach(leg=>leg.rotation.y=Math.sin(this.elapsed*29+leg.userData.phase+ant.antId)*stride)
-   mesh.userData.antennae.forEach((antenna,i)=>antenna.rotation.x=.6+Math.sin(this.elapsed*6+i+ant.antId)*.045)
+   if(ant.walkMixer){
+    if(walking&&!ant.insideVm)ant.walkMixer.update(dt*2.2)
+   }else{
+    const stride=walking ? .18 : 0
+    mesh.userData.legs.forEach(leg=>leg.rotation.y=Math.sin(this.elapsed*29+leg.userData.phase+ant.antId)*stride)
+    mesh.userData.antennae.forEach((antenna,i)=>antenna.rotation.x=.6+Math.sin(this.elapsed*6+i+ant.antId)*.045)
+   }
   }
   if(inTransit&&!active){
    if(this.returning)this.ants.forEach((ant,i)=>this.placeAntAtNest(ant,i))

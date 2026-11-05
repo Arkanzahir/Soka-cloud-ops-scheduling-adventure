@@ -49,3 +49,9 @@ Rincian izin dan uji paket: [DEPLOYMENT_READINESS.md](docs/DEPLOYMENT_READINESS.
 ## Musik Presentation Race
 
 - Sky Blue Street (165 BPM), MintoDog. CC0 1.0. [Unggahan kreator](https://opengameart.org/node/170985). Aset: `static/sounds/musics/Sky Blue Street.ogg`.
+
+## Aset fauna Presentation Race
+
+- ANT, MAXDESIGN-3D. [Model sumber](https://sketchfab.com/3d-models/ant-dab7080251674ef98fc83b7604be2ffc), [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Mesh dan tekstur diringankan, warna disesuaikan, dan klip gerak dipotong untuk ACO.
+- Midium poly Wolf animal 3D model free, iRahulRajput. [Model sumber](https://sketchfab.com/3d-models/midium-poly-wolf-animal-3d-model-free-fdf0a7577fbf4d91b12f820b81f375ec), [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Mesh disederhanakan, tekstur diubah ke warna vertex, dan rig sederhana ditambahkan untuk GWO.
+- Adult and young wolves howling far away, Sacha.Julien. [Rekaman sumber](https://freesound.org/people/Sacha.Julien/sounds/753896/), [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/). Menggunakan pratinjau MP3 dengan volume disesuaikan di game.

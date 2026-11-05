@@ -1,4 +1,5 @@
 import {makeWolf} from './WolfModel.js'
+import {mountWolfModels,poseWolf} from './WolfActors.js'
 import {CandidateBoard} from './CandidateBoard.js'
 import {validateState,optimizerState} from './state.js'
 import * as T from 'three/webgpu'
@@ -21,7 +22,7 @@ export class GwoWorld extends Area {
    g.position.set(x,y+.04,z);this.game.scene.add(g);this.objects.hideable.push(g)
    const label=this.sign('',x,y+3.35,z,2.35,true)
    const pad=new T.Mesh(new T.CylinderGeometry(1.4,1.55,.12,9),this.materials.wood);pad.position.set(x,y+.03,z);this.game.scene.add(pad);this.objects.hideable.push(pad)
-   this.wolves.push({home:g.position.clone(),id:'wolf-'+(i+1),mesh:g,label,base:g.position.clone(),pad})
+   this.wolves.push({home:g.position.clone(),facing:0,id:'wolf-'+(i+1),mesh:g,label,base:g.position.clone(),pad})
   }
   const tracksideModels=this.objects.hideable.slice()
   // A small observation shelter replaces boards that previously cut across the driving view.
@@ -44,16 +45,23 @@ export class GwoWorld extends Area {
   const gate=manager.findReturnCheckpoint({position:[39,50],rotation:0});if(!gate)throw new Error('No safe GWO gate');this.mainGate=gate;this.entry=manager.createStation({zone:'main',label:'Wolf Field Research',position:[gate.position[0],1.5,gate.position[1]],onInteract:()=>manager.enter('gwo')})
   this.exit=manager.createStation({zone:'gwo',label:'Kembali ke Main',position:[-65,1.5,75],onInteract:()=>manager.enter('main')})
   this.station=manager.createStation({zone:'gwo',label:'GWO Research',position:[-65,1.5,70],onInteract:()=>this.onLearn?this.onLearn():manager.openPanel('gwo-research')})
+  this.howlPosition=new T.Vector3()
+  this.howl=this.game.audio.register({group:'gwoHowl',path:'sounds/cloud-ops/gwo-howl.mp3',
+   volume:.45,antiSpam:4.4,distanceFade:32,positions:this.howlPosition})
+  this.game.resourcesLoader.load([['wolf','campus/animals/wolf.glb','gltf']])
+   .then(({wolf})=>mountWolfModels(this.wolves,wolf))
+   .catch(error=>console.warn('GWO model fallback',error))
   this.resetVisualization();manager.registerPanel('gwo-research');manager.presentation.sections.push('gwo');manager.refresh()
  }
  setTracksideLayout(active){
   // Keep the original terrain and actors. The roadside formation is two clear rows near the rail.
   const formation=[[-64,57],[-59,57],[-54,57],[-62,62],[-57,62]]
-  const facing=active?-Math.PI*.7:0
+  const facing=active?-Math.PI*.51:0
   for(const [i,wolf] of this.wolves.entries()){
    const [x,z]=active?formation[i]:[wolf.home.x,wolf.home.z]
    wolf.base.set(x,wolf.home.y,z)
    wolf.mesh.position.copy(wolf.base)
+   wolf.rankMove=null
    wolf.mesh.rotation.y+=facing-(wolf.facing||0)
    wolf.facing=facing
    wolf.pad.position.x=x;wolf.pad.position.z=z
@@ -89,12 +97,63 @@ export class GwoWorld extends Area {
  applyOptimizerState(input){this.applyState(optimizerState(input),{guides:input.guides});this.board.write(`5 of ${input.candidates.length} candidates | ITER ${input.iteration} | BEST ${input.bestMakespan.toFixed(2)} s`)}
  applyState(input,{preview=false,guides=null}={}){
   const previous=this.state,state=validateState(input);this.state=state;this.preview=preview
+  this.paused=false
+  const priorPositions=new Map(this.wolves.map(w=>[w.id,w.mesh.position.clone()]))
   const ranked=[...state.candidates].sort((a,b)=>a.fitness-b.fitness)
   state.candidates.forEach((candidate,i)=>{const wolf=this.wolves[i];const old=previous?.candidates.find(c=>c.id===candidate.id);wolf.motion=old&&(old.fitness!==candidate.fitness||old.assignment.some((v,j)=>v!==candidate.assignment[j]))?1:0;wolf.id=candidate.id;const leader=Object.entries(state.leaders).find(([,id])=>id===candidate.id)?.[0];wolf.role=leader||null;wolf.label.mesh.visible=!!leader;wolf.targetScale=leader==='alpha'?1.18:leader==='beta'?1.08:leader==='delta'?1.03:.94;wolf.mesh.userData.accents.forEach(m=>m.material=this.materials[leader||'wood']);wolf.pad.material=this.materials[leader||'wood'];wolf.label.write(`${leader?.toUpperCase()||candidate.id} | ${candidate.fitness.toFixed(2)} s`);wolf.targetRotation=ranked.findIndex(c=>c.id===candidate.id)*.12;wolf.assignment=[...candidate.assignment]})
+  for(const wolf of this.wolves){
+   const from=previous&&priorPositions.get(wolf.id)
+   wolf.rankMove=from&&from.distanceToSquared(wolf.base)>.1?{from,elapsed:0}:null
+   wolf.mesh.position.copy(wolf.rankMove?.from??wolf.base)
+  }
+  if(!preview&&!this.game.audio.mute.active&&previous&&previous.leaders.alpha!==state.leaders.alpha){
+   const alpha=this.wolves.find(w=>w.role==='alpha')
+   alpha.mesh.getWorldPosition(this.howlPosition)
+   if(this.howlPosition.distanceTo(this.game.player.position)<25){
+    const lastPlay=this.howl.lastPlay
+    this.howl.play()
+    if(this.howl.lastPlay!==lastPlay)alpha.howlAt=this.time
+   }
+  }
   this.board.write(`${preview?'DEMO':'LIVE'} / ${state.iteration} / BEST ${state.bestMakespan.toFixed(2)} s`)
   this.schedules.write(state,previous,{preview,guides})
   const detail=document.getElementById('gwo-state');if(detail)detail.textContent=`${preview?'DEMO / PREVIEW — synthetic values':'External engine event'}; iteration ${state.iteration}; best makespan ${state.bestMakespan} s. `+state.candidates.map(c=>`${c.id}: [${c.assignment.join(',')}] fitness ${c.fitness}`).join('; ')
  }
- resetVisualization(){this.schedules.reset();this.state=null;this.preview=false;this.board.write('5 of 12 candidates | waiting for engine');for(const [i,w] of this.wolves.entries()){w.mesh.position.copy(w.base);w.mesh.rotation.y=w.facing||0;w.targetRotation=0;w.motion=0;w.targetScale=1;w.mesh.scale.setScalar(1);w.mesh.userData.body.rotation.z=0;w.role=null;w.label.mesh.visible=false;w.mesh.userData.accents.forEach(m=>m.material=this.materials.wood);w.pad.material=this.materials.wood;w.assignment=null;w.label.write(`CANDIDATE ${i+1} | waiting`)}this.time=0}
- update(){if(!this.wolves)return;if(this.manager.currentZone!=='gwo'&&!this.trackside) return;this.time+=this.game.ticker.delta;for(const w of this.wolves){w.motion=Math.max(0,(w.motion||0)-this.game.ticker.delta);w.mesh.position.y=w.base.y+Math.sin((1-w.motion)*Math.PI*4)*.05*w.motion;w.mesh.userData.body.scale.y=1+Math.sin(this.time*1.8+w.base.x)*.009;w.mesh.userData.head.rotation.z=Math.sin(this.time*1.1+w.base.x)*.025;w.mesh.userData.tail.rotation.x=Math.sin(this.time*1.6+w.base.x)*.12;w.mesh.scale.setScalar(w.mesh.scale.x+((w.targetScale||1)-w.mesh.scale.x)*Math.min(1,this.game.ticker.delta*4));w.mesh.rotation.y+=((w.facing||0)+w.targetRotation-w.mesh.rotation.y)*Math.min(1,this.game.ticker.delta*4);w.mesh.userData.body.rotation.z=Math.sin(this.time*1.4+w.base.x)*.012}}
+ resetVisualization(){this.schedules.reset();this.state=null;this.preview=false;this.paused=false;this.howl.howl.stop();this.board.write('5 of 12 candidates | waiting for engine');for(const [i,w] of this.wolves.entries()){w.mesh.position.copy(w.base);w.rankMove=null;w.howlAt=-Infinity;poseWolf(w,0,false,0);w.mesh.rotation.y=w.facing||0;w.targetRotation=0;w.motion=0;w.targetScale=1;w.mesh.scale.setScalar(1);w.mesh.userData.body.rotation.z=0;w.role=null;w.label.mesh.visible=false;w.mesh.userData.accents.forEach(m=>m.material=this.materials.wood);w.pad.material=this.materials.wood;w.assignment=null;w.label.write(`CANDIDATE ${i+1} | waiting`)}this.time=0}
+ setPaused(paused){
+  this.paused=paused
+  if(paused){
+   this.howl.howl.stop()
+   for(const wolf of this.wolves){wolf.howlAt=-Infinity;poseWolf(wolf,this.time,false,0)}
+  }
+ }
+ update(){
+  if(!this.wolves||this.paused||this.manager.currentZone!=='gwo'&&!this.trackside)return
+  const dt=this.game.ticker.delta
+  this.time+=dt
+  for(const wolf of this.wolves){
+   const {mesh,base,rankMove}=wolf
+   const time=this.time+base.x
+   let facing=wolf.facing+wolf.targetRotation
+   if(rankMove){
+    rankMove.elapsed+=dt
+    const t=Math.min(rankMove.elapsed/1.35,1)
+    mesh.position.lerpVectors(rankMove.from,base,t*t*(3-2*t))
+    const dx=base.x-rankMove.from.x,dz=base.z-rankMove.from.z
+    const arc=.55*Math.sin(Math.PI*t)/Math.hypot(dx,dz)
+    mesh.position.x-=dz*arc
+    mesh.position.z+=dx*arc
+    if(t<.84)facing=Math.atan2(rankMove.from.z-base.z,base.x-rankMove.from.x)
+    if(t===1)wolf.rankMove=null
+   }
+   mesh.position.y=base.y+(wolf.rankMove?Math.abs(Math.sin(time*18))*.04:0)
+   mesh.userData.body.scale.y=1+Math.sin(time*1.8)*.009
+   const turn=facing-mesh.rotation.y
+   mesh.rotation.y+=Math.atan2(Math.sin(turn),Math.cos(turn))*Math.min(1,dt*8)
+   mesh.scale.setScalar(mesh.scale.x+(wolf.targetScale-mesh.scale.x)*Math.min(1,dt*4))
+   const age=this.time-wolf.howlAt
+   const howl=age>=0&&age<4.2?Math.sin(Math.PI*age/4.2):0
+   poseWolf(wolf,time,!!wolf.rankMove,howl)
+  }
+ }
 }

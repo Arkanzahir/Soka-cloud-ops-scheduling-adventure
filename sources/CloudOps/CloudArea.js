@@ -114,6 +114,7 @@ export class CloudArea extends Area {
   let event;try{event=allocationEvent(input,this.experiment)}catch(error){this.lastVisualizationError=error.message;return false}
   this.lastVisualizationError=null;this.lastAllocation=event
   if(event.taskIndex>=(this.experiment?.taskCount??8)||event.vmIndex>=(this.experiment?.vmCount??3))return false
+  this.paused=false
   const task=this.tasks[event.taskIndex];task.vm=event.vmIndex
   task.motion={from:task.mesh.position.clone(),to:this.allocationTarget(event.taskIndex,event.vmIndex),elapsed:0,duration:1.4}
   this.tasks.forEach(t=>t.mesh.scale.setScalar(t===task?1.12:1));this.vms.forEach((vm,i)=>vm.selection.visible=i===event.vmIndex)
@@ -122,7 +123,8 @@ export class CloudArea extends Area {
  displayLoads(loads,makespan){const max=Math.max(...loads,1);this.vms.forEach((vm,i)=>{vm.load=loads[i]??0;vm.loadLabel.write(`LOAD ${vm.load.toFixed(2)} s`);vm.bar.scale.x=35*vm.load/max+.01});this.makespanLabel.write(`${this.previewMode?'DEMO/PREVIEW | ':''}MAKESPAN ${makespan.toFixed(3)} s`)}
  positionTask(task,position){task.mesh.position.copy(position);task.label.mesh.position.copy(position).add(task.labelOffset)}
  applySchedule(input){let state;try{state=scheduleState(input,this.experiment)}catch(error){this.lastVisualizationError=error.message;return false}this.resetVisualization();this.tasks.forEach((task,i)=>{if(i>=(this.experiment?.taskCount??8))return;task.vm=state.assignments[i];this.positionTask(task,this.allocationTarget(i,task.vm))});this.displayLoads(state.vmLoads,state.makespan);return true}
- resetVisualization(){this.tasks.forEach(task=>{task.motion=null;task.vm=null;task.mesh.scale.setScalar(1);this.positionTask(task,task.home)});this.vms.forEach(vm=>vm.selection.visible=false);this.lastAllocation=null;this.lastVisualizationError=null;this.displayLoads([0,0,0],0)}
+ setPaused(paused){this.paused=paused}
+ resetVisualization(){this.paused=false;this.tasks.forEach(task=>{task.motion=null;task.vm=null;task.mesh.scale.setScalar(1);this.positionTask(task,task.home)});this.vms.forEach(vm=>vm.selection.visible=false);this.lastAllocation=null;this.lastVisualizationError=null;this.displayLoads([0,0,0],0)}
  setPreviewMode(enabled){this.previewMode=!!enabled;this.displayLoads(this.vms.map(vm=>vm.load),Math.max(...this.vms.map(vm=>vm.load)))}
  // Centers active task rows, keeping dispatch boxes, labels and parking guides aligned.
  layoutQueue(count){
@@ -163,7 +165,11 @@ export class CloudArea extends Area {
   // Respect Area's frustum culling; inactive objects stay hidden even when re-entering.
   const inView=this.trackside||this.frustum?.isIn!==false
   this.tasks.forEach((task,i)=>{const visible=inView&&i<this.experiment.taskCount;task.mesh.visible=visible;task.label.mesh.visible=visible})
-  this.vms.forEach((vm,i)=>{const visible=inView&&i<this.experiment.vmCount;for(const node of vm.visualNodes)node.visible=visible})
+  this.vms.forEach((vm,i)=>{
+   const visible=inView&&i<this.experiment.vmCount
+   for(const node of vm.visualNodes)
+    node.visible=visible&&(node!==vm.selection||this.lastAllocation?.vmIndex===i)
+  })
  }
- update(){if(!this.tasks)return;this.refreshExperimentVisibility();const dt=this.game.ticker.delta;for(const vm of this.vms){vm.activity.scale.setScalar(vm.selection.visible?1.25+Math.sin(this.game.ticker.elapsed*4)*.2:1)}for(const task of this.tasks){if(!task.motion)continue;const m=task.motion;m.elapsed=Math.min(m.duration,m.elapsed+dt);const p=m.elapsed/m.duration,eased=p*p*(3-2*p),position=this.motionPosition;position.copy(m.from).lerp(m.to,eased);position.y+=Math.sin(p*Math.PI)*1.25;this.positionTask(task,position);if(p===1){task.motion=null;task.mesh.scale.setScalar(1)}}}
+ update(){if(!this.tasks)return;this.refreshExperimentVisibility();if(this.paused)return;const dt=this.game.ticker.delta;for(const vm of this.vms){vm.activity.scale.setScalar(vm.selection.visible?1.25+Math.sin(this.game.ticker.elapsed*4)*.2:1)}for(const task of this.tasks){if(!task.motion)continue;const m=task.motion;m.elapsed=Math.min(m.duration,m.elapsed+dt);const p=m.elapsed/m.duration,eased=p*p*(3-2*p),position=this.motionPosition;position.copy(m.from).lerp(m.to,eased);position.y+=Math.sin(p*Math.PI)*1.25;this.positionTask(task,position);if(p===1){task.motion=null;task.mesh.scale.setScalar(1)}}}
 }

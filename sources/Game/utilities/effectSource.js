@@ -1,6 +1,6 @@
 /** Route inherited effect cues to original synthesized clips. Music uses its own playlist. */
 export function effectSource(path, loop) {
-    if(!path.startsWith('sounds/') || path.startsWith('sounds/musics/')) return path
+    if(!path.startsWith('sounds/') || path.startsWith('sounds/musics/') || path.startsWith('sounds/cloud-ops/')) return path
 
     let clip = 'click'
     if(path.startsWith('sounds/vehicle/honk/')) clip = 'horn'
