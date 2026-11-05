@@ -52,7 +52,6 @@ Dev A/B: day=.1, year=.25, camera/quality/viewport sama. Screenshot produksi men
 ## Reproduksi
 
 ```powershell
-Copy-Item .env.example .env
 npm.cmd install --force
 npm.cmd test
 npm.cmd run build
