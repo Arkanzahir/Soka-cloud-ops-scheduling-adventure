@@ -4,6 +4,7 @@ import { Game } from './Game.js'
 import { remap, remapClamp, clamp } from './utilities/maths.js'
 import gsap from 'gsap'
 import { Events } from './Events.js'
+import { effectSource } from './utilities/effectSource.js'
 
 export class Audio
 {
@@ -73,8 +74,9 @@ export class Audio
         }
 
         const item = {}
+        const source = effectSource(options.path, options.loop)
         item.howl = new Howl({
-            src: [ options.path ],
+            src: [ source ],
             pool: 2,
             autoplay: (this.initiated && options.autoplay) ?? false,
             loop: options.loop ?? false,
@@ -82,7 +84,7 @@ export class Audio
             preload: options.preload ?? true,
             onloaderror: () =>
             {
-                console.error(`Audio > Load error > ${options.path}`, options)
+                console.error(`Audio > Load error > ${source}`, options)
             },
             onend: () =>
             {

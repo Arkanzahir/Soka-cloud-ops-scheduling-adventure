@@ -2,14 +2,22 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import crypto from 'node:crypto';
+import { isRetiredAsset } from '../scripts/public-asset-policy.mjs';
 const digest=file=>crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex');
 test('Bruno vehicle, camera, world, physics, materials and license remain byte-identical',()=>{
  const manifest=JSON.parse(fs.readFileSync('docs/evidence/upstream-core.json'));
  for(const file of manifest.files)assert.equal(digest(file.path),file.sha256,file.path);
 });
-test('all imported runtime assets retain upstream bytes except the subpath manifest',()=>{
+test('retained runtime assets match their upstream or explicitly sanitized hashes',()=>{
  const manifest=JSON.parse(fs.readFileSync('docs/evidence/asset-inventory.json'));
- for(const file of manifest.entries.filter(e=>e.path.startsWith('static/')&&e.path!=='static/favicons/site.webmanifest'))assert.equal(digest(file.path),file.sha256,file.path);
+ const sanitized = {
+  'static/areas/areas.glb': 'b138490d8f8a2c60a1530dabb33d23ac75c13491ee80e8dfc6be095c945c7659',
+  'static/areas/areas-compressed.glb': '574913d92f9abc4e62ac355b125a405f745480033f90e90c308b00345618bc3c'
+ };
+ for(const file of manifest.entries.filter(e=>e.path.startsWith('static/')&&e.path!=='static/favicons/site.webmanifest')){
+  if(isRetiredAsset(file.path.slice(7))) assert.ok(!fs.existsSync(file.path),file.path);
+  else assert.equal(digest(file.path),sanitized[file.path]??file.sha256,file.path);
+ }
 });
 test('HTML entrypoint assets exist and resolve beneath a repository subpath',()=>{
  const html=fs.readFileSync('sources/index.html','utf8');
