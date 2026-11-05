@@ -1350,7 +1350,7 @@ export class CircuitArea extends Area
 
     restart()
     {
-        if(this.state === CircuitArea.STATE_STARTING)
+        if(this.game.world.presentationRace?.active || this.state === CircuitArea.STATE_STARTING)
             return
 
         // Area frustum

@@ -10,6 +10,6 @@ export function registerAcoWorld(game,manager){
  const ground=manager.transitions.safeSpawn(gate).y-1.7;
  world.entry=manager.createStation({zone:'main',label:'Ant Research Park',position:[x,ground+1.5,z],onInteract:()=>manager.enter('aco')});
  world.exit=manager.createStation({zone:'aco',label:'Kembali ke Main',position:[220,1.5,12],onInteract:()=>manager.enter('main')});
- world.onResearch=()=>{if(manager.currentZone==='aco'&&manager.canInteract()&&game.player.position.distanceTo(new T.Vector3(211,1,7))<3)world.onLearn?world.onLearn():manager.openPanel('aco-research')};
+ world.onResearch=()=>{if(manager.currentZone==='aco'&&manager.canInteract()&&game.player.position.distanceTo(world.researchPosition)<3)world.onLearn?world.onLearn():manager.openPanel('aco-research')};
  manager.registerPanel('aco-research');manager.presentation.sections.push('aco');return world;
 }

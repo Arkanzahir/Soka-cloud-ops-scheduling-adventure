@@ -12,17 +12,17 @@ export class LearningHost {
   learningModal.events.on('opened',()=>{this.floating.fit();game.audio.setMusicMix({ducked:true})});
   learningModal.events.on('close',()=>game.audio.setMusicMix({ducked:false}));
   game.modals.items.get('learning').events.on('close',()=>this.panel.close());
-  for(const [id,index] of [['cloud',1],['aco',2],['gwo',3]])game.world.areas[id].onLearn=()=>this.open(index);
+  for(const [id,index] of [['cloud',1],['aco',2],['gwo',3]])game.world.areas[id].onLearn=()=>this.openStation(index);
   this.button=document.querySelector('#presentation-open');this.button.hidden=false;this.button.onclick=()=>this.startPresentation();
   this.quick=document.createElement('button');this.quick.type='button';this.quick.id='dashboard-open';this.quick.textContent='Buka Dashboard · L';this.quick.title='L: buka/tutup; Esc: kembali mengemudi. Seret header untuk memindahkan panel.';this.quick.hidden=true;document.body.appendChild(this.quick);
-  this.toggle=()=>{if(this.busy)return;if(this.panel.visible){this.panel.close();return}const index={cloud:1,aco:2,gwo:3}[manager.currentZone];if(index&&manager.canInteract())this.open(index)};this.quick.onclick=this.toggle;
+  this.toggle=()=>{if(this.busy)return;if(this.panel.visible){this.panel.close();return}if(game.world.presentationRace?.active)return;const index={cloud:1,aco:2,gwo:3}[manager.currentZone];if(index&&manager.canInteract())this.open(index)};this.quick.onclick=this.toggle;
   this.shortcut=e=>{if(e.code!=='KeyL'||e.repeat||e.ctrlKey||e.altKey||e.metaKey||e.target.closest?.('input,textarea,select,[contenteditable="true"]'))return;if(this.panel.visible||manager.canInteract()&&manager.currentZone!=='main'){e.preventDefault();e.stopImmediatePropagation();this.toggle()}};document.addEventListener('keydown',this.shortcut,true);
-  this.refreshQuick=()=>{const visible=['cloud','aco','gwo'].includes(manager.currentZone)&&manager.canInteract();if(this.quick.hidden===visible)this.quick.hidden=!visible};game.ticker.events.on('tick',this.refreshQuick,15);
+  this.refreshQuick=()=>{const visible=!game.world.presentationRace?.active&&['cloud','aco','gwo'].includes(manager.currentZone)&&manager.canInteract();if(this.quick.hidden===visible)this.quick.hidden=!visible};game.ticker.events.on('tick',this.refreshQuick,15);
   const controls=document.createElement('div');controls.className='co-music-controls';controls.innerHTML='<label><input id="music-enabled" type="checkbox" checked> Musik latar</label><label>Volume musik <input id="music-volume" type="range" min="0" max="0.3" step="0.01" value="0.12" aria-label="Volume musik"></label><small>Musik mengecil saat dashboard terbuka. M: mute seluruh audio.</small>';document.querySelector('.options-content .content-inner').appendChild(controls);
   controls.querySelector('#music-enabled').onchange=e=>game.audio.setMusicMix({enabled:e.target.checked});controls.querySelector('#music-volume').oninput=e=>game.audio.setMusicMix({volume:Number(e.target.value)});
  }
  async startPresentation(){
-  if(this.busy||!this.manager.canInteract())return;
+  if(this.busy||this.game.world.presentationRace?.active||!this.manager.canInteract())return;
   this.busy=true;this.button.disabled=true;
   try{
    // Return while the native modal is still closed, avoiding an open/close transition race.
@@ -31,6 +31,11 @@ export class LearningHost {
   }finally{this.busy=false;this.button.disabled=false}
  }
  open(index){this.manager.openPanel('learning');this.panel.open(index)}
+ openStation(index){
+  const race=this.game.world.presentationRace;
+  if(race?.active)race.openCheckpoint(index);
+  else this.open(index);
+ }
  async navigate(id){
   if(id===this.manager.currentZone)return true;
   if(this.busy)return false;

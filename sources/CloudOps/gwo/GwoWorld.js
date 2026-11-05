@@ -38,9 +38,9 @@ export class GwoWorld extends Area {
   for(const [x,z]of [[-72,59],[-72,72]]){const model=base.clone(true);model.position.set(x,ground(x,z),z);this.game.objects.add({model,updateMaterials:false});this.objects.hideable.push(model)}
   const spawn={position:[-65,65],rotation:0};manager.transitions.safeSpawn(spawn)
   manager.register({id:'gwo',name:'Wolf Field Research',center:[-65,65],radius:18,spawn})
-  const gate=manager.findReturnCheckpoint({position:[39,50],rotation:0});if(!gate)throw new Error('No safe GWO gate');this.mainGate=gate;manager.createStation({zone:'main',label:'Wolf Field Research',position:[gate.position[0],1.5,gate.position[1]],onInteract:()=>manager.enter('gwo')})
-  manager.createStation({zone:'gwo',label:'Kembali ke Main',position:[-65,1.5,75],onInteract:()=>manager.enter('main')})
-  manager.createStation({zone:'gwo',label:'GWO Research',position:[-65,1.5,70],onInteract:()=>this.onLearn?this.onLearn():manager.openPanel('gwo-research')})
+  const gate=manager.findReturnCheckpoint({position:[39,50],rotation:0});if(!gate)throw new Error('No safe GWO gate');this.mainGate=gate;this.entry=manager.createStation({zone:'main',label:'Wolf Field Research',position:[gate.position[0],1.5,gate.position[1]],onInteract:()=>manager.enter('gwo')})
+  this.exit=manager.createStation({zone:'gwo',label:'Kembali ke Main',position:[-65,1.5,75],onInteract:()=>manager.enter('main')})
+  this.station=manager.createStation({zone:'gwo',label:'GWO Research',position:[-65,1.5,70],onInteract:()=>this.onLearn?this.onLearn():manager.openPanel('gwo-research')})
   this.resetVisualization();manager.registerPanel('gwo-research');manager.presentation.sections.push('gwo');manager.refresh()
  }
  mesh(geo,mat,parent,x,y,z,sx=1,sy=1,sz=1){const m=new T.Mesh(geo,this.materials[mat]);m.position.set(x,y,z);m.scale.set(sx,sy,sz);m.castShadow=true;m.receiveShadow=true;parent.add(m);return m}

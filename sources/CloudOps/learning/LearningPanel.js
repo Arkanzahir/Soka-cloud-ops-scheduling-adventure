@@ -176,7 +176,7 @@ export class LearningPanel
         this.slide = index
         const section = PRESENTATION_SECTIONS[index]
         this.render()
-        if(section.zone && this.navigate && this.visible)
+        if(section.zone && this.navigate && this.visible && !this.raceChapter)
         {
             try
             {
@@ -189,6 +189,12 @@ export class LearningPanel
                 if(this.visible && this.slide === index) this.feedback(`Zona belum siap: ${error.message}`)
             }
         }
+    }
+
+    setRaceChapter(active)
+    {
+        this.raceChapter=active
+        this.root.classList.toggle('co-learning--race',active)
     }
 
     computeExperiment()
@@ -396,6 +402,7 @@ export class LearningPanel
         const trigger = event.target.closest('[data-action]')
         if(!trigger || !this.root.contains(trigger) || !this.visible) return
         const action = trigger.dataset.action
+        if(this.raceChapter&&['slide','previous','next'].includes(action))return
         if(action === 'experiment-toggle'){
             this.experimentExpanded=!this.experimentExpanded
             this.updateExperimentDisclosure()

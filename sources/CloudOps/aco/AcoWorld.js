@@ -111,7 +111,8 @@ export class AcoWorld {
    this.group.add(ant);this.ants.push({mesh:ant,antId:i+1,vm:0,phase:i/12})
   }
   this.box(-9,1.3,5,4.5,2.6,.35,'wood',true);this.label('ACO RESEARCH',-9,2,5.2,4);this.label('E / ENTER : INSPECT',-9,1.2,5.2,4)
-  this.point=this.game.interactivePoints.create(this.origin.clone().add(new T.Vector3(-9,1,7)),'Research',InteractivePoints.ALIGN_RIGHT,InteractivePoints.STATE_CONCEALED,()=>this.onResearch?.());this.point.show()
+  this.researchPosition=this.origin.clone().add(new T.Vector3(-9,1,7))
+  this.point=this.game.interactivePoints.create(this.researchPosition,'Research',InteractivePoints.ALIGN_RIGHT,InteractivePoints.STATE_CONCEALED,()=>this.onResearch?.());this.point.show()
  }
  makeAnt(){
   const group=new T.Group()

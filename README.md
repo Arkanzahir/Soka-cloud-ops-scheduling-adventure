@@ -91,7 +91,7 @@ Perbandingan memakai dataset sama, seed **42**, **50 iterasi** untuk metaheurist
 | **E / Enter** | Berinteraksi dengan gerbang atau stasiun terdekat. |
 | **Esc** | Menutup panel/menu dan kembali mengemudi. |
 | **R** | Reset kendaraan ke titik aman zona aktif. |
-| **M** | Membuka peta kampus. |
+| **L** | Membuka dashboard world aktif saat Free Drive. |
 
 Datangi gerbang Cloud, ACO, atau GWO, lalu tekan E/Enter. Di dalam zona, gunakan stasiun riset untuk membuka pelajaran. Gerbang **Kembali ke Main** membawa mobil pulang.
 
@@ -100,6 +100,8 @@ Untuk demo kelas, klik **MULAI PRESENTASI**:
 **Pembukaan → Cloud → ACO → GWO → Hasil → Paper**.
 
 **Langkah** menjalankan satu event; **Play/Pause** menjalankan/menahan trace; **Reset** mengulang. Next/Previous mengatur zona dan panel yang sama. Tutup panel dengan Esc untuk melihat seluruh meja ACO dari stasiunnya; overlap pada sudut tersebut masih menjadi batas tampilan yang didokumentasikan.
+
+Untuk mengemudi selama demo, pilih **Presentation Race** di Main World. Ikuti panah relatif mobil, masuk ke lingkaran checkpoint, berhenti, lalu tekan **E**. Tekan **Esc** setelah menjelaskan materi untuk menampilkan arah berikutnya. Gunakan gerbang **Kembali ke Main** untuk berpindah antar-world. Setelah Hasil dan Paper, datangi **Finish** dan tekan E. Tombol **Akhiri** mengembalikan Free Drive. Balapan sirkuit dapat dimulai kembali sesudahnya.
 
 ## Instalasi dan menjalankan lokal
 
