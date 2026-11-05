@@ -1,0 +1,65 @@
+
+> cloud-ops-scheduling-adventure@0.0.0 build
+> vite build --mode production
+
+vite v7.2.4 building client environment for production...
+transforming...
+
+../fonts/Pally-Regular.woff2 referenced in ../fonts/Pally-Regular.woff2 didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+../fonts/Pally-Medium.woff2 referenced in ../fonts/Pally-Medium.woff2 didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+../fonts/Pally-Bold.woff2 referenced in ../fonts/Pally-Bold.woff2 didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+../ui/controls/mouse-keyboard.svg referenced in ../ui/controls/mouse-keyboard.svg didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+../ui/controls/touch.svg referenced in ../ui/controls/touch.svg didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+../ui/controls/gamepad.svg referenced in ../ui/controls/gamepad.svg didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+../ui/achievements/check.svg referenced in ../ui/achievements/check.svg didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+../ui/controls/gamepad-circle.webp referenced in ../ui/controls/gamepad-circle.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+../ui/controls/gamepad-triangle.webp referenced in ../ui/controls/gamepad-triangle.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+../ui/controls/gamepad-square.webp referenced in ../ui/controls/gamepad-square.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+../ui/controls/gamepad-cross.webp referenced in ../ui/controls/gamepad-cross.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+../ui/actions/actions-icon-arrow.webp referenced in ../ui/actions/actions-icon-arrow.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+../ui/actions/actions-icon-close.webp referenced in ../ui/actions/actions-icon-close.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+../ui/actions/actions-icon-open.webp referenced in ../ui/actions/actions-icon-open.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+../ui/music-note.svg referenced in ../ui/music-note.svg didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+../ui/map/player.webp referenced in ../ui/map/player.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+../fonts/Pally-Regular.woff referenced in ../fonts/Pally-Regular.woff didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+../fonts/Pally-Medium.woff referenced in ../fonts/Pally-Medium.woff didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+../fonts/Pally-Bold.woff referenced in ../fonts/Pally-Bold.woff didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+../fonts/Pally-Regular.ttf referenced in ../fonts/Pally-Regular.ttf didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+../fonts/Pally-Medium.ttf referenced in ../fonts/Pally-Medium.ttf didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+../fonts/Pally-Bold.ttf referenced in ../fonts/Pally-Bold.ttf didn't resolve at build time, it will remain unchanged to be resolved at runtime
+✓ 814 modules transformed.
+../cloud-ops/node_modules/vm-browserify/index.js (110:11): Use of eval in "../cloud-ops/node_modules/vm-browserify/index.js" is strongly discouraged as it poses security risks and may cause issues with minification.
+rendering chunks...
+computing gzip size...
+../dist/index.html                                60.67 kB │ gzip:     9.81 kB
+../dist/assets/rapier_wasm3d_bg-0Vyjx73g.wasm  1,698.49 kB │ gzip:   627.43 kB
+../dist/assets/index-qUhsL8Z7.css                 49.29 kB │ gzip:     8.80 kB
+../dist/assets/rapier-D9R4uZew.js                229.92 kB │ gzip:    34.80 kB
+../dist/assets/index-0f2uL_GL.js               5,236.15 kB │ gzip: 1,117.05 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 23.58s

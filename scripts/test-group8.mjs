@@ -1,10 +1,11 @@
 import {chromium} from 'playwright';import assert from 'node:assert/strict';import fs from 'node:fs';
 const url=process.argv[2]||'http://127.0.0.1:4193/Soka-cloud-ops-scheduling-adventure/';
+const label=process.argv[3]||'group8';
 const browser=await chromium.launch({channel:'chrome',headless:true}),page=await browser.newPage({viewport:{width:1366,height:768}}),report={checks:[],errors:[],httpErrors:[]};
 page.on('pageerror',e=>report.errors.push(e.message));page.on('response',r=>{if(r.status()>=400&&r.url().startsWith(new URL(url).origin))report.httpErrors.push({url:r.url(),status:r.status()})});
 await page.addInitScript(()=>{window.__campusOpened=[];window.open=url=>{window.__campusOpened.push(String(url));return null}});
 const check=(name,value)=>{report.checks.push({name,passed:!!value});assert.ok(value,name);console.log('PASS '+name)};
-const shot=name=>page.screenshot({path:`docs/evidence/group8-${name}.png`});
+const shot=name=>page.screenshot({path:`docs/evidence/${label}-${name}.png`});
 const panel=()=>page.waitForFunction(()=>game.world.learning.panel.visible&&!game.world.learning.busy&&game.modals.state===1,null,{timeout:30000});
 async function closePanel(){await page.keyboard.press('Escape');await page.waitForFunction(()=>game.modals.state===3&&game.world.cloudOps.state==='DRIVING')}
 async function menu(id){await page.evaluate(id=>game.menu.open(id),id);await page.waitForFunction(()=>game.menu.state===1)}
@@ -42,4 +43,4 @@ try{
  await page.evaluate(()=>game.world.cloudOps.enter('gwo',true));await page.keyboard.press('m');await page.waitForFunction(()=>game.modals.current?.name==='map'&&game.modals.state===1);await page.locator('.js-map-container .location').filter({hasText:'Cloud Ops Campus'}).click();await page.waitForFunction(()=>game.world.cloudOps.currentZone==='main'&&!game.overlay.mesh.visible&&game.modals.state===3,null,{timeout:30000});check('campus map returns from mini-world through ZoneManager safely',await page.evaluate(()=>game.world.cloudOps.currentZone==='main'&&!game.map.navigating));
  check('no personal account was opened by any tested interaction',await page.evaluate(()=>window.__campusOpened.every(u=>u==='https://github.com/Arkanzahir/Soka-cloud-ops-scheduling-adventure')));
  check('no JavaScript or local resource errors',report.errors.length===0&&report.httpErrors.length===0);report.passed=true;
-}catch(error){report.passed=false;report.failure=error.stack;report.state=await page.evaluate(()=>({zone:window.game?.world?.cloudOps?.currentZone,modal:window.game?.modals?.state,menu:window.game?.menu?.state,active:window.game?.interactivePoints?.activeItem?.text})).catch(()=>null);await shot('failure').catch(()=>{});throw error}finally{fs.writeFileSync('docs/evidence/group8-branding.json',JSON.stringify(report,null,2));await browser.close()}
+}catch(error){report.passed=false;report.failure=error.stack;report.state=await page.evaluate(()=>({zone:window.game?.world?.cloudOps?.currentZone,modal:window.game?.modals?.state,menu:window.game?.menu?.state,active:window.game?.interactivePoints?.activeItem?.text})).catch(()=>null);await shot('failure').catch(()=>{});throw error}finally{fs.writeFileSync(`docs/evidence/${label}-branding.json`,JSON.stringify(report,null,2));await browser.close()}

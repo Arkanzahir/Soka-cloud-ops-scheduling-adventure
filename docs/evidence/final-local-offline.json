@@ -1,0 +1,74 @@
+{
+  "checks": [
+    {
+      "name": "normal release has branded title and no debug Game",
+      "passed": true
+    },
+    {
+      "name": "Settings preview uses the Group 8 campus image",
+      "passed": true
+    },
+    {
+      "name": "MIT copyright and source repository accessible in the real release menu",
+      "passed": true
+    },
+    {
+      "name": "cloud normal release Step updates the visible lesson",
+      "passed": true
+    },
+    {
+      "name": "cloud normal release Play/Pause holds progress",
+      "passed": true
+    },
+    {
+      "name": "cloud normal release Reset clears lesson progress",
+      "passed": true
+    },
+    {
+      "name": "aco normal release Step updates the visible lesson",
+      "passed": true
+    },
+    {
+      "name": "aco normal release Play/Pause holds progress",
+      "passed": true
+    },
+    {
+      "name": "aco normal release Reset clears lesson progress",
+      "passed": true
+    },
+    {
+      "name": "gwo normal release Step updates the visible lesson",
+      "passed": true
+    },
+    {
+      "name": "gwo normal release Play/Pause holds progress",
+      "passed": true
+    },
+    {
+      "name": "gwo normal release Reset clears lesson progress",
+      "passed": true
+    },
+    {
+      "name": "normal release comparison has three metrics, two curves and eight tasks",
+      "passed": true
+    },
+    {
+      "name": "normal release has three scientific reference cards",
+      "passed": true
+    },
+    {
+      "name": "normal release closes presentation with one canvas and panel",
+      "passed": true
+    },
+    {
+      "name": "normal release has no JS or local HTTP errors",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "httpErrors": [],
+  "blockedExternal": [
+    "https://fonts.googleapis.com/css2?family=Amatic+SC:wght@700&family=Nunito:wght@400;700;900&display=block"
+  ],
+  "passed": true
+}

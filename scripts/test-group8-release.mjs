@@ -2,6 +2,10 @@ import {chromium} from 'playwright';import assert from 'node:assert/strict';impo
 const browser=await chromium.launch({channel:'chrome',headless:true}),page=await browser.newPage({viewport:{width:1366,height:768}}),report={checks:[],errors:[],httpErrors:[]};
 const url=process.argv[2]||'http://127.0.0.1:4193/Soka-cloud-ops-scheduling-adventure/';
 const label=process.argv[3]||'group8-release';
+if(process.argv.includes('--block-external')){
+ report.blockedExternal=[];
+ await page.route('**/*',route=>{const target=new URL(route.request().url());if(['http:','https:'].includes(target.protocol)&&target.origin!==new URL(url).origin){report.blockedExternal.push(target.href);return route.abort()}return route.continue()});
+}
 page.on('pageerror',e=>report.errors.push(e.message));page.on('response',r=>{if(r.status()>=400&&r.url().startsWith(new URL(url).origin))report.httpErrors.push(r.url())});
 const check=(name,value)=>{report.checks.push({name,passed:!!value});assert.ok(value,name);console.log('PASS '+name)};
 const shot=name=>page.screenshot({path:`docs/evidence/${label}-${name}.png`});
@@ -11,7 +15,11 @@ try{
  for(let i=0;i<60&&!await page.locator('#presentation-open').isVisible();i++){await page.keyboard.press('Enter');await page.waitForTimeout(1000)}
  await page.locator('#presentation-open').waitFor({state:'visible',timeout:30000});
  check('normal release has branded title and no debug Game',await page.evaluate(()=>window.game===undefined&&document.title==='Cloud Ops: Scheduling Adventure — Kelompok 8'));await shot('main');
- await page.locator('.js-menu-trigger').click();await page.locator('.campus-home').waitFor({state:'visible'});await page.locator('.js-navigation-item[data-name="behindTheScene"]').click();await page.locator('.campus-credits').waitFor({state:'visible'});
+ await page.locator('.js-menu-trigger').click();await page.locator('.campus-home').waitFor({state:'visible'});
+ await page.locator('.js-navigation-item[data-name="options"]').click();await page.locator('.js-navigation-item[data-name="options"].is-active').waitFor({state:'visible'});
+ await page.waitForFunction(()=>{const e=document.querySelector('.options-content');return e.classList.contains('is-visible')&&document.querySelector('.menu').getAnimations({subtree:true}).every(a=>a.playState!=='running')});
+ check('Settings preview uses the Group 8 campus image',await page.locator('.options-preview img').evaluate(img=>img.complete&&img.naturalWidth>0&&img.getAttribute('src')==='campus/preview.svg'));await shot('settings');
+ await page.locator('.js-navigation-item[data-name="behindTheScene"]').click();await page.locator('.campus-credits').waitFor({state:'visible'});
  const summary=page.locator('.campus-license summary');await summary.scrollIntoViewIfNeeded();await summary.click();await page.locator('.campus-license pre').scrollIntoViewIfNeeded();check('MIT copyright and source repository accessible in the real release menu',await page.locator('.campus-license pre').innerText().then(t=>t.includes('Copyright (c) 2025 Bruno Simon')&&t.includes('Permission is hereby granted')));await shot('license');
  await page.locator('.js-navigation-item[data-name="home"]').click();await page.locator('[data-campus-start]').click();await settled();
  for(const [index,id]of [[1,'cloud'],[2,'aco'],[3,'gwo']]){

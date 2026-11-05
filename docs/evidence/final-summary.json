@@ -1,0 +1,60 @@
+{
+  "checkedAt": "2026-11-05T04:44:33.599Z",
+  "unitPassed": 40,
+  "browserChecks": 156,
+  "runs": [
+    {
+      "name": "final-branding-branding",
+      "passed": true,
+      "checks": 22
+    },
+    {
+      "name": "final-readability",
+      "passed": true,
+      "checks": 15
+    },
+    {
+      "name": "final-gameplay",
+      "passed": true,
+      "checks": 32
+    },
+    {
+      "name": "final-gwo",
+      "passed": true,
+      "checks": 13
+    },
+    {
+      "name": "final-ui",
+      "passed": true,
+      "checks": 28
+    },
+    {
+      "name": "final-listeners",
+      "passed": true,
+      "checks": 1
+    },
+    {
+      "name": "final-aco-motion",
+      "passed": true,
+      "checks": 7
+    },
+    {
+      "name": "final-normal-browser",
+      "passed": true,
+      "checks": 6
+    },
+    {
+      "name": "final-normal-ui",
+      "passed": true,
+      "checks": 16
+    },
+    {
+      "name": "final-local-offline",
+      "passed": true,
+      "checks": 16
+    }
+  ],
+  "buildPassed": true,
+  "assetHashes": 963,
+  "scope": "Current checkpoint only; unpublished Astra revisions excluded; main/deployment not authorized"
+}

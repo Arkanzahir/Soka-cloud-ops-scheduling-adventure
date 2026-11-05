@@ -14,7 +14,7 @@ page.on('response',r=>{if(r.status()>=400&&r.url().startsWith(new URL(url).origi
 const check=(name,value)=>{report.checks.push({name,passed:!!value});assert.ok(value,name);console.log('PASS '+name)}
 const driving=()=>page.waitForFunction(()=>game.world.cloudOps.state==='DRIVING'&&!game.world.cloudOps.transitions.busy)
 const panel=()=>page.waitForFunction(()=>game.world.learning.panel.visible&&!game.world.learning.busy&&game.modals.state===1)
-const shot=name=>page.screenshot({path:`docs/evidence/${label}-${name}.png`})
+const shot=name=>page.screenshot({path:`docs/evidence/${label}-${name}.png`,scale:'css'})
 async function near(position){await page.evaluate(p=>game.physicalVehicle.moveTo({x:p[0],y:2,z:p[1]},0),position);await page.waitForTimeout(2500)}
 async function close(){await page.keyboard.press('Escape');await driving()}
 async function enter(id){await page.evaluate(async id=>{if(!await game.world.cloudOps.enter(id,true))throw Error('Transition '+id)},id);await driving()}

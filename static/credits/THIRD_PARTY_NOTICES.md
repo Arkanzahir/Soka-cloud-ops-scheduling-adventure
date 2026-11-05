@@ -36,3 +36,11 @@ Paper digunakan sebagai **referensi ilmiah**, bukan sebagai sumber kode game. Ku
 ## 4. Kontribusi kelompok
 
 Catat secara faktual tugas yang dikerjakan oleh setiap anggota melalui commit/PR atau tabel tugas. Kontribusi Kelompok 8 yang sudah diimplementasikan: integrasi world Cloud/ACO/GWO, simulator scheduling baseline, visualisasi trace, dokumentasi, mode presentasi, optimasi, dan rebranding kampus. Fondasi Bruno tetap dikreditkan terpisah.
+
+## 5. Gate publikasi — 5 November 2026
+
+PR #12 (keterbacaan mini-world) dan #11 (branding) telah digabung ke branch release; main dan deployment menunggu keputusan akhir. Papan kandidat GWO adalah visualisasi original berbasis event, tanpa aset unduhan baru. Lisensi MIT dan copyright asli Bruno tidak diubah.
+
+Izin redistribusi per rekaman SFX dan font Pally belum memiliki ledger/bukti lengkap pada inventaris. Merek, gambar galeri, dan materi pihak ketiga yang masih tersimpan dalam static juga memerlukan review: menonaktifkan interaksi tidak menghapus berkas dari dist. Kredit CC0 musik Kounine tidak boleh diperluas ke semua audio. Tidak ada clearance baru yang diklaim.
+
+**Jangan lakukan deployment publik sebelum izin item yang belum jelas diselesaikan.** Status Pages, rencana setelah persetujuan, dan fallback localhost teruji dicatat di [`docs/DEPLOYMENT_READINESS.md`](docs/DEPLOYMENT_READINESS.md).
