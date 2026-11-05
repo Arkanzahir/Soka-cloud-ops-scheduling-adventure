@@ -204,6 +204,19 @@ export class PresentationRace
         this.show('Ikuti checkpoint balap. Menepi di marka pos, lalu tekan E.')
     }
 
+    nearbyStop()
+    {
+        if(!this.ready || !this.manager.canInteract('racing')) return -1
+        const point = this.game.interactivePoints.activeItem
+        return this.stops.findIndex(({station}) => station.point === point && station.trigger.isIn)
+    }
+
+    openNearbyStop()
+    {
+        const index = this.nearbyStop()
+        if(index !== -1) this.openStop(index)
+    }
+
     openStop(index)
     {
         if(!this.ready) return
