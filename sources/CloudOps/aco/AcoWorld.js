@@ -183,7 +183,7 @@ export class AcoWorld {
     // Between task decisions, return along the previous branch before taking
     // the new VM route. This avoids teleporting ants between destinations.
     const returningToNest=this.returning||(this.moving&&ant.fromVM!==null&&progress<.32)
-    const vm=returningToNest&&ant.fromVM!==null?ant.fromVM:ant.vm
+    const vm=this.returning?ant.vm:(returningToNest&&ant.fromVM!==null?ant.fromVM:ant.vm)
     const t=this.returning?1-progress:
      ant.fromVM!==null?(progress<.32?1-progress/.32:Math.min(1,(progress-.32)/.68)):progress
     const curve=this.paths[vm]
