@@ -94,3 +94,13 @@
 .co-music-controls{display:flex;flex-direction:column;gap:12px;margin-top:18px;padding:12px;border:1px solid #94796c;border-radius:10px}.co-music-controls label{display:flex;align-items:center;gap:12px}.co-music-controls small{font-size:12px}.co-music-controls input{accent-color:#75b7ae}
 .modals:has(.learning-host.is-displayed){z-index:200}
 body:has(.learning-host.is-displayed) .campus-overlay{visibility:hidden;pointer-events:none}
+
+
+/* ACO experiment: compact controls inside the existing draggable LearningPanel. */
+.co-learning .co-experiment{margin-top:16px;padding:12px;border:1px solid #bea58b;background:#fff9e8;border-radius:12px}
+.co-learning .co-experiment-fields{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px}
+.co-learning .co-experiment-fields label{display:flex;flex-direction:column;gap:4px;font-weight:900;font-size:12px}
+.co-learning .co-experiment-fields select{width:100%;min-width:0;border:2px solid #a88b76;border-radius:8px;background:#fff5df;padding:6px;color:#382c38;font:inherit}
+.co-learning .co-experiment-fields select:focus-visible{outline:3px solid #50958b}
+.co-learning .co-experiment-result{font-size:12px;line-height:1.5;font-weight:800;overflow-wrap:anywhere;background:#e4efe2;border-left:4px solid #5d9a8d;border-radius:6px;padding:10px}
+.co-learning .co-config-scope{font-size:12px;background:#fff0cc;border:1px solid #cca66b;padding:10px;border-radius:8px}
