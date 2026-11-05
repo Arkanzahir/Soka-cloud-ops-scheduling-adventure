@@ -1,0 +1,136 @@
+{
+  "url": "http://127.0.0.1:4194/Soka-cloud-ops-scheduling-adventure/",
+  "checks": [
+    {
+      "name": "four unique production zones, no debug test route",
+      "passed": true
+    },
+    {
+      "name": "Cloud entrance E and grounded car",
+      "passed": true
+    },
+    {
+      "name": "driving and follow camera",
+      "passed": true
+    },
+    {
+      "name": "R retains Cloud",
+      "passed": true
+    },
+    {
+      "name": "Cloud station opens shared M6 and locks chassis",
+      "passed": true
+    },
+    {
+      "name": "Play/Pause stops timeline",
+      "passed": true
+    },
+    {
+      "name": "Cloud reset clears real actors/loads",
+      "passed": true
+    },
+    {
+      "name": "Cloud displays real Round Robin makespan and assignments",
+      "passed": true
+    },
+    {
+      "name": "Cloud polished packages follow allocation labels and anchored load bars",
+      "passed": true
+    },
+    {
+      "name": "Next closes, teleports and reopens ACO",
+      "passed": true
+    },
+    {
+      "name": "ACO research Enter opens shared panel",
+      "passed": true
+    },
+    {
+      "name": "ACO choices and iteration pheromone are real",
+      "passed": true
+    },
+    {
+      "name": "ACO reset neutral and rewind deterministic",
+      "passed": true
+    },
+    {
+      "name": "Next reaches GWO with panel lock",
+      "passed": true
+    },
+    {
+      "name": "GWO shows five real candidates and leader IDs",
+      "passed": true
+    },
+    {
+      "name": "GWO polished collars and pads follow real optimizer roles",
+      "passed": true
+    },
+    {
+      "name": "GWO Play advances real iterations and Pause holds cursor",
+      "passed": true
+    },
+    {
+      "name": "GWO reset has no synthetic fitness",
+      "passed": true
+    },
+    {
+      "name": "GWO reset clears leader accents and scale",
+      "passed": true
+    },
+    {
+      "name": "Previous safely reaches ACO",
+      "passed": true
+    },
+    {
+      "name": "Comparison has real three rows and eight assignments",
+      "passed": true
+    },
+    {
+      "name": "Paper section preserves three references",
+      "passed": true
+    },
+    {
+      "name": "Opening returns Main",
+      "passed": true
+    },
+    {
+      "name": "Esc restores original driving/body",
+      "passed": true
+    },
+    {
+      "name": "cloud physical entrance",
+      "passed": true
+    },
+    {
+      "name": "cloud physical exit to Main",
+      "passed": true
+    },
+    {
+      "name": "aco physical entrance",
+      "passed": true
+    },
+    {
+      "name": "aco physical exit to Main",
+      "passed": true
+    },
+    {
+      "name": "gwo physical entrance",
+      "passed": true
+    },
+    {
+      "name": "gwo physical exit to Main",
+      "passed": true
+    },
+    {
+      "name": "one shared panel and stable actor counts",
+      "passed": true
+    },
+    {
+      "name": "no JavaScript or local resource errors",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "failedRequests": [],
+  "passed": true
+}

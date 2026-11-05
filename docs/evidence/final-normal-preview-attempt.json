@@ -1,0 +1,34 @@
+{
+  "url": "http://127.0.0.1:4194/Soka-cloud-ops-scheduling-adventure/",
+  "label": "final-normal",
+  "browser": "156.0.8078.74",
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "checks": [
+    {
+      "name": "release does not expose debug Game",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "httpErrors": [
+    {
+      "url": "http://127.0.0.1:4194/Soka-cloud-ops-scheduling-adventure/assets/index-0f2uL_GL.js",
+      "status": 404
+    }
+  ],
+  "requestFailures": [
+    {
+      "url": "http://127.0.0.1:4194/Soka-cloud-ops-scheduling-adventure/assets/index-0f2uL_GL.js",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://fonts.googleapis.com/css2?family=Amatic+SC:wght@700&family=Nunito:wght@400;700;900&display=block",
+      "error": "net::ERR_NETWORK_ACCESS_DENIED"
+    }
+  ],
+  "passed": false,
+  "failure": "locator.waitFor: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#presentation-open') to be visible\u001b[22m\n\u001b[2m    63 × locator resolved to hidden <button hidden=\"\" id=\"presentation-open\" class=\"campus-primary\">MULAI PRESENTASI →</button>\u001b[22m\n\n    at D:\\Download\\Soka-cloud-ops-scheduling-adventure-main\\mini-world-polish\\scripts\\test-browser.mjs:29:44"
+}

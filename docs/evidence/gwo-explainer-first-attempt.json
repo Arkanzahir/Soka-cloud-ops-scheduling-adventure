@@ -1,0 +1,24 @@
+{
+  "checks": [
+    {
+      "name": "one schedule board, five wolves and original four zones",
+      "passed": true
+    },
+    {
+      "name": "neutral board has no invented schedule",
+      "passed": true
+    },
+    {
+      "name": "all five rows show real event assignments, roles, fitness and guides",
+      "passed": true
+    },
+    {
+      "name": "original follow camera and actual Low DPR1",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "httpErrors": [],
+  "passed": false,
+  "failure": "page.evaluate: TypeError: Cannot read properties of null (reading 'candidates')\n    at eval (eval at evaluate (:370:30), <anonymous>:1:81)\n    at Array.every (<anonymous>)\n    at eval (eval at evaluate (:370:30), <anonymous>:1:52)\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)\n    at D:\\Download\\Soka-cloud-ops-scheduling-adventure-main\\mini-world-polish\\scripts\\test-gwo-explainer.mjs:28:73"
+}

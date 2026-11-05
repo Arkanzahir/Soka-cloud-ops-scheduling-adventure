@@ -1,0 +1,49 @@
+{
+  "checkedAtUTC": "2026-11-05T02:14:53.0763635Z",
+  "repository": {
+    "full_name": "Arkanzahir/Soka-cloud-ops-scheduling-adventure",
+    "visibility": "public",
+    "has_pages": false,
+    "homepage": null,
+    "default_branch": "main"
+  },
+  "papers": [
+    {
+      "title": [
+        "An improved grey wolf optimizer with flexible crossover and mutation for cluster task scheduling"
+      ],
+      "volume": "704",
+      "journal": [
+        "Information Sciences"
+      ],
+      "source": "https://api.crossref.org/works/10.1016/j.ins.2025.121943",
+      "page": "121943",
+      "authors": [
+        "Hongbo Wang",
+        "Jinyu Zhang",
+        "Jingkun Fan",
+        "ChiYiDuo Zhang",
+        "Bo Deng",
+        "WenTao Zhao"
+      ],
+      "doi": "10.1016/j.ins.2025.121943"
+    },
+    {
+      "title": [
+        "Grey Wolf Optimizer"
+      ],
+      "volume": "69",
+      "journal": [
+        "Advances in Engineering Software"
+      ],
+      "source": "https://api.crossref.org/works/10.1016/j.advengsoft.2013.12.007",
+      "page": "46-61",
+      "authors": [
+        "Seyedali Mirjalili",
+        "Seyed Mohammad Mirjalili",
+        "Andrew Lewis"
+      ],
+      "doi": "10.1016/j.advengsoft.2013.12.007"
+    }
+  ]
+}

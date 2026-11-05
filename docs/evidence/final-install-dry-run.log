@@ -1,0 +1,69 @@
+npm warn ERESOLVE overriding peer dependency
+npm warn While resolving: vite-plugin-restart@0.4.1
+npm warn Found: vite@7.2.4
+npm warn node_modules/vite
+npm warn   vite@"^7.2.4" from the root project
+npm warn   4 more (@vitejs/plugin-basic-ssl, ...)
+npm warn
+npm warn Could not resolve dependency:
+npm warn peer vite@"^6.0.0 || ^7.0.0" from @vitejs/plugin-basic-ssl@2.1.0
+npm warn node_modules/@vitejs/plugin-basic-ssl
+npm warn   @vitejs/plugin-basic-ssl@"^2.1.0" from the root project
+npm warn ERESOLVE overriding peer dependency
+npm warn While resolving: vite-plugin-restart@0.4.1
+npm warn Found: vite@7.2.4
+npm warn node_modules/vite
+npm warn   vite@"^7.2.4" from the root project
+npm warn   4 more (@vitejs/plugin-basic-ssl, ...)
+npm warn
+npm warn Could not resolve dependency:
+npm warn peer vite@"^2.0.0 || ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0" from vite-plugin-node-polyfills@0.24.0
+npm warn node_modules/vite-plugin-node-polyfills
+npm warn   vite-plugin-node-polyfills@"^0.24.0" from the root project
+npm warn ERESOLVE overriding peer dependency
+npm warn While resolving: vite-plugin-restart@0.4.1
+npm warn Found: vite@7.2.4
+npm warn node_modules/vite
+npm warn   vite@"^7.2.4" from the root project
+npm warn   4 more (@vitejs/plugin-basic-ssl, ...)
+npm warn
+npm warn Could not resolve dependency:
+npm warn peer vite@"^2.9.0 || ^3.0.0 || ^4.0.0 || ^5.0.0" from vite-plugin-restart@0.4.1
+npm warn node_modules/vite-plugin-restart
+npm warn   vite-plugin-restart@"^0.4.1" from the root project
+npm warn ERESOLVE overriding peer dependency
+npm warn While resolving: vite-plugin-restart@0.4.1
+npm warn Found: vite@7.2.4
+npm warn node_modules/vite
+npm warn   vite@"^7.2.4" from the root project
+npm warn   4 more (@vitejs/plugin-basic-ssl, ...)
+npm warn
+npm warn Could not resolve dependency:
+npm warn peer vite@">=2.8" from vite-plugin-top-level-await@1.6.0
+npm warn node_modules/vite-plugin-top-level-await
+npm warn   vite-plugin-top-level-await@"^1.6.0" from the root project
+npm warn ERESOLVE overriding peer dependency
+npm warn While resolving: vite-plugin-restart@0.4.1
+npm warn Found: vite@7.2.4
+npm warn node_modules/vite
+npm warn   vite@"^7.2.4" from the root project
+npm warn   4 more (@vitejs/plugin-basic-ssl, ...)
+npm warn
+npm warn Could not resolve dependency:
+npm warn peer vite@"^2 || ^3 || ^4 || ^5 || ^6 || ^7" from vite-plugin-wasm@3.5.0
+npm warn node_modules/vite-plugin-wasm
+npm warn   vite-plugin-wasm@"^3.5.0" from the root project
+npm warn ERESOLVE overriding peer dependency
+npm warn While resolving: vite-plugin-restart@0.4.1
+npm warn Found: vite@undefined
+npm warn node_modules/vite
+npm warn   vite@"^7.2.4" from the root project
+npm warn
+npm warn Could not resolve dependency:
+npm warn peer vite@"^2.9.0 || ^3.0.0 || ^4.0.0 || ^5.0.0" from vite-plugin-restart@0.4.1
+npm warn node_modules/vite-plugin-restart
+npm warn   vite-plugin-restart@"^0.4.1" from the root project
+npm error code ENOTCACHED
+npm error request to https://registry.npmjs.org/vite failed: cache mode is 'only-if-cached' but no cached response is available.
+npm error Log files were not written due to an error writing to the directory: C:\Users\Lenovo\AppData\Local\npm-cache\_logs
+npm error You can rerun the command with `--loglevel=verbose` to see the logs in your terminal

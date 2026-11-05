@@ -1,0 +1,30 @@
+{
+  "checks": [
+    {
+      "name": "one schedule board, five wolves and original four zones",
+      "passed": true
+    },
+    {
+      "name": "neutral board has no invented schedule",
+      "passed": true
+    },
+    {
+      "name": "all five rows show real event assignments, roles, fitness and guides",
+      "passed": true
+    },
+    {
+      "name": "full board fits native station camera",
+      "passed": false
+    }
+  ],
+  "errors": [],
+  "httpErrors": [],
+  "boardBounds": {
+    "left": -118.0406948333603,
+    "right": 374.02513905686726,
+    "top": 143.37504667021176,
+    "bottom": 340.45998032561386
+  },
+  "passed": false,
+  "failure": "AssertionError [ERR_ASSERTION]: full board fits native station camera\n    at check (file:///D:/Download/Soka-cloud-ops-scheduling-adventure-main/mini-world-polish/scripts/test-gwo-explainer.mjs:9:69)\n    at file:///D:/Download/Soka-cloud-ops-scheduling-adventure-main/mini-world-polish/scripts/test-gwo-explainer.mjs:24:2"
+}

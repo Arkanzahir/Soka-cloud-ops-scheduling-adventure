@@ -1,4 +1,5 @@
 import {makeWolf} from './WolfModel.js'
+import {CandidateBoard} from './CandidateBoard.js'
 import {validateState,optimizerState} from './state.js'
 import * as T from 'three/webgpu'
 import {color,texture} from 'three/tsl'
@@ -28,6 +29,7 @@ export class GwoWorld extends Area {
   for(const x of [-71.4,-66.6])this.block(x,1.4,73.55,.18,2.8,.18,'wood')
   const roof=this.block(-69,3.3,73.5,5.7,.22,2.1,'dark');roof.rotation.z=.05
   this.board=this.sign('',-69,1.6,73.7,4.5)
+  this.schedules=new CandidateBoard(this)
   this.sign('RESEARCH | E / ENTER',-69,.95,73.7,4)
   this.block(-69,.7,73.5,5,.14,1.8,'wood')
   // Observation binoculars: an environmental cue, not a second game camera.
@@ -60,14 +62,15 @@ export class GwoWorld extends Area {
    tex.needsUpdate=true
   };write(text);return {mesh:m,write}
  }
- applyOptimizerState(input){this.applyState(optimizerState(input));this.board.write(`5 of ${input.candidates.length} candidates | ITER ${input.iteration} | BEST ${input.bestMakespan.toFixed(2)} s`)}
- applyState(input,{preview=false}={}){
-  const state=validateState(input);this.state=state;this.preview=preview
+ applyOptimizerState(input){this.applyState(optimizerState(input),{guides:input.guides});this.board.write(`5 of ${input.candidates.length} candidates | ITER ${input.iteration} | BEST ${input.bestMakespan.toFixed(2)} s`)}
+ applyState(input,{preview=false,guides=null}={}){
+  const previous=this.state,state=validateState(input);this.state=state;this.preview=preview
   const ranked=[...state.candidates].sort((a,b)=>a.fitness-b.fitness)
   state.candidates.forEach((candidate,i)=>{const wolf=this.wolves[i];wolf.id=candidate.id;const leader=Object.entries(state.leaders).find(([,id])=>id===candidate.id)?.[0];wolf.role=leader||null;wolf.label.mesh.visible=!!leader;wolf.targetScale=leader==='alpha'?1.18:leader==='beta'?1.08:leader==='delta'?1.03:.94;wolf.mesh.userData.accents.forEach(m=>m.material=this.materials[leader||'wood']);wolf.pad.material=this.materials[leader||'wood'];wolf.label.write(`${leader?.toUpperCase()||candidate.id} | ${candidate.fitness.toFixed(2)} s`);wolf.targetRotation=ranked.findIndex(c=>c.id===candidate.id)*.12;wolf.assignment=[...candidate.assignment]})
   this.board.write(`${preview?'DEMO':'LIVE'} / ${state.iteration} / BEST ${state.bestMakespan.toFixed(2)} s`)
+  this.schedules.write(state,previous,{preview,guides})
   const detail=document.getElementById('gwo-state');if(detail)detail.textContent=`${preview?'DEMO / PREVIEW — synthetic values':'External engine event'}; iteration ${state.iteration}; best makespan ${state.bestMakespan} s. `+state.candidates.map(c=>`${c.id}: [${c.assignment.join(',')}] fitness ${c.fitness}`).join('; ')
  }
- resetVisualization(){this.state=null;this.preview=false;this.board.write('5 of 12 candidates | waiting for engine');for(const [i,w] of this.wolves.entries()){w.mesh.position.copy(w.base);w.mesh.rotation.y=0;w.targetRotation=0;w.targetScale=1;w.mesh.scale.setScalar(1);w.mesh.userData.body.rotation.z=0;w.role=null;w.label.mesh.visible=false;w.mesh.userData.accents.forEach(m=>m.material=this.materials.wood);w.pad.material=this.materials.wood;w.assignment=null;w.label.write(`CANDIDATE ${i+1} | waiting`)}this.time=0}
+ resetVisualization(){this.schedules.reset();this.state=null;this.preview=false;this.board.write('5 of 12 candidates | waiting for engine');for(const [i,w] of this.wolves.entries()){w.mesh.position.copy(w.base);w.mesh.rotation.y=0;w.targetRotation=0;w.targetScale=1;w.mesh.scale.setScalar(1);w.mesh.userData.body.rotation.z=0;w.role=null;w.label.mesh.visible=false;w.mesh.userData.accents.forEach(m=>m.material=this.materials.wood);w.pad.material=this.materials.wood;w.assignment=null;w.label.write(`CANDIDATE ${i+1} | waiting`)}this.time=0}
  update(){if(!this.wolves)return;this.time+=this.game.ticker.delta;for(const w of this.wolves){w.mesh.scale.setScalar(w.mesh.scale.x+((w.targetScale||1)-w.mesh.scale.x)*Math.min(1,this.game.ticker.delta*4));w.mesh.rotation.y+=(w.targetRotation-w.mesh.rotation.y)*Math.min(1,this.game.ticker.delta*4);w.mesh.userData.body.rotation.z=Math.sin(this.time*1.4+w.base.x)*.012}}
 }
