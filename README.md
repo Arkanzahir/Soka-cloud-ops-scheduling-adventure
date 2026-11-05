@@ -10,7 +10,7 @@
 
 Berbeda dengan PowerPoint konvensional, penjelasan algoritma tidak berhenti pada definisi dan gambar. Pemain dapat mengubah jumlah task, kemampuan Virtual Machine (VM), parameter algoritma, kemudian menjalankan kode JavaScript dan melihat bagaimana jadwal serta metrik evaluasinya berubah.
 
-**Prinsip proyek:** game 3D adalah cara *menyampaikan* materi. Nilai akademik utamanya tetap terletak pada paper, penjelasan algoritma, studi kasus task→algoritma→solusi, dan visualisasi hasil perhitungan yang benar.
+**Prinsip proyek:** game 3D adalah cara *menyampaikan* materi. Nilai akademik utamanya tetap terletak pada paper, penjelasan algoritma, studi kasus task→algoritma→solusi, dan visualisasi hasil perhitungan yang benar
 
 ### Istilah penting:
 
