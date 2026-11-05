@@ -104,3 +104,7 @@ body:has(.learning-host.is-displayed) .campus-overlay{visibility:hidden;pointer-
 .co-learning .co-experiment-fields select:focus-visible{outline:3px solid #50958b}
 .co-learning .co-experiment-result{font-size:12px;line-height:1.5;font-weight:800;overflow-wrap:anywhere;background:#e4efe2;border-left:4px solid #5d9a8d;border-radius:6px;padding:10px}
 .co-learning .co-config-scope{font-size:12px;background:#fff0cc;border:1px solid #cca66b;padding:10px;border-radius:8px}
+
+.co-learning .co-experiment-current{font-size:12px;font-weight:800;color:#5a5144;margin-top:6px;line-height:1.45}
+.co-learning .co-experiment-toggle{font-size:11px;padding:4px 8px;min-height:30px}
+.co-learning .co-experiment-body{padding-top:6px}
