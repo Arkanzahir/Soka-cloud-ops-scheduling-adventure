@@ -19,12 +19,12 @@ export class TimeMachineArea extends Area
     {
         this.interactivePoint = this.game.interactivePoints.create(
             this.references.items.get('interactivePoint')[0].position,
-            'Time Machine',
+            'Tentang Proyek',
             InteractivePoints.ALIGN_RIGHT,
             InteractivePoints.STATE_CONCEALED,
             () =>
             {
-                window.open('https://2019.bruno-simon.com')
+                this.game.menu.open('behindTheScene')
             },
             () =>
             {
@@ -46,10 +46,10 @@ export class TimeMachineArea extends Area
         let canCollide = true
         let collideIndex = 0
 
-        const screenTextures = [
-            this.game.resources.timeMachineScreenFolioTexture,
-            this.game.resources.timeMachineScreenMGSTexture,
-        ]
+        const canvas=document.createElement('canvas');canvas.width=512;canvas.height=256
+        const context=canvas.getContext('2d');context.fillStyle='#fff0bf';context.fillRect(0,0,512,256);context.fillStyle='#383039';context.textAlign='center';context.font='bold 52px sans-serif';context.fillText('CLOUD OPS',256,90);context.font='bold 28px sans-serif';context.fillText('TASK  →  VM',256,150);context.fillText('KELOMPOK 8 / SOKA',256,205)
+        const campusTexture=new THREE.CanvasTexture(canvas);campusTexture.colorSpace=THREE.SRGBColorSpace
+        const screenTextures = [campusTexture]
 
         const alertSound = this.game.audio.register({
             path: 'sounds/tv/alert.mp3',

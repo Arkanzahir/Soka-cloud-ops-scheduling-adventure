@@ -3,6 +3,7 @@ import { Game } from '../../Game.js'
 import { color, float, Fn, luminance, max, mix, positionGeometry, step, texture, uniform, uv, vec4 } from 'three/tsl'
 import gsap from 'gsap'
 import { clamp } from 'three/src/math/MathUtils.js'
+import {CAMPUS_LESSONS} from '../../../CloudOps/campus/content.js'
 import { Area } from './Area.js'
 
 export class CareerArea extends Area
@@ -76,14 +77,17 @@ export class CareerArea extends Area
             green: uniform(color('#a2ffab'))
         }
 
-        for(const group of lineGroups)
+        for(const [lessonIndex,group] of lineGroups.entries())
         {
             const line = {}
             line.group = group
             line.size = parseFloat(line.group.userData.size)
             line.hasEnd = line.group.userData.hasEnd
             line.color = line.group.userData.color
-            line.texture = this.game.resources[`${line.group.userData.texture}Texture`]
+            const canvas=document.createElement('canvas');canvas.width=1024;canvas.height=256
+            const context=canvas.getContext('2d');context.fillStyle='#000';context.fillRect(0,0,1024,256);context.fillStyle='#fff';context.font='bold 62px sans-serif';context.textAlign='center';context.textBaseline='middle';context.fillText(CAMPUS_LESSONS[lessonIndex % CAMPUS_LESSONS.length],512,128,990)
+            line.texture = new THREE.CanvasTexture(canvas)
+            line.lesson = CAMPUS_LESSONS[lessonIndex % CAMPUS_LESSONS.length]
 
             line.stone = line.group.children.find(child => child.name.startsWith('stone'))
             line.stone.position.y = 0
@@ -155,7 +159,7 @@ export class CareerArea extends Area
         this.year.originZ = this.year.group.position.z
         this.year.size = 17
         this.year.offsetTarget = 0
-        this.year.start = 2008
+        this.year.start = 2026
         this.year.current = this.year.start
 
         //    Digit indexes
@@ -365,7 +369,7 @@ export class CareerArea extends Area
         const finalPositionZ = this.year.originZ - this.year.offsetTarget
         this.year.group.position.z += (finalPositionZ - this.year.group.position.z) * this.game.ticker.deltaScaled * 10
 
-        const yearCurrent = this.year.start + Math.floor(this.year.offsetTarget)
+        const yearCurrent = this.year.start
 
         if(yearCurrent !== this.year.current)
         {

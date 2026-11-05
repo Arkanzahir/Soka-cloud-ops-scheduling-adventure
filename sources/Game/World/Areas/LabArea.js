@@ -9,6 +9,7 @@ import { remapClamp, safeMod, signedModDelta } from '../../utilities/maths.js'
 import { Inputs } from '../../Inputs/Inputs.js'
 import { MeshDefaultMaterial } from '../../Materials/MeshDefaultMaterial.js'
 import { Area } from './Area.js'
+import {configureExhibit} from '../../../CloudOps/campus/exhibit.js'
 
 export class LabArea extends Area
 {
@@ -34,36 +35,10 @@ export class LabArea extends Area
         
         this.state = LabArea.STATE_CLOSED
 
-        this.setSounds()
-        this.setInteractivePoint()
-        this.setInputs()
-        this.setCinematic()
-        this.setShadeMix()
-        this.setTexts()
-        this.setHover()
-        this.setNavigation()
-        this.setImages()
-        this.setAdjacents()
-        this.setTitle()
-        this.setUrl()
-        this.setScroller()
-        this.setPendulum()
-        this.setBlackBoard()
         this.setCandleFlames()
         this.setCauldron()
         this.setAchievement()
-
-        this.changeProject(0, null, true)
-        this.scroller.progress = this.scroller.targetProgress
-
-        this.scroller.animate()
-
-        // Debug
-        if(this.game.debug.active)
-        {
-            this.debugPanel.addButton({ title: 'open', label: 'open' }).on('click', () => { this.open() })
-            this.debugPanel.addButton({ title: 'close', label: 'close' }).on('click', () => { this.close() })
-        }
+        configureExhibit(this, 'lab', labData[0].title)
     }
 
     setSounds()

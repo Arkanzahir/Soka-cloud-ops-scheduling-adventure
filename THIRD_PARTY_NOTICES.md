@@ -1,6 +1,6 @@
 # Third-party Sources & Attribution — Cloud Ops
 
-**Status M0:** fondasi Bruno diimpor dari commit `41046b57eeed8d156d9c3fd7fa259900baef7816`. Lisensi MIT asli berada di [`license.md`](license.md); source, aset runtime dan sumber Blender dipertahankan. Inventaris file/hash dan pengecualian izin: [`docs/ASSET_CATALOG.md`](docs/ASSET_CATALOG.md). Kredit dalam game dan README upstream tetap disimpan. Repository tetap Private; belum dipublikasikan.
+**Status M0:** fondasi Bruno diimpor dari commit `41046b57eeed8d156d9c3fd7fa259900baef7816`. Lisensi MIT asli berada di [`license.md`](license.md); source, aset runtime dan sumber Blender dipertahankan. Inventaris file/hash dan pengecualian izin: [`docs/ASSET_CATALOG.md`](docs/ASSET_CATALOG.md). Kredit dalam game dan README upstream tetap disimpan. Kandidat rilis tersedia pada branch release; belum ada deployment. Visibility GitHub terverifikasi 5 November 2026: Public; sesi rebranding tidak mengubah visibility.
 
 ## 1. Game 3D dasar
 
@@ -35,4 +35,4 @@ Paper digunakan sebagai **referensi ilmiah**, bukan sebagai sumber kode game. Ku
 
 ## 4. Kontribusi kelompok
 
-Catat secara faktual tugas yang dikerjakan oleh setiap anggota melalui commit/PR atau tabel tugas. Integrasi tiga mini-world, simulator CTS, visualisasi ACO/GWO, dokumentasi, dan mode presentasi akan menjadi kontribusi sendiri **hanya setelah benar-benar selesai**.
+Catat secara faktual tugas yang dikerjakan oleh setiap anggota melalui commit/PR atau tabel tugas. Kontribusi Kelompok 8 yang sudah diimplementasikan: integrasi world Cloud/ACO/GWO, simulator scheduling baseline, visualisasi trace, dokumentasi, mode presentasi, optimasi, dan rebranding kampus. Fondasi Bruno tetap dikreditkan terpisah.

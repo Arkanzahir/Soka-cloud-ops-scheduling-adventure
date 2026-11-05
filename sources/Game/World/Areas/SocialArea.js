@@ -33,6 +33,7 @@ export class SocialArea extends Area
 
     setLinks()
     {
+        this.campusLinks = []
         const radius = 6
         let i = 0
 
@@ -52,8 +53,12 @@ export class SocialArea extends Area
                 () =>
                 {
                     if(link.url)
-                        window.open(link.url, '_blank')
-                    else(link.modal)
+                        window.open(link.url, '_blank', 'noopener,noreferrer')
+                    else if(link.menu)
+                        this.game.menu.open(link.menu)
+                    else if(link.action === 'presentation')
+                        this.game.world.learning.startPresentation()
+                    else if(link.modal)
                         this.game.modals.open(link.modal)
                 },
                 () =>
@@ -70,6 +75,7 @@ export class SocialArea extends Area
                 }
             )
             
+            this.campusLinks.push({link, point:this.interactivePoint})
             i++
         }
     }
@@ -173,7 +179,7 @@ export class SocialArea extends Area
     {
         const interactiveArea = this.game.interactivePoints.create(
             this.references.items.get('onlyFans')[0].position,
-            'OnlyFans',
+            'Pendingin Server',
             InteractivePoints.ALIGN_RIGHT,
             InteractivePoints.STATE_CONCEALED,
             () =>

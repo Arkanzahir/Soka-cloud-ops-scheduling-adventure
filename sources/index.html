@@ -1,27 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CLOUD OPS — Bruno baseline</title>
+    <title>Cloud Ops: Scheduling Adventure — Kelompok 8</title>
 
-    <meta name="description" content="Bruno Simon's creative portfolio">
-
-    <meta itemprop="name" content="Bruno Simon">
-    <meta itemprop="description" content="Bruno Simon's creative portfolio">
-    <meta itemprop="image" content="https://bruno-simon.com/social/share-image.png?cb=a">
-
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Bruno Simon">
-    <meta name="twitter:description" content="Bruno Simon's creative portfolio">
-    <meta name="twitter:image" content="https://bruno-simon.com/social/share-image.png?cb=a">
-
-    <meta property="og:site_name" content="Three.js Journey">
+    <meta name="description" content="Game edukasi 3D interaktif untuk mempelajari cloud task scheduling menggunakan Round Robin, ACO, dan GWO.">
+    <meta name="author" content="Kelompok 8 — SOKA">
+    <meta itemprop="name" content="Cloud Ops: Scheduling Adventure — Kelompok 8">
+    <meta itemprop="description" content="Game edukasi 3D interaktif untuk mempelajari cloud task scheduling menggunakan Round Robin, ACO, dan GWO.">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Cloud Ops: Scheduling Adventure — Kelompok 8">
+    <meta name="twitter:description" content="Game edukasi 3D interaktif untuk mempelajari cloud task scheduling menggunakan Round Robin, ACO, dan GWO.">
+    <meta property="og:site_name" content="Cloud Ops — Kelompok 8">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://bruno-simon.com/">
-    <meta property="og:title" content="Bruno Simon">
-    <meta property="og:description" content="Bruno Simon's creative portfolio">
-    <meta property="og:image" content="https://bruno-simon.com/social/share-image.png?cb=a">
+    <meta property="og:title" content="Cloud Ops: Scheduling Adventure — Kelompok 8">
+    <meta property="og:description" content="Game edukasi 3D interaktif untuk mempelajari cloud task scheduling menggunakan Round Robin, ACO, dan GWO.">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -29,11 +23,8 @@
     
     <link rel="stylesheet" href="./style/index.styl">
 
-    <link rel="icon" type="image/png" href="./favicons/favicon-96x96.png" sizes="96x96" />
-    <link rel="icon" type="image/svg+xml" href="./favicons/favicon.svg" loading="lazy" />
-    <link rel="shortcut icon" href="./favicons/favicon.ico" />
-    <link rel="apple-touch-icon" sizes="180x180" href="./favicons/apple-touch-icon.png" />
-    <meta name="apple-mobile-web-app-title" content="Bruno's" />
+    <link rel="icon" type="image/svg+xml" href="./campus/icon.svg" loading="lazy" />
+    <meta name="apple-mobile-web-app-title" content="Cloud Ops" />
     <link rel="manifest" href="./favicons/site.webmanifest" />
 
     <link rel="preload" href="./respawns/respawnsReferences-compressed.glb" as="fetch" crossorigin>
@@ -106,7 +97,7 @@
                 <div class="js-navigation navigation">
 
                     <!-- Intro -->
-                    <button class="js-navigation-item item" data-name="home">
+                    <button class="js-navigation-item item" data-name="home" title="Beranda Cloud Ops" aria-label="Beranda Cloud Ops">
                         <div class="button-inner">
                             <div class="icon-container">
                                 <img src="ui/home.svg" loading="lazy">
@@ -115,7 +106,7 @@
                     </button>
 
                     <!-- Intro -->
-                    <button class="js-navigation-item item" data-name="options">
+                    <button class="js-navigation-item item" data-name="options" title="Pengaturan grafis dan audio" aria-label="Pengaturan grafis dan audio">
                         <div class="button-inner">
                             <div class="icon-container">
                                 <img src="ui/gear.svg" loading="lazy">
@@ -124,7 +115,7 @@
                     </button>
 
                     <!-- Controls -->
-                    <button class="js-navigation-item item" data-name="controls">
+                    <button class="js-navigation-item item" data-name="controls" title="Kontrol kendaraan" aria-label="Kontrol kendaraan">
                         <div class="button-inner">
                             <div class="icon-container">
                                 <img src="ui/controls/gamepad.svg" loading="lazy">
@@ -133,7 +124,7 @@
                     </button>
 
                     <!-- Achievements -->
-                    <button class="js-navigation-item item" data-name="achievements">
+                    <button class="js-navigation-item item" data-name="achievements" title="Pencapaian kampus" aria-label="Pencapaian kampus">
                         <div class="button-inner">
                             <div class="icon-container">
                                 <img src="ui/medal.svg" loading="lazy">
@@ -142,7 +133,7 @@
                     </button>
 
                     <!-- Circuit -->
-                    <button class="js-navigation-item item" data-name="circuit">
+                    <button class="js-navigation-item item" data-name="circuit" title="Sirkuit" aria-label="Sirkuit">
                         <div class="button-inner">
                             <div class="icon-container">
                                 <img src="ui/wheel.svg" loading="lazy">
@@ -151,7 +142,7 @@
                     </button>
 
                     <!-- Whispers -->
-                    <button class="js-navigation-item item" data-name="whispers">
+                    <button class="js-navigation-item item" data-name="whispers" title="Pesan kampus" aria-label="Pesan kampus">
                         <div class="button-inner">
                             <div class="icon-container">
                                 <img src="ui/whispers/whisper-fill.svg" loading="lazy">
@@ -160,7 +151,7 @@
                     </button>
 
                     <!-- Behind the scene -->
-                    <button class="js-navigation-item item" data-name="behindTheScene">
+                    <button class="js-navigation-item item" data-name="behindTheScene" title="Tentang Proyek / Credits" aria-label="Tentang Proyek / Credits">
                         <div class="button-inner">
                             <div class="icon-container">
                                 <img src="ui/question.svg" loading="lazy">
@@ -175,7 +166,7 @@
 
                         <!-- Intro -->
                         <div class="js-preview preview home-preview">
-                            <img class="background" src="ui/previews/home.webp" loading="lazy" draggable="false">
+                            <img class="background" src="campus/preview.svg" loading="lazy" draggable="false">
                         </div>
 
                         <!-- Options -->
@@ -206,27 +197,34 @@
 
                         <!-- Behind the scene -->
                         <div class="js-preview preview behindTheScene-preview">
-                            <img class="background" src="ui/previews/behindTheScene.webp" loading="lazy" draggable="false">
+                            <img class="background" src="campus/preview.svg" loading="lazy" draggable="false">
                         </div>
 
                     </div>
 
                     <div class="contents js-contents">
                         <!-- Intro -->
-                        <div class="js-content content home-content">
-                            <div class="content-inner">
-                                <div class="title">Bruno's Home</div>
-                                <p class="text">Welcome!</p>
-                                <p class="text">My name is <strong>Bruno Simon</strong>, and I'm a <strong>creative developer</strong> (mostly for the web).</p>
-                                <p class="text">This is my portfolio. Please drive around to learn more about me and discover the many secrets of this world.</p>
-                                <p class="text">And don't break anything!</p>
-                            </div>
-                        </div>
+                        <div class="js-content content home-content campus-home">
+                                <div class="content-inner">
+                                <span class="campus-eyebrow">KELOMPOK 8 · SOKA</span>
+                                <h1 class="title">Cloud Ops:<br>Scheduling Adventure</h1>
+                                <p class="campus-subtitle">Petualangan Interaktif Optimasi Penjadwalan Task pada Cloud Computing</p>
+                                <p class="text">Selamat datang! Jelajahi kampus 3D untuk memahami bagaimana task dijadwalkan pada Virtual Machine menggunakan <strong>Round Robin, Ant Colony Optimization, dan Grey Wolf Optimizer</strong>.</p>
+                                <div class="campus-itinerary">
+                                <span>01 · Cloud</span>
+                                <span>02 · ACO</span>
+                                <span>03 · GWO</span>
+                                </div>
+                                <p class="text">Dataset yang sama, tiga pendekatan. Amati alokasi task, beban VM, dan makespan dari perhitungan algoritma nyata.</p>
+                                <button type="button" data-campus-start class="campus-primary">MULAI PRESENTASI →</button>
+                                <p class="campus-caption">Atau tutup menu dan ikuti papan gerbang kampus. E/Enter: interaksi · R: reset · Esc: kembali.</p>
+                                </div>
+                                </div>
 
                         <!-- Options -->
                         <div class="js-content content options-content">
                             <div class="content-inner">
-                                <div class="title">Options</div>
+                                <div class="title">Pengaturan</div>
                                 <table class="options">
                                     <tbody>
                                         <tr>
@@ -670,56 +668,53 @@
                         </div>
 
                         <!-- Behind the scene -->
-                        <div class="js-content content behindTheScene-content">
-                            <div class="content-inner">
-                                <div class="title">Behind the scene</div>
+                        <div class="js-content content behindTheScene-content campus-credits">
+                                <div class="content-inner">
+                                <span class="campus-eyebrow">SUMBER &amp; KONTRIBUSI</span>
+                                <h1 class="title">Tentang Proyek</h1>
                                 <p class="text">
-                                    Thank you for visiting my portfolio!
-                                    <br />If you are curious about the stack and how I built this project, here’s everything you need to know.
-                                </p>
-                                
-                                <h2 class="title">Three.js</h2>
+                                <strong>Cloud Ops: Scheduling Adventure</strong> dikembangkan dan diadaptasi oleh <strong>Kelompok 8</strong> untuk mata kuliah Strategi Optimasi Komputasi Awan (SOKA).</p>
+                                <h2 class="title">Fondasi yang kami gunakan</h2>
+                                <p class="text">Adaptasi edukatif dari <strong>Folio 2025 karya Bruno Simon</strong>, menggunakan fondasi Three.js, aset, kendaraan, kamera, fisika, dan sistem interaksi proyek sumber. Proyek ini tidak menyiratkan dukungan atau endorsement Bruno Simon.</p>
                                 <p class="text">
-                                    <a href="https://threejs.org" target="_blank" rel="noreferrer">Three.js</a> is the library I’m using to render this 3D world.
-                                    <br />It was created by <strong>mr.doob</strong> (<a href="https://x.com/mrdoob" target="_blank" rel="noreferrer">X</a>, <a href="http://github.com/mrdoob" target="_blank" rel="noreferrer">GitHub</a>), followed by hundreds of awesome developers, one of which being Sunag (<a href="https://x.com/sea3dformat" target="_blank" rel="noreferrer">X</a>, <a href="https://github.com/sunag" target="_blank" rel="noreferrer">GitHub</a>) who added <a href="https://github.com/mrdoob/three.js/wiki/Three.js-Shading-Language" target="_blank" rel="noreferrer">TSL</a>, enabling the use of both WebGL and WebGPU, making this portfolio possible.
+                                <a href="https://github.com/brunosimon/folio-2025" target="_blank" rel="noopener noreferrer">Repository sumber · Bruno Simon / Folio 2025</a>
                                 </p>
-                                
-                                <h2 class="title">Three.js Journey</h2>
+                                <h2 class="title">Kontribusi Kelompok 8</h2>
+                                <p class="text">World Cloud/ACO/GWO, algoritma scheduling baseline, SimulationBridge, dashboard M6, pengujian, optimasi, dan identitas kampus edukasi.</p>
                                 <p class="text">
-                                    If you want to learn Three.js, I got you covered with this <a href="https://threejs-journey.com" target="_blank" rel="noreferrer">huge course</a>.
-                                    <br />It contains everything you need to start building awesome stuff with Three.js (and much more).
+                                <a href="https://github.com/Arkanzahir/Soka-cloud-ops-scheduling-adventure" target="_blank" rel="noopener noreferrer">Repository proyek Kelompok 8</a>
                                 </p>
-                                
-                                <h2 class="title">Devlogs</h2>
-                                <p class="text">
-                                    I’ve been making devlogs since the very start of this portfolio and you can find them all on my <a href="https://www.youtube.com/playlist?list=PL5nApUt6Z8sTZxEsEMd8x89OCKCAAfNL0" target="_blank" rel="noreferrer">Youtube channel</a>.
-                                </p>
-                                
-                                <h2 class="title">Source code</h2>
-                                <p class="text">
-                                    The code is available on <a href="https://github.com/brunosimon/folio-2025" target="_blank" rel="noreferrer">GitHub</a> under <a href="https://choosealicense.com/licenses/mit/" target="_blank" rel="noreferrer">MIT license</a>. Even the Blender files are there, so have fun!
-                                    <br />For security reasons, I’m not sharing the server code, but the portfolio works without it.
-                                </p>
-                                
-                                <h2 class="title">Musics</h2>
-                                <p class="text">
-                                    The music you hear was made especially for this portfolio by the awesome Kounine (<a href="https://linktr.ee/Kounine" target="_blank" rel="noreferrer">Linktree</a>).
-                                    <br />They are now under <a href="https://choosealicense.com/licenses/cc0-1.0/" target="_blank" rel="noreferrer">CC0 license</a>, meaning you can do whatever you want with them!
-                                    <br />Download them <a href="https://github.com/brunosimon/folio-2025/tree/main/static/sounds/musics" target="_blank" rel="noreferrer">here</a>.
-                                </p>
+                                <h2 class="title">Kredit pihak ketiga</h2>
+                                <p class="text">Three.js &amp; TSL, Rapier, Howler.js; musik Kounine; font Amatic SC, Nunito, dan Pally. Pemberitahuan aset, musik, SFX, dan font tetap dipertahankan pada <a href="credits/THIRD_PARTY_NOTICES.md" target="_blank" rel="noopener">THIRD_PARTY_NOTICES.md</a>.</p>
+                                <details class="campus-license">
+                                <summary>MIT License · Copyright (c) 2025 Bruno Simon</summary>
+                                <pre>MIT License
 
-                                <h2 class="title">Some more links</h2>
-                                <ul class="text">
-                                    <li>Physics library ⇒ <a href="https://rapier.rs" target="_blank" rel="noreferrer">Rapier</a></li>
-                                    <li>Audio library ⇒ <a href="https://howlerjs.com" target="_blank" rel="noreferrer">Howler.js</a></li>
-                                    <li>Fonts ⇒ <a href="https://fonts.google.com/specimen/Amatic+SC" target="_blank" rel="noreferrer">Amatic SC</a> & <a href="https://fonts.google.com/specimen/Nunito?query=Nunito" target="_blank" rel="noreferrer">Nunito</a></li>
-                                </ul>
+Copyright (c) 2025 Bruno Simon
 
-                                <p class="text text-faded text-align-right">
-                                    — Bruno
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.</pre>
+                                </details>
+                                <p class="text">
+                                <a href="credits/folio-2025-license.txt" target="_blank" rel="noopener">Buka lisensi MIT asli</a>
                                 </p>
-                            </div>
-                        </div>
+                                </div>
+                                </div>
 
                     </div>
 
@@ -839,48 +834,7 @@
             </div>
 
             <!-- Discord -->
-            <div class="js-modal modal discord" data-name="discord">
-                <div class="container">
-                    <div class="content">
-                        <button class="js-close close">
-                            <img class="icon is-default" src="ui/close.svg" loading="lazy">
-                            <span class="icon is-xbox">A</span>
-                        </button>
-
-                        <div class="title"><img src="ui/discord.svg" loading="lazy"> Discord</div>
-
-                        <div class="items">
-                            <div class="item">
-                                <div class="title-container">
-                                    <div class="line left"></div>
-                                    <div class="title">Public server</div>
-                                    <div class="line right"></div>
-                                </div>
-                                <p>Come hang out with the community<span class="optional">, show us your projects and ask us anything</span>.</p>
-                                <div class="button-container">
-                                    <a href="https://discord.com/channels/769928116701233152/1445064878384480288" target="_blank" rel="noreferrer" class="button">
-                                        Join server
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="item">
-                                <div class="title-container">
-                                    <div class="line left"></div>
-                                    <div class="title">Private messages</div>
-                                    <div class="line right"></div>
-                                </div>
-                                <p>Contact me directly.<span class="optional"><br />I have to warn you, I try to answer everyone, but it might take a while.</span></p>
-                                <div class="button-container">
-                                    <a href="https://discord.com/users/202907325722263553" target="_blank" rel="noreferrer" class="button">
-                                        Start chating
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    
-                    </div>
-                </div>
-            </div>
+            <div class="js-modal modal discord" data-name="discord"><button class="js-close close"><div class="button-inner"><img src="ui/close.svg" alt="Tutup"></div></button><div class="container"><div class="content"><h2 class="title">Panduan Kampus</h2><p>Ikuti gerbang Cloud, ACO, dan GWO atau gunakan Mulai Presentasi. Kelompok 8 tidak mencantumkan akun sosial pribadi pada game ini.</p></div></div></div>
 
             <!-- Map -->
             <div class="js-modal modal map" data-name="map">
@@ -910,7 +864,7 @@
     </div>
 
     <div class="js-cloud-ops-status cloud-ops-status" tabindex="-1" role="status" aria-live="polite" hidden></div>
-    <button id="presentation-open" class="co-button" style="position:fixed;top:16px;left:16px;z-index:10" hidden>Presentasi</button>
+    <aside class="campus-overlay" aria-label="Cloud Ops Kelompok 8"><span>KELOMPOK 8 / SOKA</span><strong>CLOUD OPS</strong><button id="presentation-open" class="campus-primary" hidden>MULAI PRESENTASI →</button></aside>
     <script type="module" src="./index.js"></script>
 </body>
 </html>
