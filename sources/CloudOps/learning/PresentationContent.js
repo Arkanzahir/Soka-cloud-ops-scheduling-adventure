@@ -84,12 +84,12 @@ export function lessonDetail(step, problem = DEFAULT_PROBLEM)
     if(step.kind === 'allocation')
         return { headline: `${e.taskId} → ${e.vmId}`,
             lines: [`Durasi task di VM ini: ${fmt(e.executionTime)} detik`,
-                `Load VM1/VM2/VM3: ${e.vmLoads.map(x => fmt(x)).join(' / ')} detik`,
+                `Beban ${problem.vms.map(vm => vm.id).join('/')}: ${e.vmLoads.map(x => fmt(x)).join(' / ')} detik`,
                 'Round Robin bergiliran memilih VM; bukan mencari jadwal optimal.'] }
     if(step.kind === 'ant-choice')
         return { headline: `${e.taskId} → ${e.vmId} (semut ${e.ant})`,
             lines: [
-                `Probabilitas VM1/VM2/VM3: ${e.probabilities.map(p => fmt(p * 100, 1) + '%').join(' / ')}`,
+                `Probabilitas ${problem.vms.map(vm => vm.id).join('/')}: ${e.probabilities.map(p => fmt(p * 100, 1) + '%').join(' / ')}`,
                 `Feromon untuk task ini: ${e.pheromone.map(x => fmt(x, 3)).join(' / ')}`,
                 'Probabilitas dihitung dari feromon dan heuristik. Pemilihan menggunakan roulette seeded.'
             ] }

@@ -64,6 +64,16 @@ test('Step explanations show genuine per-task allocation, ACO probabilities and 
   assert.match(lessonDetail(gwo.timeline[0]).lines.join(' '),/Alpha.*Beta.*Delta/)
 })
 
+test('Cloud and ACO describe only the VMs in the active lesson', () => {
+  const problem={...DEFAULT_PROBLEM,vms:DEFAULT_PROBLEM.vms.slice(0,2)}
+  for(const algorithm of ['cloud','aco']){
+    const lesson=createLesson(algorithm,{problem,iterations:1})
+    const detail=lessonDetail(lesson.timeline[0],lesson.problem).lines.join(' ')
+    assert.match(detail,/VM1\/VM2:/)
+    assert.doesNotMatch(detail,/VM3/)
+  }
+})
+
 test('Reference titles and academic caveats explicitly distinguish baseline vs improved research',()=>{
   assert.equal(PAPERS.length,3)
   for(const paper of PAPERS) {

@@ -6,7 +6,8 @@ import { Area } from '../Game/World/Areas/Area.js'
 import { YardKit } from './cloud/YardKit.js'
 import { Trees } from '../Game/World/Trees.js'
 
-export const CLOUD_LAYOUT={center:[-65,-35],radius:20,spawn:{position:[-65,-25],rotation:0},exit:[-55,1.5,-25],station:[-76,1.5,-30]}
+const researchPodium = [-56,-36.5]
+export const CLOUD_LAYOUT={center:[-65,-35],radius:20,spawn:{position:[-65,-25],rotation:0},exit:[-55,1.5,-25],station:[researchPodium[0],1.5,researchPodium[1]+2.5]}
 export const TASK_MI=[1200,2400,1800,3200,2100,1500,2700,3600]
 export class CloudArea extends Area {
  constructor(manager){
@@ -94,16 +95,17 @@ export class CloudArea extends Area {
   // Identity sits at the roadside rather than across the windscreen.
   k.sign('CLOUD COMPUTE YARD',-73,-23,5.2,2.5)
   this.statusLabel=k.label('8 TASKS / 3 VMs',-73,1.85,-22.8,3.5,.4)
-  k.rounded(-78,1.15,-33,3.1,2.3,1.2,'wood')
-  k.rounded(-78,2.5,-33,3.7,.28,2,'coral')
-  k.label('RESEARCH / E',-78,2,-32.35,2.7,.45)
-  k.label('MI = work / MIPS = speed',-78,1.45,-32.35,2.8,.35)
-  this.makespanLabel=k.label('MAKESPAN: waiting for data',-78,.93,-32.35,2.8,.4)
+  const [x,z]=researchPodium
+  k.rounded(x,1.15,z,3.1,2.3,1.2,'wood')
+  k.rounded(x,2.5,z,3.7,.28,2,'coral')
+  k.label('RESEARCH / E',x,2,z+.65,2.7,.45)
+  k.label('MI = work / MIPS = speed',x,1.45,z+.65,2.8,.35)
+  this.makespanLabel=k.label('MAKESPAN: waiting for data',x,.93,z+.65,2.8,.4)
   // Small utility cabinet and cable reel frame the facility without blocking the drive.
-  k.rounded(-74,.55,-43,1.2,1.1,1,'dark')
-  k.mesh(new THREE.CylinderGeometry(.45,.45,.5,10),'wood',new THREE.Vector3(-75,.5,-43)).rotation.z=Math.PI/2  // Reuse the original bench template along the roadside, outside the safe stop.
+  k.rounded(-67,.55,-43,1.2,1.1,1,'dark')
+  k.mesh(new THREE.CylinderGeometry(.45,.45,.5,10),'wood',new THREE.Vector3(-68,.5,-43)).rotation.z=Math.PI/2  // Reuse the original bench template along the roadside, outside the safe stop.
   for(const [x,z]of [[-78,-26],[-52,-44]]){const model=this.game.world.benches.instancedGroup.group.clone(true);model.position.set(x,0,z);this.game.objects.add({model,updateMaterials:false});this.objects.hideable.push(model)}
-  const refs=[];for(const [x,z]of [[-79,-44],[-51,-28],[-51,-43],[-78,-22]]){const r=new THREE.Object3D();r.position.set(x,0,z);r.scale.setScalar(.65);r.updateMatrixWorld();refs.push(r)}
+  const refs=[];for(const [x,z]of [[-69,-44],[-51,-28],[-51,-43],[-78,-22]]){const r=new THREE.Object3D();r.position.set(x,0,z);r.scale.setScalar(.65);r.updateMatrixWorld();refs.push(r)}
   this.trees=new Trees('Cloud yard',this.game.resources.oakTreesVisualModel.scene.clone(true),refs,'#b4b536','#d8cf3b')
   // Low wooden boundaries frame the beds; all corners leave four-unit driving clearance.
   for(const x of [-73,-57])for(const z of [-46,-23]){k.box(x,.5,z,.16,1,.16,'wood');k.box(x+1,.65,z,2,.12,.12,'wood')}

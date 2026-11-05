@@ -153,3 +153,5 @@ New user authorization permits main/Pages ONLY if tests and asset redistribution
 ## Presentation Race audio mix — 2026-11-06
 
 On `feature/presentation-race-phase2` (draft PR #20), `Audio.js` applies background gain after asset resolution. Shared ambience (weather and road texture) plays at 25% of its previous level. Waves play at 30% of their previous level, with existing positional fades. The race test checks actual Howler gain during driving and at the GWO stop. The seed-42, four-iteration GWO demo ends with all 12 candidates sharing a 6.73 s schedule and retains the 6.50 s best-so-far.
+
+The west race bend shared space with the Cloud research podium and a collidable tree. The props and research interaction now sit inside the yard. Chrome regression drives through the former tree location and checks demo values against the world and Results UI. With 8 tasks, 3 VMs and seed 42, Results gives RR 11.83 s, ACO 6.00 s, and GWO 6.50 s. The four-iteration ACO demo reaches 6.20 s. An independent check of all 6,561 assignments confirms 6.00 s is optimal for the standard dataset.

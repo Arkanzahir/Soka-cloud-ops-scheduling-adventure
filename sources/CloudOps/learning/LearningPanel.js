@@ -53,7 +53,7 @@ export class LearningPanel
               <p class="co-question"></p>
               <p class="co-explanation"></p>
               <div class="co-takeaway"><span>INTI PEMBELAJARAN</span><p></p></div>
-              <p class="co-config-scope" hidden>Mode eksperimen hanya berlaku untuk Cloud dan ACO. Demonstrasi GWO serta tab Hasil tetap memakai skenario standar 8 task / 3 VM / 50 iterasi agar perbandingan referensi konsisten.</p>
+              <p class="co-config-scope" hidden>Pengaturan eksperimen berlaku di Cloud dan ACO. Demo GWO dan tab Hasil memakai skenario standar 8 task / 3 VM. Demo GWO berjalan ${this.demoIterations} iterasi. Tab Hasil membandingkan ACO dan GWO selama ${this.iterations} iterasi.</p>
               <div class="co-experiment" hidden>
                 <div class="co-panel-heading">EKSPERIMEN PARAMETER ACO <button type="button" class="co-button co-experiment-toggle" data-action="experiment-toggle" aria-expanded="false">⚙ Atur</button></div>
                 <div class="co-experiment-current"></div>

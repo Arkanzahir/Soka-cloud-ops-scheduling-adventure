@@ -10,6 +10,10 @@ const wait=(f,a,timeout=22000)=>p.waitForFunction(f,a,{timeout})
 const action=name=>p.locator('.co-learning [data-action="'+name+'"]')
 const driving=category=>wait(c=>game.world.cloudOps.canInteract(c),category)
 const step=()=>action('step').click()
+const finishLesson=()=>p.evaluate(()=>{
+ const player=game.world.learning.panel.player
+ player.seek(player.lesson.timeline.length)
+})
 const open=async(i,key='e')=>{await p.keyboard.press(key);await wait(i=>game.world.learning.panel.visible&&game.world.learning.panel.slide===i&&game.modals.state===1,i)}
 const close=async(category,key='Escape')=>{await p.keyboard.press(key);await driving(category)}
 const gotoStation=async(def)=>{
@@ -42,7 +46,8 @@ try{
    await p.keyboard.press('r');await wait(()=>game.world.cloudOps.transitions.busy)
    await wait(()=>game.world.cloudOps.canInteract()&&game.world.cloudOps.currentZone==='cloud'&&game.physicalVehicle.wheels.inContactCount>=2)
   }
-  await open({cloud:1,aco:2,gwo:3}[zone],'l');await step()
+  if(zone==='cloud')await gotoStation({world:zone,kind:'station'})
+  await open({cloud:1,aco:2,gwo:3}[zone],zone==='cloud'?'e':'l');await step()
   assert.equal(await p.evaluate(()=>game.world.learning.panel.player.cursor),1)
   await close('wandering')
   await gotoStation({world:zone,kind:'exit'});await p.keyboard.press('e')
@@ -61,6 +66,17 @@ try{
   const [wheel,base]=await p.evaluate(()=>{const item=game.audio.groups.get('wheelsOnFloor').items[0];return [item.howl.volume(),item.volume]})
   assert.ok(Math.abs(wheel/base-.25)<1e-6,'road texture should be 25% of its original mix')
  }finally{await p.keyboard.up('ArrowUp')}
+ await p.evaluate(()=>{
+  const transitions=game.world.cloudOps.transitions
+  const rotation=Math.PI/2
+  transitions.place(transitions.safeSpawn({position:[-79,-37],rotation}),rotation)
+ })
+ await wait(()=>game.physicalVehicle.wheels.inContactCount>=2)
+ await p.keyboard.down('ArrowUp')
+ try{
+  await wait(()=>game.player.position.z<-46&&Math.abs(game.player.position.x+79)<1.5,null,12000)
+ }finally{await p.keyboard.up('ArrowUp')}
+ console.log('PASS drove through west bend and former Cloud tree position')
  for(const i of [0,1,2,3,4,5]){
   await gotoStation({index:i});await open(i)
   assert.equal(await p.locator('.presentation-race-hud').isVisible(),false)
@@ -100,11 +116,17 @@ try{
     await wait(()=>{const task=game.world.areas.cloud.tasks[0];return task.vm===0&&!task.motion&&task.mesh.position.distanceTo(task.home)>1})
     assert.ok(await p.evaluate(()=>{const a=game.world.areas.cloud;return a.vms.filter(vm=>vm.selection.visible).length===1}))
     await action('pause').click()
+    await finishLesson()
+    const loads=await p.evaluate(()=>game.world.areas.cloud.vms.map(vm=>vm.load.toFixed(2)))
+    assert.deepEqual(loads,['11.83','8.10','2.20'])
    }
    if(i===2){
     await step()
     await wait(()=>{const a=game.world.areas.aco;return a.ants.every(v=>v.walkMixer.time>.08)&&a.ants.every(v=>v.vm===a.event.colonyChoices.find(c=>c.ant===v.antId).selectedVM)})
     await wait(()=>game.world.areas.aco.ants.every(a=>a.insideVm&&!a.mesh.visible))
+    await finishLesson()
+    assert.equal(await p.evaluate(()=>game.world.areas.aco.iteration.bestSoFar),6.2)
+    assert.match(await p.locator('.co-step-details').innerText(),/Terbaik sejauh ini: 6,20 detik/)
    }
    if(i===3){
     await step();await step()
@@ -112,10 +134,15 @@ try{
     assert.ok(await p.evaluate(()=>game.world.areas.gwo.wolves.every(w=>w.assignment.join()===game.world.areas.gwo.state.candidates.find(c=>c.id===w.id).assignment.join())))
     await wait(()=>game.world.areas.gwo.howl.howl.state()==='loaded')
     assert.ok(await p.evaluate(()=>game.world.areas.gwo.howl.lastPlay>-Infinity))
+    await step();await step()
+    const state=await p.evaluate(()=>game.world.areas.gwo.state)
+    assert.equal(state.bestMakespan,6.5)
+    assert.ok(state.candidates.every(candidate=>candidate.fitness.toFixed(2)==='6.73'))
+    assert.match(await p.locator('.co-step-details').innerText(),/Rekor sejauh ini: 6,50 detik/)
    }
   }
   if(i===4){
-   assert.equal(await p.locator('.co-metrics article').count(),3)
+   assert.deepEqual(await p.locator('.co-metrics strong').allTextContents(),['11,83 s','6,00 s','6,50 s'])
    assert.equal(await p.locator('.co-plot polyline').count(),2)
   }
   if(i===5)assert.equal(await p.locator('.co-paper').count(),3)
