@@ -171,6 +171,7 @@ export class AcoWorld {
   if(!Number.isFinite(dt)||dt<0)return
   this.elapsed+=dt
   const activeMotion=this.moving||this.returning
+  const completedReturn=this.returning&&this.elapsed>=1.15
   for(const [i,ant] of this.ants.entries()){
    if(!ant.mesh.visible)continue
    if(activeMotion){
@@ -186,16 +187,17 @@ export class AcoWorld {
     ant.mesh.position.x+=tangent.z*lateral
     ant.mesh.position.z-=tangent.x*lateral
     ant.mesh.rotation.y=Math.atan2(tangent.x,tangent.z)+(this.returning?Math.PI:0)
-    if(progress>=1&&this.returning){
-     this.returning=false
-     this.ants.forEach((a,j)=>this.placeAntAtNest(a,j))
-    }
+
    }else{
     // Idle movement at the anthill is ambient only; VM choices remain engine-driven.
     ant.mesh.position.x+=Math.sin(this.elapsed*1.1+i)*.002
    }
    ant.mesh.userData.legs.forEach(l=>l.rotation.y=Math.sin(this.elapsed*27+l.userData.phase)*.2)
    ant.mesh.userData.antennae.forEach((m,k)=>m.rotation.x=.6+Math.sin(this.elapsed*9+k+i)*.08)
+  }
+  if(completedReturn){
+   this.returning=false
+   this.ants.forEach((a,j)=>this.placeAntAtNest(a,j))
   }
  }
 
