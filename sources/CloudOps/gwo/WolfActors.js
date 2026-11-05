@@ -31,9 +31,17 @@ export function poseWolf(wolf, time, moving, howling)
 {
     if(!wolf.rig) return
     const { head, tail, legs } = wolf.rig
+    const shift = !moving && !howling ? Math.pow(Math.max(0, Math.sin(time * 1.45)), 6) : 0
+    const body = wolf.mesh.userData.body
+    body.position.x = shift * .16
+    body.rotation.x = shift * .055
     const phase = time * 18
     for(let i = 0; i < legs.length; i++)
-        legs[i].rotation.z = moving ? Math.sin(phase + (i === 1 || i === 2 ? Math.PI : 0)) * .31 : 0
-    head.rotation.z = howling * .28 + Math.sin(time * 2) * .022
-    tail.rotation.y = Math.sin(time * (moving ? 9 : 2)) * .12
+    {
+        const stride = Math.sin(phase + (i === 1 || i === 2 ? Math.PI : 0)) * .31
+        legs[i].rotation.z = moving ? stride : (i === 1 ? shift * -.17 : 0)
+    }
+    head.rotation.y = moving ? 0 : Math.sin(time * 1.1) * .38 * (1 - howling)
+    head.rotation.z = howling * .28 + Math.sin(time * 1.7) * .09
+    tail.rotation.y = Math.sin(time * (moving ? 9 : 2.4)) * (moving ? .18 : .34)
 }

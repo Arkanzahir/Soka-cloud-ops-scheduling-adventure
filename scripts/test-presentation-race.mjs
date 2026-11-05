@@ -59,7 +59,22 @@ try{
   await gotoStation({index:i});await open(i)
   assert.equal(await p.locator('.presentation-race-hud').isVisible(),false)
   if(i>=1&&i<=3){
-   await action('reset').click();await action('play').click()
+   await action('reset').click()
+   if(i===2){
+    const [pose,origin]=await p.evaluate(()=>{const a=game.world.areas.aco.ants[0];return [a.idleMount.position.toArray(),a.mesh.position.toArray()]})
+    await wait(pose=>game.world.areas.aco.ants[0].idleMount.position.toArray().some((v,k)=>Math.abs(v-pose[k])>.06),pose)
+    assert.deepEqual(await p.evaluate(()=>game.world.areas.aco.ants[0].mesh.position.toArray()),origin)
+   }
+   if(i===3){
+    const pose=await p.evaluate(()=>game.world.areas.gwo.wolves[0].rig.head.rotation.y)
+    await wait(pose=>Math.abs(game.world.areas.gwo.wolves[0].rig.head.rotation.y-pose)>.13,pose)
+    assert.equal(await p.evaluate(()=>game.world.areas.gwo.state),null)
+    const waves=await p.evaluate(()=>game.audio.groups.get('waves').items[0].howl.volume())
+    assert.ok(waves<.06,'waves near GWO should stay quiet in Presentation Race')
+    console.log('PASS idle poses before Play and quieter waves at GWO',waves.toFixed(3))
+   }
+   assert.equal(await p.evaluate(()=>game.world.learning.panel.player.cursor),0)
+   await action('play').click()
    await close('racing')
    await wait(()=>game.world.learning.panel.player.cursor>=1)
    assert.ok(await p.locator('.race-playback').isVisible())

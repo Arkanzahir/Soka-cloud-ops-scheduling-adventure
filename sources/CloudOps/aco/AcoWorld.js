@@ -407,10 +407,15 @@ export class AcoWorld {
     }
     active ||= walking
    }
+   const idle=!inTransit&&!this.event&&!ant.insideVm
    if(ant.walkMixer){
-    if(walking&&!ant.insideVm)ant.walkMixer.update(dt*2.2)
+    const phase=this.elapsed*(.95+(ant.antId%4)*.08)+ant.antId*1.9
+    // Local wandering at the nest leaves the agent's engine position and assignment intact.
+    ant.idleMount.position.set(idle?Math.sin(phase)*.24:0,0,idle?Math.cos(phase)*.21:0)
+    ant.idleMount.rotation.y=idle?Math.atan2(.24*Math.cos(phase),-.21*Math.sin(phase)):0
+    if(mesh.visible&&(walking||idle))ant.walkMixer.update(dt*(walking?2.2:.72))
    }else{
-    const stride=walking ? .18 : 0
+    const stride=walking ? .18 : idle ? .07 : 0
     mesh.userData.legs.forEach(leg=>leg.rotation.y=Math.sin(this.elapsed*29+leg.userData.phase+ant.antId)*stride)
     mesh.userData.antennae.forEach((antenna,i)=>antenna.rotation.x=.6+Math.sin(this.elapsed*6+i+ant.antId)*.045)
    }

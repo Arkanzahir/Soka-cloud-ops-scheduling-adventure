@@ -34,5 +34,6 @@ export function mountAntModels(ants, { scene, animations })
         for(const part of ant.mesh.children) part.visible = false
         ant.mesh.add(mount)
         ant.walkMixer = mixer
+        ant.idleMount = mount
     }
 }

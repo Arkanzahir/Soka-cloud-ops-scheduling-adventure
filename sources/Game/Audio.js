@@ -509,7 +509,9 @@ export class Audio
                     this.game.terrain.size / 2 - Math.abs(this.game.player.position.x),
                     this.game.terrain.size / 2 - Math.abs(this.game.player.position.z)
                 )
-                item.volume = Math.pow(remapClamp(distanceToSide, 0, 40, 1, 0.1), 2) * 0.7
+                const quieter = this.game.world.presentationRace?.active ||
+                    this.game.world.cloudOps?.currentZone === 'gwo'
+                item.volume = Math.pow(remapClamp(distanceToSide, 0, 40, 1, 0.1), 2) * (quieter ? 0.14 : 0.7)
             }
         })
 

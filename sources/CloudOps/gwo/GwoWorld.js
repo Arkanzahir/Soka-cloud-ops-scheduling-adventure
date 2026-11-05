@@ -128,11 +128,12 @@ export class GwoWorld extends Area {
   }
  }
  update(){
-  if(!this.wolves||this.paused||this.manager.currentZone!=='gwo'&&!this.trackside)return
+  if(!this.wolves||this.manager.currentZone!=='gwo'&&!this.trackside)return
   const dt=this.game.ticker.delta
   this.time+=dt
   for(const wolf of this.wolves){
    const {mesh,base,rankMove}=wolf
+   if(rankMove&&this.paused)continue
    const time=this.time+base.x
    let facing=wolf.facing+wolf.targetRotation
    if(rankMove){
