@@ -32,6 +32,8 @@ Model lingkungan dan kode Folio 2025 mengikuti atribusi MIT Bruno Simon. Musik K
 | `sounds/cloud-ops/waves.wav` | Efek sintetis asli, dibuat oleh [generator proyek](../scripts/generate-release-sfx.mjs) dan dicakup lisensi MIT proyek. |
 | `sounds/musics/Sky Blue Street.ogg` | Musik MintoDog, CC0 pada [unggahan OpenGameArt](https://opengameart.org/node/170985). |
 
+Pembaruan audio berikutnya menyintesis ulang `sounds/cloud-ops/engine.wav` dan menghaluskan `sounds/cloud-ops/ambience.wav` dengan generator MIT yang sama. Paket audio ini memakai aset berlisensi yang tercatat di atas dan efek hasil sintesis proyek.
+
 Paket menyertakan [kredit kreator dan catatan modifikasi](../static/credits/THIRD_PARTY_NOTICES.md) serta [lisensi MIT Folio 2025](../static/credits/folio-2025-license.txt). Catatan pembatasan Pally dan aset lama berlaku untuk file historis yang sudah dikeluarkan dari paket.
 
 ## Demo lokal

@@ -60,11 +60,18 @@ try{
  await wait(()=>game.world.presentationRace.active&&game.interactivePoints.activeItem===game.world.areas.circuit.interactivePoint&&game.interactivePoints.activeItem.state===4)
  await p.keyboard.press('Enter')
  await wait(()=>game.world.presentationRace.ready&&game.audio.raceMusic.playing(),null,35000)
+ await wait(()=>{
+  const engine=game.audio.groups.get('vehicleEngine').items[0].howl
+  return engine.playing()&&engine.volume()>=.08&&engine.volume()<=.11&&engine.rate()>.8
+ })
  await p.keyboard.down('ArrowUp')
  try{
-  await wait(()=>game.audio.groups.get('wheelsOnFloor').items[0].volume>.06)
+  await wait(()=>{
+   const engine=game.audio.groups.get('vehicleEngine').items[0].howl
+   return engine.volume()>.25&&engine.rate()>1&&game.audio.groups.get('wheelsOnFloor').items[0].volume>.06
+  })
   const [wheel,base]=await p.evaluate(()=>{const item=game.audio.groups.get('wheelsOnFloor').items[0];return [item.howl.volume(),item.volume]})
-  assert.ok(Math.abs(wheel/base-.25)<1e-6,'road texture should be 25% of its original mix')
+  assert.ok(Math.abs(wheel/base-.14)<1e-6,'road texture should be 14% of its original mix')
  }finally{await p.keyboard.up('ArrowUp')}
  await p.evaluate(()=>{
   const transitions=game.world.cloudOps.transitions
@@ -92,7 +99,7 @@ try{
     await wait(pose=>Math.abs(game.world.areas.gwo.wolves[0].rig.head.rotation.y-pose)>.13,pose)
     assert.equal(await p.evaluate(()=>game.world.areas.gwo.state),null)
     const waves=await p.evaluate(()=>game.audio.groups.get('waves').items[0].howl.volume())
-    assert.ok(waves<.02,'waves near GWO should stay quiet in Presentation Race')
+    assert.ok(waves<.01,'waves near GWO should stay below the audibility threshold in Presentation Race')
     console.log('PASS idle poses before Play and quieter waves at GWO',waves.toFixed(3))
    }
    assert.equal(await p.evaluate(()=>game.world.learning.panel.player.cursor),0)
