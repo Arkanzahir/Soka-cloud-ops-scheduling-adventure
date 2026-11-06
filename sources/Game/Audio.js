@@ -7,8 +7,8 @@ import { Events } from './Events.js'
 import { effectSource } from './utilities/effectSource.js'
 
 const backgroundGains = {
-    'sounds/cloud-ops/ambience.wav': 0.25,
-    'sounds/cloud-ops/waves.wav': 0.3
+    'sounds/cloud-ops/ambience.wav': 0.14,
+    'sounds/cloud-ops/waves.wav': 0.16
 }
 
 export class Audio
@@ -51,8 +51,10 @@ export class Audio
 
     register(options = {})
     {
+        const source = effectSource(options.path, options.loop)
+        const isVehicleEngine = source === 'sounds/cloud-ops/engine.wav'
         // Group
-        const groupName = options.group ?? 'all'
+        const groupName = options.group ?? (isVehicleEngine ? 'vehicleEngine' : 'all')
         let group = this.groups.get(groupName)
 
         if(!group)
@@ -79,7 +81,6 @@ export class Audio
         }
 
         const item = {}
-        const source = effectSource(options.path, options.loop)
         item.gain = backgroundGains[source] ?? 1
         item.howl = new Howl({
             src: [ source ],
@@ -105,7 +106,8 @@ export class Audio
         item.volume = options.volume ?? 0.5
         item.antiSpam = options.antiSpam ?? 0.1
         item.lastPlay = -Infinity
-        item.onPlaying = options.onPlaying ?? null
+        // Tune the replacement motor loop here while retaining the inherited vehicle code.
+        item.onPlaying = isVehicleEngine ? sound => this.mixEngine(sound) : options.onPlaying ?? null
         item.onPlay = options.onPlay ?? null
         item.loaded = options.preload ?? true
         item.autoplay = options.autoplay ?? false
@@ -151,6 +153,19 @@ export class Audio
         group.items.push(item)
 
         return item
+    }
+
+    mixEngine(item)
+    {
+        const { player, physicalVehicle, ticker } = this.game
+        const throttle = Math.abs(player.accelerating)
+        const rolling = Math.min(1, physicalVehicle.xzSpeed / 22)
+        const rev = clamp(Math.max(throttle * 0.8, rolling * 0.55) + player.boosting * 0.2, 0, 1)
+        const volume = 0.09 + rev * 0.38
+        const rate = 0.82 + rev * 0.58
+        const easing = volume > item.volume ? 10 : 2.5
+        item.volume += (volume - item.volume) * Math.min(1, ticker.deltaScaled * easing)
+        item.rate += (rate - item.rate) * Math.min(1, ticker.deltaScaled * 5)
     }
 
     setPlaylist()
