@@ -4,24 +4,24 @@
 
 Jelajahi kampus dengan mobil 3D, kirim task ke virtual machine, dan amati bagaimana **Round Robin, Ant Colony Optimization, serta Grey Wolf Optimizer** menyusun jadwal. Alokasi, nilai, dan grafik berasal dari engine JavaScript nyata yang dapat diuji.
 
-![Cloud Ops Campus dan kendaraan](docs/evidence/final-branding-main.png)
-
 [Mainkan di GitHub Pages](https://arkanzahir.github.io/Soka-cloud-ops-scheduling-adventure/) · [Jalankan secara lokal](#instalasi-dan-menjalankan-lokal) · [Dokumentasi teknis](#dokumentasi-lanjutan)
 
+![Cloud Ops Campus dengan mobil, landmark Kelompok 8, dan gerbang zona](docs/screenshots/campus.webp)
+
 <details>
-<summary>Pratinjau world, presentasi, dan hasil</summary>
+<summary>Galeri gameplay</summary>
 
 | Cloud Compute Yard | Ant Research Park |
 | --- | --- |
-| ![Delapan task dan tiga VM](docs/evidence/final-gameplay-cloud-yard.png) | ![Semut dan jalur feromon](docs/evidence/final-readability-aco-live.png) |
+| ![Antrean delapan task dan tiga VM di Cloud Compute Yard](docs/screenshots/cloud.webp) | ![Koloni semut bergerak dari sarang ke VM mengikuti jalur feromon](docs/screenshots/aco.webp) |
 
-| Wolf Field Research | Presentation Mode |
+| Wolf Field Research | Classic Race |
 | --- | --- |
-| ![Lima kandidat serigala](docs/evidence/final-gameplay-gwo-leaders.png) | ![Panel pembelajaran](docs/evidence/final-gameplay-panel.png) |
+| ![Lima serigala dengan label Alpha, Beta, Delta dan papan alokasi task](docs/screenshots/gwo.webp) | ![Mobil di garis start Classic Race dengan timer dan lampu hijau](docs/screenshots/classic-race.webp) |
 
-![Perbandingan hasil dan konvergensi](docs/evidence/final-normal-ui-results.png)
+**Perbandingan algoritma**
 
-Screenshot browser asli dari game terintegrasi, bukan mockup. Bukti lengkap tersedia pada laporan QA.
+![Dashboard hasil Round Robin, ACO, dan GWO dengan grafik konvergensi dan tabel alokasi task](docs/screenshots/results.webp)
 
 </details>
 
