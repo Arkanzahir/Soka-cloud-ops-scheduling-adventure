@@ -121,6 +121,13 @@ try
     await page.keyboard.press('e')
     await wait(() => game.world.presentationRace.ready,null,35000)
     await parkAt('race')
+    assert.ok(await page.evaluate(() => {
+        const { areas, presentationRace } = game.world
+        const exhibit = presentationRace.root.getObjectByName('hybrid-trackside-exhibit')
+        const sign = presentationRace.root.getObjectByName('hybrid-trackside-sign')
+        return presentationRace.root.visible && exhibit?.children.length > 0 && !!sign?.parent &&
+            !areas.hybrid.group.visible && areas.hybrid.tasks.every(task => task.group.parent === areas.hybrid.group)
+    }))
     const parked = await page.evaluate(() => game.player.position.toArray())
     await save('hybrid-race-checkpoint.png')
     await page.keyboard.press('e')

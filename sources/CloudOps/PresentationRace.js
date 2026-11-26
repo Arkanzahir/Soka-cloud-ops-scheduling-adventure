@@ -12,7 +12,8 @@ const STOPS = [
       exhibit: [-2.6, -64], origin: [4, -4], scale: .50, deck: [11, 6.6] },
     { title: 'Wolf Field Research', stop: [-76, -55], sign: [-70, -67], world: 'gwo', label: 'GWO',
       exhibit: [-64, -57], origin: [-61, 66], scale: .59, rotation: Math.PI / 2, deck: [13, 13], elevation: .9 },
-    { title: 'Hybrid Scheduling Lab', stop: [-83, -35], sign: [-86.5, -34], visit: 'hybrid', label: 'Hybrid' },
+    { title: 'Hybrid Scheduling Lab', stop: [-74.5, -35], visit: 'hybrid', label: 'Hybrid',
+      exhibit: [-65.8, -41.8], origin: [0, -2.2], scale: .42, rotation: .34, deck: [12.95, 5.8], elevation: 1.2, focusWeight: .68 },
     { title: 'Hasil', stop: [-75, 48], sign: [-69, 50] },
     { title: 'Paper dan kesimpulan', stop: [-27, 55], sign: [-36, 54] }
 ]
@@ -54,16 +55,19 @@ export class PresentationRace
         })
         this.stops = STOPS.map((stop, index) => {
             const [x,z] = stop.stop
-            const [signX,signZ] = stop.sign
-            const sign = new Group()
-            sign.position.set(signX, 0, signZ)
-            sign.rotation.y = Math.PI / 4
-            this.root.add(sign)
-            for(const side of [-1, 1])
-                kit.rounded(side * 2, 1.12, 0, .18, 2.25, .18, 'wood', sign)
-            kit.rounded(0, 2.1, 0, 5.2, 1.12, .22, 'wood', sign)
-            sign.add(kit.label(`POS ${index + 1} · ${stop.title.toUpperCase()}`, 0, 2.28, .13, 4.9, .45).mesh)
-            sign.add(kit.label('MENEPI · E / ENTER', 0, 1.88, .13, 3.6, .30).mesh)
+            if(stop.sign)
+            {
+                const [signX,signZ] = stop.sign
+                const sign = new Group()
+                sign.position.set(signX, 0, signZ)
+                sign.rotation.y = Math.PI / 4
+                this.root.add(sign)
+                for(const side of [-1, 1])
+                    kit.rounded(side * 2, 1.12, 0, .18, 2.25, .18, 'wood', sign)
+                kit.rounded(0, 2.1, 0, 5.2, 1.12, .22, 'wood', sign)
+                sign.add(kit.label(`POS ${index + 1} · ${stop.title.toUpperCase()}`, 0, 2.28, .13, 4.9, .45).mesh)
+                sign.add(kit.label('MENEPI · E / ENTER', 0, 1.88, .13, 3.6, .30).mesh)
+            }
             for(const side of [-1, 1])
                 kit.mesh(padGeometry, 'cream', new Vector3(x, .075, z + side * 1.45), this.root)
             const station = manager.createStation({
@@ -74,9 +78,9 @@ export class PresentationRace
                 isAvailable: () => this.ready,
                 onInteract: () => this.openStop(index)
             })
-            if(!stop.world) return { station }
+            if(!stop.exhibit) return { station }
 
-            const world = game.world.areas[stop.world]
+            const world = game.world.areas[stop.world ?? stop.visit]
             const stand = new Group()
             const display = new Group()
             const [originX,originZ] = stop.origin
@@ -84,14 +88,28 @@ export class PresentationRace
             const [width,depth] = stop.deck
             const elevation = stop.elevation ?? .52
             const deckHeight = elevation + .3
-            kit.rounded(displayX, elevation - deckHeight / 2, displayZ, width, deckHeight, depth, 'wood', this.root)
+            const base = kit.rounded(displayX, elevation - deckHeight / 2, displayZ, width, deckHeight, depth, 'wood', this.root)
             stand.position.set(displayX, elevation, displayZ)
             stand.scale.setScalar(stop.scale)
             stand.rotation.y = stop.rotation || 0
             display.position.set(-originX, 0, -originZ)
             stand.add(display)
             this.root.add(stand)
-            return { station, world, display, focus: new Vector3(displayX, 0, displayZ) }
+            const focus = new Vector3(displayX, 0, displayZ)
+            if(stop.visit)
+            {
+                base.rotation.y = stand.rotation.y
+                const plaque = new Group()
+                plaque.name = 'hybrid-trackside-sign'
+                plaque.position.set(2.15, .17, depth / 2 + .09)
+                base.add(plaque)
+                kit.rounded(0,0,0,6.25,.81,.18,'wood',plaque)
+                plaque.add(kit.label(`POS ${index + 1} · MASUK LAB`, 0, .12, .10, 5.9, .38).mesh)
+                plaque.add(kit.label('MENEPI · E / ENTER', 0, -.19, .10, 3.6, .22).mesh)
+                display.add(world.createTracksideExhibit())
+                return { station, focus, focusWeight: stop.focusWeight }
+            }
+            return { station, world, display, focus }
         })
         // Player updates tracking at 6; View consumes it at 7.
         game.ticker.events.on('tick', () => this.frameParkedExhibit(), 6)
@@ -109,7 +127,7 @@ export class PresentationRace
         const {position} = this.game.player
         const stop = this.stops.find(({station,focus}) => focus &&
             Math.hypot(position.x - station.position.x, position.z - station.position.z) < 2.5)
-        if(stop) this.game.view.focusPoint.trackedPosition.lerp(stop.focus, .4)
+        if(stop) this.game.view.focusPoint.trackedPosition.lerp(stop.focus, stop.focusWeight ?? .4)
     }
 
     async start()

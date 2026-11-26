@@ -41,7 +41,7 @@ Game memperagakan pencarian jadwal dengan **makespan minimum**: waktu sampai sel
 | **Wolf Field Research** | Lima kandidat terbaik dari 12 serigala. Label Alpha, Beta, dan Delta, papan alokasi task, serta rekor makespan mengikuti hasil engine. |
 | **Hybrid Scheduling Lab** | Antrean task, rak VM, sarang semut, dan meja kromosom. Pilih Max-Min → ACO atau Min-Min → GA dan bandingkan makespan sebelum dan sesudah optimasi. |
 
-**Free Drive** memberi akses ke zona melalui gerbang kampus. **Presentation Race** menempatkan tujuh pos di sisi lintasan dalam urutan Pembukaan → Cloud → ACO → GWO → Hybrid → Hasil → Paper. Menepi dan tekan **E** di pos Hybrid untuk masuk lab. Gunakan papan **Kembali** di lab untuk kembali ke posisi parkir dan melanjutkan lap. Timer balap terus berjalan.
+**Free Drive** memberi akses ke zona melalui gerbang kampus. **Presentation Race** menempatkan tujuh pos di sisi lintasan dalam urutan Pembukaan → Cloud → ACO → GWO → Hybrid → Hasil → Paper. Miniatur di pos Hybrid memperlihatkan sarang dan jalur feromon, antrean task dan VM, serta meja kromosom. Menepi dan tekan **E** untuk masuk lab interaktif. Gunakan papan **Kembali** di lab untuk kembali ke posisi parkir dan melanjutkan lap. Timer balap terus berjalan.
 
 **Dashboard** menyediakan Langkah, Play, Pause, dan Reset. Tab Hasil menyajikan tabel alokasi task, makespan, biaya simulasi, utilisasi proksi, dan grafik konvergensi. Pengaturan grafis Low/High tersedia melalui menu.
 

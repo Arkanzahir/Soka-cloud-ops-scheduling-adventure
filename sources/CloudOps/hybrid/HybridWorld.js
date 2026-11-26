@@ -2,7 +2,7 @@ import * as T from 'three/webgpu'
 import { mountAntModels } from '../aco/AntModel.js'
 import { YardKit } from '../cloud/YardKit.js'
 import { DEFAULT_PROBLEM } from '../scheduling/problem.js'
-import { HYBRID_MODES } from '../scheduling/hybrid.js'
+import { HYBRID_MODES, runHybrid } from '../scheduling/hybrid.js'
 import { Trees } from '../../Game/World/Trees.js'
 
 const VM_X = [-3.6, 0, 3.6]
@@ -86,14 +86,40 @@ export class HybridWorld
             }
         }
         this.plantTrees()
+        const exhibitStart = this.group.children.length
         this.buildDispatch()
         this.buildAntStation()
         this.buildChromosomeStation()
         this.sign('HYBRID SCHEDULING LAB', 0, 4.25, -8.7, 10.6, 'dark')
+        this.exhibitParts = this.group.children.slice(exhibitStart)
+        this.addBench()
         this.sign('Penyortiran task · E / ENTER', -8.6, 2, 5.8, 5.45, 'wood')
         this.sign('KEMBALI · E / ENTER', 9.2, 1.8, 7.1, 4.9, 'wood')
         this.phase = this.sign('', 0, 3.25, -8.5, 9.25, 'wood', .48)
         this.decision = this.label('', 0, 2.77, -8.38, 8.8, .4)
+    }
+
+    createTracksideExhibit()
+    {
+        const exhibit = new T.Group()
+        exhibit.name = 'hybrid-trackside-exhibit'
+        this.box(0, .016, -2.2, 30.4, .04, 13.35, 'sand', exhibit)
+        const liveLabels = new Set([
+            ...this.pads.map(pad => pad.load.mesh),
+            ...this.chromosome.map(row => row.label.mesh)
+        ])
+        const gaSeed = runHybrid(DEFAULT_PROBLEM, {mode: 'ga'}).initial.assignment
+        const initialChromosome = this.chromosome[0].cells
+        for(const part of this.exhibitParts)
+        {
+            if(liveLabels.has(part)) continue
+            const model = part.clone()
+            const gene = initialChromosome.indexOf(part)
+            if(gene !== -1) model.material = this.kit.materials[VM_MATERIALS[gaSeed[gene]]]
+            if(part === this.ant.mesh) this.loadAnt({mesh: model, antId: 1})
+            exhibit.add(model)
+        }
+        return exhibit
     }
 
     sign(text, x, y, z, width, material, height = .72)
@@ -149,6 +175,10 @@ export class HybridWorld
             this.tasks.push({group, crate, home: group.position.clone(), target: group.position.clone()})
         })
         this.label('ANTREAN TASK',0,.35,3.78,3.2,.48)
+    }
+
+    addBench()
+    {
         const bench = this.game.world.benches.instancedGroup.group.clone(true)
         bench.position.set(-11.8,0,8.8)
         bench.rotation.y = Math.PI
@@ -196,8 +226,13 @@ export class HybridWorld
         for(const offset of [-.25,0,.22])
             this.mesh(antBody,'dark',0,.15,offset,model)
         this.ant = {mesh: model, antId: 1}
-        this.game.resourcesLoader.load([['ant','campus/animals/ant.glb','gltf']])
-            .then(({ant}) => mountAntModels([this.ant],ant))
+        this.antModel = this.game.resourcesLoader.load([['ant','campus/animals/ant.glb','gltf']])
+        this.loadAnt(this.ant)
+    }
+
+    loadAnt(actor)
+    {
+        this.antModel.then(({ant}) => mountAntModels([actor],ant))
             .catch(error => console.warn('Hybrid ant model fallback',error))
     }
 
