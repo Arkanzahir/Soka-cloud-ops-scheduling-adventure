@@ -108,3 +108,10 @@ body:has(.learning-host.is-displayed) .campus-overlay{visibility:hidden;pointer-
 .co-learning .co-experiment-current{font-size:12px;font-weight:800;color:#5a5144;margin-top:6px;line-height:1.45}
 .co-learning .co-experiment-toggle{font-size:11px;padding:4px 8px;min-height:30px}
 .co-learning .co-experiment-body{padding-top:6px}
+.co-hybrid-modes[hidden] { display: none; }
+.co-hybrid-matrix { width: 100%; margin: .45rem 0; border-collapse: collapse; font-variant-numeric: tabular-nums; text-align: right; }
+.co-hybrid-matrix caption { text-align: left; margin-bottom: .35rem; }
+.co-hybrid-matrix :is(th, td) { padding: .19rem .35rem; border-bottom: 1px solid currentColor; }
+.co-hybrid-matrix th:first-child { text-align: left; }
+.co-hybrid-matrix [data-minimum] { font-weight: 800; }
+.co-hybrid-matrix [data-selected] { color: #302535; background: #ffce84; outline: 2px solid #ffce84; outline-offset: -2px; }

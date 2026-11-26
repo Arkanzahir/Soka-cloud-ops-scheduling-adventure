@@ -1,7 +1,7 @@
 import { DEFAULT_PROBLEM } from '../scheduling/index.js'
 import { compareAlgorithms } from '../simulation/SimulationBridge.js'
 
-/** Six short, lecturer-friendly presentation sections. No fake algorithm results. */
+/** Short presentation sections backed by the scheduling engine. */
 export const PRESENTATION_SECTIONS = Object.freeze([
     { id: 'opening', label: 'Pembukaan', zone: 'main', eyebrow: '01 / PENGANTAR', title: 'Cloud Ops: Scheduling Adventure',
         question: 'Bagaimana membagi banyak tugas ke beberapa server agar semuanya cepat selesai?',
@@ -19,11 +19,15 @@ export const PRESENTATION_SECTIONS = Object.freeze([
         question: 'Bagaimana Alpha, Beta, dan Delta memandu perubahan kandidat?',
         explanation: 'Satu serigala membawa satu jadwal lengkap untuk 8 task. Engine menilai 12 kandidat, dan arena menampilkan 5 terbaik. Alpha, Beta, dan Delta memandu pembaruan kandidat. Bingkai emas pada papan menandai task yang pindah VM.',
         takeaway: 'Gerak serigala adalah metafora kandidat solusi, bukan pencarian jarak fisik ke VM.' },
-    { id: 'results', label: 'Hasil', zone: null, eyebrow: '05 / PERBANDINGAN', title: 'Jadwal mana yang lebih cepat?',
+    { id: 'hybrid', label: 'Hybrid', zone: 'hybrid', eyebrow: '05 / ALGORITMA HYBRID', title: 'Hybrid Scheduling Lab',
+        question: 'Apa yang terjadi jika pencarian dimulai dari jadwal yang sudah tersusun?',
+        explanation: 'Max-Min menyusun jadwal untuk feromon awal ACO. Min-Min menyusun kromosom pertama untuk Genetic Algorithm (GA).',
+        takeaway: 'Bandingkan makespan jadwal awal dengan jadwal terbaik setelah optimasi.' },
+    { id: 'results', label: 'Hasil', zone: null, eyebrow: '06 / PERBANDINGAN', title: 'Jadwal mana yang lebih cepat?',
         question: 'Bagaimana hasil Round Robin, ACO, dan GWO pada data yang sama?',
         explanation: 'Perbandingan ini dihitung langsung oleh engine dengan dataset dan seed sama. Makespan adalah objektif utama; biaya dan utilization proxy hanya metrik tambahan.',
         takeaway: 'Hasil satu seed bukan bukti satu algoritma selalu lebih unggul. Anggaran evaluasinya juga berbeda.' },
-    { id: 'paper', label: 'Paper', zone: null, eyebrow: '06 / REFERENSI', title: 'Dari penelitian ke simulasi edukatif',
+    { id: 'paper', label: 'Paper', zone: null, eyebrow: '07 / REFERENSI', title: 'Dari penelitian ke simulasi edukatif',
         question: 'Apa hubungan kode yang kita jalankan dengan paper penelitian?',
         explanation: 'ACO yang dijalankan adalah baseline ACO diskret dan GWO adalah baseline standar yang didiskretisasi. Paper modern yang kami kaji menggunakan varian improved, jadi hasilnya tidak direplikasi secara identik.',
         takeaway: 'Transparan tentang asumsi, rumus, dan perbedaan implementasi dari paper.' }

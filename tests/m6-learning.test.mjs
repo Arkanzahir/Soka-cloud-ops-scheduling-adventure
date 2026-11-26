@@ -7,9 +7,9 @@ import { PRESENTATION_SECTIONS, PAPERS, buildComparison, convergencePolyline, fm
 
 const near = (a,b,eps=1e-9) => assert.ok(Math.abs(a-b)<eps,`${a} != ${b}`)
 
-test('M6 has six ordered learning sections with correct zone mapping and plain Indonesian explanations', () => {
-  assert.deepEqual(PRESENTATION_SECTIONS.map(s=>s.id), ['opening','problem','aco','gwo','results','paper'])
-  assert.deepEqual(PRESENTATION_SECTIONS.map(s=>s.zone), ['main','cloud','aco','gwo',null,null])
+test('M6 has seven ordered learning sections with correct zone mapping and plain Indonesian explanations', () => {
+  assert.deepEqual(PRESENTATION_SECTIONS.map(s=>s.id), ['opening','problem','aco','gwo','hybrid','results','paper'])
+  assert.deepEqual(PRESENTATION_SECTIONS.map(s=>s.zone), ['main','cloud','aco','gwo','hybrid',null,null])
   for(const section of PRESENTATION_SECTIONS) {
     assert.ok(section.question.length > 15)
     assert.ok(section.explanation.length > 25)

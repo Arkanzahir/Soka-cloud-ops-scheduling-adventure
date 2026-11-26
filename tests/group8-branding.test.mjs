@@ -4,7 +4,7 @@ import {PROJECT_REPOSITORY,PROJECT_TITLE,DESTINATIONS} from '../sources/CloudOps
 test('public campus destinations never use upstream personal account URLs',()=>{
  for(const entry of [...social,...projects,...lab])if(entry.url)assert.equal(entry.url,PROJECT_REPOSITORY);
  assert.deepEqual(social.filter(x=>x.menu).map(x=>x.menu),['behindTheScene']);assert.ok(social.some(x=>x.action==='presentation'));
- assert.deepEqual(DESTINATIONS.map(x=>x.id),['cloud','aco','gwo']);
+ assert.deepEqual(DESTINATIONS.map(x=>x.id),['cloud','aco','gwo','hybrid']);
 });
 test('public HTML identity and legal attribution are kept separate',()=>{
  const html=fs.readFileSync('sources/index.html','utf8');assert.ok(html.includes('<title>'+PROJECT_TITLE+'</title>'));

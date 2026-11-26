@@ -16,7 +16,8 @@ export class InteractiveStation
             this.position, label, InteractivePoints.ALIGN_RIGHT, InteractivePoints.STATE_HIDDEN,
             () =>
             {
-                if(this.enabled && this.trigger.isIn && manager.canInteract(category) && Math.abs(game.player.position.y - this.position.y) < 3)
+                const filter = typeof category === 'function' ? category() : category
+                if(this.enabled && this.trigger.isIn && manager.canInteract(filter) && Math.abs(game.player.position.y - this.position.y) < 3)
                     onInteract()
             },
             () => game.inputs.interactiveButtons.addItems(['interact']),

@@ -34,9 +34,10 @@ export class MainHub {
   this.signs=[];
   for(const destination of DESTINATIONS){
    const area=this.game.world.areas[destination.id];
+   if(!area.entry)continue;
    const position=destination.id==='gwo'?area.mainGate.position:[area.entry.position.x,area.entry.position.z];
    const isAco=destination.id==='aco';
-   const ground=isAco?area.entry.position.y-1.5:0;
+   const ground=isAco||destination.id==='hybrid'?area.entry.position.y-1.5:0;
    const sign=new T.Group();
    sign.name='campus-wayfinding-'+destination.id;
    sign.position.set(position[0] - (isAco ? .9 : 2), ground, position[1] - (isAco ? .9 : 2.2));

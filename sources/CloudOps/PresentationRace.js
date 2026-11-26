@@ -12,6 +12,7 @@ const STOPS = [
       exhibit: [-2.6, -64], origin: [4, -4], scale: .50, deck: [11, 6.6] },
     { title: 'Wolf Field Research', stop: [-76, -55], sign: [-70, -67], world: 'gwo', label: 'GWO',
       exhibit: [-64, -57], origin: [-61, 66], scale: .59, rotation: Math.PI / 2, deck: [13, 13], elevation: .9 },
+    { title: 'Hybrid Scheduling Lab', stop: [-83, -35], sign: [-86.5, -34], visit: 'hybrid', label: 'Hybrid' },
     { title: 'Hasil', stop: [-75, 48], sign: [-69, 50] },
     { title: 'Paper dan kesimpulan', stop: [-27, 55], sign: [-36, 54] }
 ]
@@ -46,7 +47,10 @@ export class PresentationRace
         const kit = new YardKit({ game, objects: { hideable: [] } })
         const padGeometry = new BoxGeometry(2.2, .025, .14)
         game.modals.items.get('learning').events.on('closed', () => {
-            if(this.ready) this.showDrivingHint()
+            if(!this.ready) return
+            if(this.manager.currentZone === 'hybrid')
+                this.show('L untuk buka simulasi. Menepi di papan Kembali, lalu tekan E untuk lanjut balapan.')
+            else this.showDrivingHint()
         })
         this.stops = STOPS.map((stop, index) => {
             const [x,z] = stop.stop
@@ -128,7 +132,7 @@ export class PresentationRace
             this.viewed.clear()
             this.mountExhibits()
             this.game.audio.raceMusic.load()
-            this.show('Tekan E untuk mulai. Temukan 6 pos materi di sisi lintasan.')
+            this.show(`Tekan E untuk mulai. Temukan ${STOPS.length} pos materi di sisi lintasan.`)
             this.manager.refresh()
         }
         catch(error)
@@ -194,7 +198,8 @@ export class PresentationRace
 
     updatePlayback(snapshot)
     {
-        const world = this.ready && STOPS[this.learning.panel.slide]?.world
+        const stop = STOPS[this.learning.panel.slide]
+        const world = this.ready && this.viewed.has(this.learning.panel.slide) && (stop?.world ?? stop?.visit)
         const status = snapshot?.status
         this.playback.hidden = !world || (status !== 'playing' && status !== 'finished')
         if(this.playback.hidden) return
@@ -229,6 +234,15 @@ export class PresentationRace
         this.show('Ikuti checkpoint balap. Menepi di marka pos, lalu tekan E.')
     }
 
+    showDrivingHintAfterVisit()
+    {
+        if(!this.ready) return
+        this.learning.panel.setRaceChapter(false)
+        this.circuit.timer.group.visible = this.circuit.timer.visible
+        this.cancel.disabled = false
+        this.showDrivingHint()
+    }
+
     nearbyStop()
     {
         if(!this.ready || !this.manager.canInteract('racing')) return -1
@@ -242,7 +256,7 @@ export class PresentationRace
         if(index !== -1) this.openStop(index)
     }
 
-    openStop(index)
+    async openStop(index)
     {
         if(!this.ready) return
         const vehicle = this.game.physicalVehicle
@@ -252,13 +266,29 @@ export class PresentationRace
             return
         }
 
+        const stop = STOPS[index]
+        if(stop.visit)
+        {
+            this.cancel.disabled = true
+            if(!await this.manager.enter(stop.visit, false, 'racing'))
+            {
+                this.cancel.disabled = false
+                this.show(this.manager.lastError || 'Gerbang Hybrid belum dapat dimasuki.')
+                return
+            }
+            this.circuit.timer.group.visible = false
+        }
         this.learning.panel.setRaceChapter(true)
         if(this.learning.open(index, 'racing'))
         {
             this.viewed.add(index)
             this.hud.hidden = true
         }
-        else this.learning.panel.setRaceChapter(false)
+        else
+        {
+            this.learning.panel.setRaceChapter(false)
+            if(stop.visit) this.show('L untuk buka simulasi. Tekan E di papan Kembali untuk lanjut balapan.')
+        }
     }
 
     stop()
@@ -272,6 +302,12 @@ export class PresentationRace
         if(!this.active) return
         this.active = false
         this.ready = false
+        if(this.manager.currentZone === 'hybrid')
+        {
+            // CircuitArea handles the physical respawn on finish.
+            this.manager.currentZone = 'main'
+            this.manager.returnPoint = null
+        }
         this.learning.panel.close()
         this.learning.panel.pauseLesson()
         this.learning.panel.setRaceChapter(false)

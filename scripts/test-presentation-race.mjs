@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import {chromium} from 'playwright'
-const b=await chromium.launch({channel:'chrome',headless:true})
+const b=await chromium.launch({channel:process.env.BROWSER_CHANNEL || 'chrome',headless:true})
 const p=await b.newPage({viewport:{width:1366,height:768}})
 const url = new URL(process.argv[2] || 'http://127.0.0.1:1263/#skip')
 const errors=[],requests=[]
@@ -84,7 +84,7 @@ try{
   await wait(()=>game.player.position.z<-46&&Math.abs(game.player.position.x+79)<1.5,null,12000)
  }finally{await p.keyboard.up('ArrowUp')}
  console.log('PASS drove through west bend and former Cloud tree position')
- for(const i of [0,1,2,3,4,5]){
+ for(const i of [0,1,2,3,4,5,6]){
   await gotoStation({index:i});await open(i)
   assert.equal(await p.locator('.presentation-race-hud').isVisible(),false)
   if(i>=1&&i<=3){
@@ -149,11 +149,23 @@ try{
    }
   }
   if(i===4){
+   assert.equal(await p.evaluate(()=>game.world.cloudOps.currentZone),'hybrid')
+   await step()
+   assert.equal(await p.locator('.co-hybrid-matrix [data-selected]').count(),1)
+   await finishLesson()
+   assert.match(await p.locator('.co-step-summary').innerText(),/6,40 detik/)
+  }
+  if(i===5){
    assert.deepEqual(await p.locator('.co-metrics strong').allTextContents(),['11,83 s','6,00 s','6,50 s'])
    assert.equal(await p.locator('.co-plot polyline').count(),2)
   }
-  if(i===5)assert.equal(await p.locator('.co-paper').count(),3)
+  if(i===6)assert.equal(await p.locator('.co-paper').count(),3)
   await close('racing')
+  if(i===4){
+   await gotoStation({world:'hybrid',kind:'exit'})
+   await p.keyboard.press('e')
+   await wait(()=>game.world.cloudOps.currentZone==='main'&&game.world.cloudOps.canInteract('racing'))
+  }
   if(i===3){
    await wait(()=>game.world.areas.gwo.wolves.every(w=>!w.rankMove))
    assert.ok(await p.evaluate(()=>game.world.areas.gwo.wolves.every(w=>w.mesh.position.distanceTo(w.base)<.01)))

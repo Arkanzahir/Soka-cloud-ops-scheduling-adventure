@@ -16,12 +16,12 @@ try{
  await toggle();check('High can be restored through native menu',await page.evaluate(()=>game.quality.level===0&&game.rendering.renderer.getPixelRatio()===2));await toggle();
  for(const [width,height]of [[1366,768],[1920,1080]]){
   await page.setViewportSize({width,height});await page.waitForTimeout(1000);await page.locator('#presentation-open').click();await panel();
-  for(let slide=0;slide<6;slide++){
+  for(let slide=0;slide<7;slide++){
    await page.locator(`.co-learning [data-index="${slide}"]`).click();await panel();
    check(`${width}x${height} section ${slide+1}: panel/footer fit and content scrolls without horizontal clipping`,await page.evaluate(()=>{const root=document.querySelector('.co-learning'),r=root.getBoundingClientRect(),content=root.querySelector('.co-content'),footer=root.querySelector('.co-footer').getBoundingClientRect();return r.x>=0&&r.y>=0&&r.right<=innerWidth+1&&r.bottom<=innerHeight+1&&content.clientHeight>50&&content.scrollWidth<=content.clientWidth+1&&footer.bottom<=r.bottom&&footer.top>=r.top}));
    if(slide>=1&&slide<=3){const step=page.locator('.co-learning [data-action="step"]');await step.scrollIntoViewIfNeeded();check(`${width} section ${slide+1}: Step is reachable`,await step.isVisible());}
    if(slide===1)await shot(`panel-${width}`);
-   if(slide===4){check(`${width}: actual metrics, assignments and convergence present`,await page.evaluate(()=>document.querySelectorAll('.co-metric').length===3&&document.querySelectorAll('.co-assignment-table tbody tr').length===8&&document.querySelectorAll('.co-plot polyline').length===2&&[...document.querySelectorAll('.co-metric small')].every(x=>x.textContent.includes('Utilisasi (proxy)'))));await page.locator('.co-plot-wrap').scrollIntoViewIfNeeded();await shot(`convergence-${width}`)}
+   if(slide===5){check(`${width}: actual metrics, assignments and convergence present`,await page.evaluate(()=>document.querySelectorAll('.co-metric').length===3&&document.querySelectorAll('.co-assignment-table tbody tr').length===8&&document.querySelectorAll('.co-plot polyline').length===2&&[...document.querySelectorAll('.co-metric small')].every(x=>x.textContent.includes('Utilisasi (proxy)'))));await page.locator('.co-plot-wrap').scrollIntoViewIfNeeded();await shot(`convergence-${width}`)}
   }
   await page.keyboard.press('Escape');await page.waitForFunction(()=>game.world.cloudOps.state==='DRIVING');
  }

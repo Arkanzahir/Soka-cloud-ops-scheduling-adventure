@@ -42,7 +42,7 @@ export class ZoneManager
             if(action.active && this.currentZone !== 'main' && this.state === 'DRIVING')
             {
                 for(const key of [...action.activeKeys]) game.inputs.end(key)
-                void this.enter(this.currentZone, true)
+                void this.enter(this.currentZone, true, this.drivingCategory())
             }
         }, 0)
         game.ticker.events.on('tick', () =>
@@ -50,7 +50,7 @@ export class ZoneManager
             const zone = this.zones.get(this.currentZone)
             if(this.state === 'DRIVING' && !this.lastError && zone.center &&
                 (Math.hypot(game.player.position.x - zone.center[0], game.player.position.z - zone.center[1]) > zone.radius || game.player.position.y < -2))
-                void this.enter(this.currentZone, true)
+                void this.enter(this.currentZone, true, this.drivingCategory())
         }, 8)
         this.refresh()
     }
@@ -78,6 +78,11 @@ export class ZoneManager
     canInteract(category = 'wandering')
     {
         return this.state === 'DRIVING' && this.game.inputs.filters.has(category) && !this.transitions.busy
+    }
+
+    drivingCategory()
+    {
+        return this.game.inputs.filters.has('racing') ? 'racing' : 'wandering'
     }
 
     refresh(message = '')
@@ -109,9 +114,9 @@ export class ZoneManager
         return null
     }
 
-    async enter(id, reset = false)
+    async enter(id, reset = false, category = 'wandering')
     {
-        if(!this.canInteract() || !this.zones.has(id)) return false
+        if(!this.canInteract(category) || !this.zones.has(id)) return false
         const vehicle = this.game.physicalVehicle
         if(!reset && (vehicle.wheels.inContactCount < 2 || Math.abs(vehicle.speed) > 3.5))
         {

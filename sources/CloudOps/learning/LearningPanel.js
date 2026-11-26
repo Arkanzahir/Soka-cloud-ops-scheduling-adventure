@@ -1,5 +1,6 @@
 import { createLesson, createWorldAdapter, LessonPlayer } from '../simulation/SimulationBridge.js'
 import { buildComparison, convergencePolyline, fmt, lessonDetail, PAPERS, PRESENTATION_SECTIONS } from './PresentationContent.js'
+import { allocationTable, createHybridLesson, hybridDetail } from '../hybrid/HybridLesson.js'
 import { runACO, runRoundRobin } from '../scheduling/index.js'
 import { EXPERIMENT_DEFAULTS, createExperimentProblem, validateExperimentConfig } from './ExperimentConfig.js'
 
@@ -25,6 +26,7 @@ export class LearningPanel
         this.iterations = 50
         this.demoIterations = 4
         this.acoDisplayMode='colony'
+        this.hybridMode = 'aco'
         this.experimentExpanded=false
         this.experiment={...EXPERIMENT_DEFAULTS,seed:this.seed}
         this.experimentProblem=createExperimentProblem(this.experiment)
@@ -74,6 +76,10 @@ export class LearningPanel
               </div>
               <div class="co-simulation" hidden>
                 <div class="co-panel-heading">SIMULASI LANGKAH NYATA <span class="co-step-count"></span></div>
+                <div class="co-controls co-hybrid-modes" role="group" aria-label="Algoritma Hybrid" hidden>
+                  <button type="button" class="co-button" data-action="hybrid-mode" data-mode="aco">Max-Min → ACO</button>
+                  <button type="button" class="co-button" data-action="hybrid-mode" data-mode="ga">Min-Min → GA</button>
+                </div>
                 <div class="co-demo-label">Demo pendek dengan hasil engine M4, bukan animasi acak.</div>
                 <div class="co-step-title" aria-live="polite"></div>
                 <p class="co-step-summary"></p>
@@ -262,10 +268,16 @@ export class LearningPanel
         const config=algorithm==='gwo'?{seed:this.seed,iterations:this.demoIterations,wolves:12}
             :{problem:this.experimentProblem,...(algorithm==='aco'?{seed:this.experiment.seed,iterations:Math.min(this.demoIterations,this.experiment.iterations),ants:12,sampledAnt:1}:{})}
         this.player?.dispose()
-        this.lesson = createLesson(algorithm, config)
+        this.lesson = algorithm === 'hybrid' ? createHybridLesson(this.hybridMode, { seed: this.seed })
+            : createLesson(algorithm, config)
         let adapter = null
         const world = this.worlds[algorithm]
-        if(world) adapter = createWorldAdapter(algorithm, world)
+        if(world && algorithm === 'hybrid')
+        {
+            world.setMode(this.hybridMode)
+            adapter = { apply: step => world.applyStep(step), reset: () => world.resetVisualization() }
+        }
+        else if(world) adapter = createWorldAdapter(algorithm, world)
         this.player = new LessonPlayer(this.lesson, {
             adapter, onChange: snapshot => this.renderStep(snapshot)
         })
@@ -292,10 +304,12 @@ export class LearningPanel
             if(i === this.slide) button.setAttribute('aria-current', 'step')
             else button.removeAttribute('aria-current')
         }
-        $(this.root, '.co-simulation').hidden = !['problem', 'aco', 'gwo'].includes(section.id)
+        $(this.root, '.co-simulation').hidden = !['problem', 'aco', 'gwo', 'hybrid'].includes(section.id)
+        $(this.root, '.co-hybrid-modes').hidden = section.id !== 'hybrid'
         $(this.root, '.co-simulation .co-demo-label').textContent = section.id === 'gwo'
             ? 'Demo singkat: 4 iterasi nyata. Perbandingan pada pos Hasil memakai 50 iterasi.'
-            : 'Demo pendek dengan hasil engine M4, bukan animasi acak.'
+            : section.id === 'hybrid' ? '8 task, 3 VM · Langkah utama dari 50 iterasi atau generasi.'
+                : 'Demo pendek dengan hasil engine M4, bukan animasi acak.'
         $(this.root, '.co-comparison').hidden = section.id !== 'results'
         $(this.root, '.co-experiment').hidden = !['problem','aco'].includes(section.id)
         const standard=this.experiment.taskCount===8&&this.experiment.vmCount===3&&this.experiment.iterations===50
@@ -309,6 +323,7 @@ export class LearningPanel
         colonyControl.textContent=this.acoDisplayMode==='colony'?'🐜 Mode Koloni: 12 semut':'🔎 Mode Fokus: 1 semut'
         if(section.id==='aco')this.worlds.aco?.setColonyMode?.(this.acoDisplayMode)
         if(section.id === 'gwo') this.setupLesson('gwo')
+        if(section.id === 'hybrid') this.setHybridMode(this.hybridMode)
         if(section.id === 'results') this.renderResults()
         if(section.id === 'paper') this.renderPapers()
     }
@@ -318,7 +333,8 @@ export class LearningPanel
         const count = $(this.root, '.co-step-count')
         const unit = this.lesson?.algorithm === 'gwo' ? ' iterasi demo' : ''
         count.textContent = `${snapshot.cursor} / ${snapshot.total}${unit}`
-        const { headline, lines } = lessonDetail(snapshot.step, this.lesson?.problem)
+        const hybrid = this.lesson?.algorithm === 'hybrid'
+        const { headline, lines } = (hybrid ? hybridDetail : lessonDetail)(snapshot.step, this.lesson?.problem)
         $(this.root, '.co-step-title').textContent = headline
         $(this.root, '.co-step-summary').textContent = snapshot.step?.explanation ?? 'Klik Langkah untuk memulai visualisasi. Setiap langkah menggunakan keputusan engine yang sebenarnya.'
         const container = $(this.root, '.co-step-details')
@@ -327,6 +343,8 @@ export class LearningPanel
             item.textContent = line
             return item
         }))
+        if(hybrid && snapshot.step?.kind === 'allocation')
+            container.append(allocationTable(this.lesson.problem, snapshot.step.source))
         $(this.root, '[data-action="step"]').disabled = snapshot.status === 'finished'
         const playing = snapshot.status === 'playing'
         $(this.root, '[data-action="pause"]').disabled = !playing
@@ -334,6 +352,18 @@ export class LearningPanel
         play.disabled = playing
         play.textContent = playing ? '▶ Berjalan' : snapshot.status === 'finished' ? '↻ Play lagi' : '▶ Play'
         this.onPlayback(snapshot)
+    }
+
+    setHybridMode(mode)
+    {
+        this.hybridMode = mode
+        for(const button of this.root.querySelectorAll('[data-action="hybrid-mode"]'))
+        {
+            const selected = button.dataset.mode === mode
+            button.setAttribute('aria-pressed', selected)
+            button.classList.toggle('co-button-primary', selected)
+        }
+        this.setupLesson('hybrid')
     }
 
     renderResults()
@@ -429,6 +459,7 @@ export class LearningPanel
         }
         else if(action === 'experiment-apply') this.applyExperiment(false)
         else if(action === 'experiment-default') this.applyExperiment(true)
+        else if(action === 'hybrid-mode' && trigger.dataset.mode !== this.hybridMode) this.setHybridMode(trigger.dataset.mode)
         else if(action === 'close') this.close()
         else if(action === 'slide') void this.goTo(Number(trigger.dataset.index))
         else if(action === 'previous') void this.goTo(Math.max(0, this.slide - 1))
@@ -443,7 +474,7 @@ export class LearningPanel
                 {
                     const algorithm = this.lesson?.algorithm
                     this.worlds[algorithm]?.setPaused?.(false)
-                    const interval = { aco: 1350, gwo: 2200 }[algorithm] ?? this.delay
+                    const interval = { aco: 1350, gwo: 2200, hybrid: 1900 }[algorithm] ?? this.delay
                     this.player.play(interval)
                 }
                 if(action === 'pause')

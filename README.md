@@ -2,7 +2,7 @@
 
 **Kelompok 8 — Strategi Optimasi Komputasi Awan (SOKA)**
 
-Jelajahi kampus dengan mobil 3D, kirim task ke virtual machine, dan amati bagaimana **Round Robin, Ant Colony Optimization, serta Grey Wolf Optimizer** menyusun jadwal. Alokasi, nilai, dan grafik berasal dari engine JavaScript nyata yang dapat diuji.
+Jelajahi kampus dengan mobil 3D, kirim task ke virtual machine, dan amati bagaimana **Round Robin, Ant Colony Optimization, Grey Wolf Optimizer**, serta **Max-Min → ACO dan Min-Min → GA** menyusun jadwal. Alokasi, nilai, dan grafik berasal dari engine JavaScript yang dapat diuji.
 
 [Mainkan di GitHub Pages](https://arkanzahir.github.io/Soka-cloud-ops-scheduling-adventure/) · [Jalankan secara lokal](#instalasi-dan-menjalankan-lokal) · [Dokumentasi teknis](#dokumentasi-lanjutan)
 
@@ -35,12 +35,13 @@ Game memperagakan pencarian jadwal dengan **makespan minimum**: waktu sampai sel
 
 | World | Isi dan interaksi |
 | --- | --- |
-| **Cloud Ops Campus** | Hub utama dengan kendaraan 3D, gerbang ke tiga zona, arena Classic Race, dan akses ke kredit proyek. |
+| **Cloud Ops Campus** | Hub utama dengan kendaraan 3D, gerbang ke empat zona, arena Classic Race, dan akses ke kredit proyek. |
 | **Cloud Compute Yard** | Antrean paket task dan rak VM. Animasi Round Robin memperlihatkan paket berpindah, beban tiap VM bertambah, dan makespan berubah. |
 | **Ant Research Park** | Sarang, 12 semut, jalur feromon, dan pintu VM. Mode Koloni memperlihatkan pilihan seluruh semut. Mode Fokus menampilkan keputusan dan probabilitas satu semut. |
 | **Wolf Field Research** | Lima kandidat terbaik dari 12 serigala. Label Alpha, Beta, dan Delta, papan alokasi task, serta rekor makespan mengikuti hasil engine. |
+| **Hybrid Scheduling Lab** | Antrean task, rak VM, sarang semut, dan meja kromosom. Pilih Max-Min → ACO atau Min-Min → GA dan bandingkan makespan sebelum dan sesudah optimasi. |
 
-**Free Drive** memberi akses ke zona melalui gerbang kampus. **Classic Race** menempatkan enam pos opsional di sisi lintasan: Pembukaan → Cloud → ACO → GWO → Hasil → Paper. Satu lap memakai sembilan crossing asli dan timer balap. Dashboard bisa disembunyikan sambil balapan dan simulasi terus berjalan.
+**Free Drive** memberi akses ke zona melalui gerbang kampus. **Presentation Race** menempatkan tujuh pos di sisi lintasan dalam urutan Pembukaan → Cloud → ACO → GWO → Hybrid → Hasil → Paper. Menepi dan tekan **E** di pos Hybrid untuk masuk lab. Gunakan papan **Kembali** di lab untuk kembali ke posisi parkir dan melanjutkan lap. Timer balap terus berjalan.
 
 **Dashboard** menyediakan Langkah, Play, Pause, dan Reset. Tab Hasil menyajikan tabel alokasi task, makespan, biaya simulasi, utilisasi proksi, dan grafik konvergensi. Pengaturan grafis Low/High tersedia melalui menu.
 
@@ -61,6 +62,10 @@ Game memperagakan pencarian jadwal dengan **makespan minimum**: waktu sampai sel
 | **Round Robin** | Membagi task bergiliran ke VM1 → VM2 → VM3. | Paket berpindah ke VM dan beban terakumulasi. |
 | **ACO baseline** | Tiap semut menyusun jadwal dengan feromon dan heuristik beban; evaluasi diikuti evaporasi/deposit. | Pilihan VM seluruh koloni, probabilitas semut fokus, dan pembaruan feromon. |
 | **GWO baseline** | Alpha/Beta/Delta memandu pembaruan vektor kandidat; koordinat didiskretisasi menjadi indeks VM lalu dievaluasi. | Lima jadwal, ID/peran/fitness, VM tujuan setiap task, dan perubahan assignment per ID. |
+| **Max-Min → ACO** | Max-Min memilih minimum waktu selesai terbesar per ronde. Jadwalnya menentukan feromon awal untuk ACO hybrid. | Matriks keputusan, kotak task, dan jalur feromon T1. |
+| **Min-Min → GA** | Min-Min memilih minimum waktu selesai terkecil per ronde. Jadwalnya menjadi kromosom pertama GA. | Matriks keputusan, dua kromosom induk, dan hasil crossover serta mutasi. |
+
+Hybrid memakai dataset standar 8 task, 3 VM, seed 42, dan 50 iterasi atau generasi. Tahap optimasi mengikuti [materi hybrid Kelompok 8](https://github.com/RizzqiAkbar/Presentasi-Algoritma-Hybrid-Kelompok8-SOKA). Pos Hasil tetap menunjukkan perbandingan baseline Round Robin, ACO, dan GWO; pembanding awal–akhir hybrid ada pada pos Hybrid.
 
 Satu kandidat adalah delapan pilihan VM, misalnya `[0,1,2,0,1,2,0,1]` pada engine; tampilan memakai VM1–VM3. **Satu serigala mewakili satu jadwal lengkap, bukan satu task.** Pencarian terjadi pada solusi pembagian task, bukan jarak berjalan menuju VM. [Cara membaca papan GWO](docs/GWO_SCHEDULE_EXPLAINER.md).
 

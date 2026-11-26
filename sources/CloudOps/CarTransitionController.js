@@ -114,6 +114,7 @@ export class CarTransitionController
         const previous = this.body.translation()
         const rollback = new THREE.Vector3(previous.x, previous.y + 0.2, previous.z)
         const previousRotation = this.game.physicalVehicle.yRotation
+        const filters = [...this.game.inputs.filters]
         this.busy = true
         this.lock()
         this.game.inputs.filters.clear()
@@ -139,7 +140,7 @@ export class CarTransitionController
         {
             this.unlock()
             this.game.inputs.filters.clear()
-            this.game.inputs.filters.add('wandering')
+            for(const filter of filters) this.game.inputs.filters.add(filter)
             this.busy = false
         }
     }
